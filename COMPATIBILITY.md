@@ -26,12 +26,12 @@ exactly reproducible development stack is required.
 
 | Package | Verified commit |
 |---|---|
-| `cudatensr` | `c774d7c277fa8e88084560708bce96bd4cd7eb21` |
-| `cudasparsr` | `b204a7993b6a45c62a30df1868a9bd7429ee0389` |
-| `cudalearnr` | `3b1ad4efac75885a1f8f343cd4cfc41814c52e3d` |
-| `cudacellr` | `5ca486ccd36c02e66f89e3e1e1e431445d315a3c` |
-| `cudagraphR` | `ae7ea60c0a44d608928e671bf854f451ce9aaa5f` |
-| `cudaembedr` | `d444c50c4662d3b0188ce39f5e183d62145968e8` |
+| `cudatensr` | `3eec71fab7859655e5ffe7f21f298a7e32176e77` |
+| `cudasparsr` | `6e6bb7e8f8f055a78da479aa777c10c0855ee926` |
+| `cudalearnr` | `78a7ccec3dc2adef6e0ad7e2349e9f1e0925974f` |
+| `cudacellr` | `385abd4f992fcffca770d7fa690113dfc912dd5a` |
+| `cudagraphR` | `8a33ad64289e7eed6d998be83aca9e66a09f2bd7` |
+| `cudaembedr` | `90b585cc212709c6594d4bd2aa619a49b0088229` |
 
 **Verified on:** `2026-07-25`
 
