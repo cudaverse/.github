@@ -84,8 +84,20 @@ jobs:
         with:
           use-public-rspm: true
 
-      - name: Install integration dependencies
-        run: install.packages(c("Matrix", "igraph"))
+      - name: Install integration dependencies and system requirements
+        uses: r-lib/actions/setup-r-dependencies@v2
+        with:
+          working-directory: packages/cudagraphR
+          packages: any::Matrix, any::igraph
+
+      - name: Verify integration dependencies
+        run: |
+          stopifnot(
+            requireNamespace("Matrix", quietly = TRUE),
+            requireNamespace("igraph", quietly = TRUE)
+          )
+          cat("Matrix", as.character(packageVersion("Matrix")), "\n")
+          cat("igraph", as.character(packageVersion("igraph")), "\n")
         shell: Rscript {0}
 
       - name: Install the source stack in dependency order

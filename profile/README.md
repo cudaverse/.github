@@ -68,7 +68,9 @@ The APIs are under active development and are not yet CRAN releases. CPU paths
 run in cross-platform `R CMD check`; CUDA paths require a CUDA-enabled R
 `torch` installation. Exact neighbour search now uses bounded distance blocks.
 Current priorities are dedicated NVIDIA CI, Bioconductor adapters, CRAN
-submission readiness, and broader real-data validation.
+submission readiness, and broader real-data validation. Progress and acceptance
+gates are tracked in the
+[current roadmap](https://github.com/cudaverse/.github/blob/main/ROADMAP.md).
 
 ## Contributing
 
