@@ -26,7 +26,7 @@ exactly reproducible development stack is required.
 
 | Package | Verified commit |
 |---|---|
-| `cudatensr` | `1a9352aa8bdf7e0b72e32cc064de8004dccca3b6` |
+| `cudatensr` | `b33d6d1dd405ffe586d18c10e117848c04c42ace` |
 | `cudasparsr` | `fd27094aac7526383c7aabc56433dcfa88e2bdf1` |
 | `cudalearnr` | `069db8adb8fde4bc2931f9e7936e8d656221cb6e` |
 | `cudacellr` | `1dd95a1ebd3ff2b538307c13ad866cf92630f86c` |
