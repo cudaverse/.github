@@ -43,11 +43,16 @@ neighbors <- cuda_knn(pca$x, k = 10, device = "auto")
 
 pca
 neighbors
+cudalearnr::cuda_provenance(pca)
+cudalearnr::cuda_provenance(neighbors)
 ```
 
 Use `device = "cpu"` for a guaranteed portable path or `device = "cuda"` to
 require a working CUDA-enabled R `torch` installation. `"auto"` never claims
-CUDA unless the backend is available.
+CUDA unless the backend is available. `cuda_diagnostics()` explains runtime
+availability, while the shared `cuda_provenance()` table distinguishes the
+requested device, actual device, backend, fallback reason, and output device
+for every computation stage.
 
 For a complete analysis crossing the single-cell, neighbour, graph, and
 embedding layers, follow the
@@ -71,6 +76,9 @@ Current priorities are dedicated NVIDIA CI, Bioconductor adapters, CRAN
 submission readiness, and broader real-data validation. Progress and acceptance
 gates are tracked in the
 [current roadmap](https://github.com/cudaverse/.github/blob/main/ROADMAP.md).
+The hard-failing NVIDIA parity workflow is implemented, but continuous
+hardware coverage is not claimed until a labeled runner is online and the gate
+has passed.
 
 ## Contributing
 

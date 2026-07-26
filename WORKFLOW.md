@@ -125,6 +125,7 @@ stopifnot(!any(neighbor_cell_ids == query_cell_ids))
 
 fit$pca$device
 fit$neighbors$device
+cudacellr::cuda_provenance(fit)
 ```
 
 Normalization remains sparse. Only the selected variable-feature matrix is
@@ -148,6 +149,8 @@ dim(adjacency)
 
 communities <- cuda_leiden(graph, resolution = 1)
 table(communities$membership)
+cudagraphR::cuda_provenance(graph)
+graph$source_provenance
 
 stopifnot(
   identical(graph$vertex_names, cell_ids),
@@ -180,6 +183,8 @@ stopifnot(identical(rownames(coordinates), cell_ids))
 
 embedding$compute_device
 embedding$compute_stages
+cudaembedr::cuda_provenance(embedding)
+embedding$source_provenance
 ```
 
 Diffusion-map distance computation can use CUDA, while kernel construction and
@@ -210,8 +215,9 @@ if (cudatensr::cuda_available()) {
 ```
 
 Use `device = "cuda"` when CUDA is required. Use `"auto"` only when a CPU
-fallback is acceptable. Always record actual device and stage provenance with
-reproducible results.
+fallback is acceptable. `cuda_provenance()` records the original request,
+actual stage device, backend, selection reason, fallback flag, and output
+device. A strict CUDA request never silently returns a CPU result.
 
 ## Continue from individual stages
 

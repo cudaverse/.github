@@ -18,6 +18,8 @@ implementation details belong in the repository that owns them.
       with optional CUDA distance computation
 - [x] Cross-platform R release and R-devel checks, pkgdown sites, explicit
       backend provenance, and a CPU-first end-to-end workflow
+- [x] A shared `cudaverse-stage/1` provenance schema with structured CUDA
+      diagnostics, strict device selection, and source-provenance propagation
 
 The source dependency graph is:
 
@@ -33,14 +35,18 @@ cudacellr -. optional workflow adapter .-> cudaembedr
 
 - [x] Record and continuously validate an exact cross-repository source tuple
       in `COMPATIBILITY.md`
+- [x] Define a hard-failing, full-stack CPU/CUDA parity contract and reusable
+      workflow for an NVIDIA self-hosted runner
 - [ ] Run all CUDA-capable public paths on dedicated NVIDIA CI hardware
-- [ ] Require CPU/CUDA parity assertions and actual-device provenance in the
-      NVIDIA job; a CUDA-unavailable skip must not count as coverage
-- [ ] Add runnable long-form package articles for installation, backend
+- [ ] Enable the hardware contract on every push with the repository variable
+      `CUDAVERSE_NVIDIA_CI=enabled` after an online
+      `self-hosted,linux,x64,cuda` runner is available
+- [x] Add runnable long-form package articles for installation, backend
       semantics, memory limits, and the end-to-end workflow
 
-No CUDA performance or continuous hardware-coverage claim is complete until
-the NVIDIA gate passes.
+The contract itself refuses to skip when CUDA is unavailable. No CUDA
+performance or continuous hardware-coverage claim is complete until an NVIDIA
+runner executes it successfully on every required change.
 
 ## R and Bioconductor integration
 

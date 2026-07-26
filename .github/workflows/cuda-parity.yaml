@@ -16,22 +16,22 @@ on:
         required: false
         type: string
         default: ""
-  push:
-    branches: [main]
   workflow_dispatch:
-  schedule:
-    - cron: "23 6 * * 1"
 
-name: identifier-integration
+name: cuda-parity
 
 permissions:
   contents: read
 
 jobs:
-  cpu-contract:
-    runs-on: ubuntu-latest
+  hardware-contract:
+    name: NVIDIA hardware contract
+    runs-on: [self-hosted, linux, x64, cuda]
+    timeout-minutes: 60
+    env:
+      CUDAVERSE_REQUIRE_CUDA: "true"
     steps:
-      - name: Check out the integration contract
+      - name: Check out the hardware contract
         uses: actions/checkout@v7
         with:
           repository: cudaverse/.github
@@ -84,21 +84,24 @@ jobs:
         with:
           use-public-rspm: true
 
-      - name: Install integration dependencies and system requirements
-        uses: r-lib/actions/setup-r-dependencies@v2
-        with:
-          working-directory: packages/cudagraphR
-          packages: any::Matrix, any::igraph
+      - name: Prove the runner has NVIDIA hardware
+        run: nvidia-smi
 
-      - name: Verify integration dependencies
-        run: |
-          stopifnot(
-            requireNamespace("Matrix", quietly = TRUE),
-            requireNamespace("igraph", quietly = TRUE)
-          )
-          cat("Matrix", as.character(packageVersion("Matrix")), "\n")
-          cat("igraph", as.character(packageVersion("igraph")), "\n")
+      - name: Require the preconfigured R torch CUDA runtime
         shell: Rscript {0}
+        run: |
+          stopifnot(requireNamespace("torch", quietly = TRUE))
+          stopifnot(isTRUE(torch::cuda_is_available()))
+          stopifnot(torch::cuda_device_count() > 0L)
+          print(torch::cuda_device_count())
+
+      - name: Install CPU-side integration dependencies
+        shell: Rscript {0}
+        run: |
+          install.packages(
+            c("Matrix", "igraph"),
+            repos = "https://cloud.r-project.org"
+          )
 
       - name: Install the source stack in dependency order
         run: |
@@ -109,5 +112,5 @@ jobs:
           R CMD INSTALL packages/cudagraphR
           R CMD INSTALL packages/cudaembedr
 
-      - name: Verify identifier preservation across packages
-        run: Rscript contract/scripts/check-identifiers.R
+      - name: Run required CPU-CUDA parity and provenance checks
+        run: Rscript contract/scripts/check-cuda-parity.R

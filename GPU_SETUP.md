@@ -54,6 +54,7 @@ packageVersion("torch")
 torch::cuda_is_available()
 torch::cuda_device_count()
 cudatensr::cuda_available()
+cudatensr::cuda_diagnostics()
 ```
 
 Both availability checks must return `TRUE` before `device = "cuda"` can work.
@@ -96,6 +97,32 @@ Do not use a large biological dataset as the first GPU test.
 Some workflows are intentionally hybrid. For example, diffusion-map distances
 may run on CUDA while kernel construction and eigendecomposition run on CPU.
 Such a result reports `"hybrid"` rather than claiming end-to-end GPU execution.
+
+Every 0.2.0 result supports the same detailed inspector:
+
+```r
+selection <- cudatensr::cuda_select_device("auto")
+selection
+
+fit <- cudalearnr::cuda_knn(
+  scale(iris[, 1:4]),
+  k = 5,
+  device = "auto"
+)
+cudalearnr::cuda_provenance(fit)
+```
+
+The stage table separates:
+
+- `requested_device`: what the caller requested, including `"auto"`;
+- `device`: where the stage actually computed;
+- `backend`: the concrete implementation;
+- `selection_reason` and `fallback`: why automatic selection chose CPU;
+- `output_device`: where the stage result resides.
+
+`device = "cuda"` signals a `cudaverse_cuda_unavailable` condition when the
+runtime is unusable. It never returns a CPU result. `device = "auto"` may use
+CPU, but the reason remains visible in provenance.
 
 ## Memory and data transfer
 
@@ -155,3 +182,23 @@ cudatensr::cuda_available()
 Also provide a small reproducible input, the requested device, the actual
 device/backend fields, and whether the same call succeeds with
 `device = "cpu"`.
+
+## Organization hardware gate
+
+The organization owns a full-stack parity script at
+`scripts/check-cuda-parity.R` and a reusable `cuda-parity` workflow. It covers
+all public CUDA-capable paths in the six core packages and fails immediately
+when torch cannot see a physical NVIDIA device.
+
+A self-hosted runner must provide:
+
+- labels `self-hosted`, `linux`, `x64`, and `cuda`;
+- R and a CUDA-enabled R torch runtime;
+- a working `nvidia-smi`;
+- network access needed to install ordinary R dependencies.
+
+Each package exposes a manual `cuda-parity` workflow. After the runner is
+online and the manual contract passes, set the repository Actions variable
+`CUDAVERSE_NVIDIA_CI=enabled` to require the same job on pushes and pull
+requests. A skipped job while that variable is absent is infrastructure
+readiness, not CUDA coverage.
