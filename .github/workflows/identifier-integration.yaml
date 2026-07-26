@@ -89,6 +89,7 @@ jobs:
         with:
           working-directory: packages/cudagraphR
           packages: any::Matrix, any::igraph, bioc::SingleCellExperiment
+          dependencies: '"hard"'
 
       - name: Verify integration dependencies
         run: |
