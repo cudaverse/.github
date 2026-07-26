@@ -36,6 +36,15 @@ pak::pak(c(
 diffusion-map example below has a base eigensolver; installing `RSpectra` can
 accelerate its CPU eigendecomposition.
 
+For the optional native Bioconductor path:
+
+```r
+if (!requireNamespace("BiocManager", quietly = TRUE)) {
+  install.packages("BiocManager")
+}
+BiocManager::install("SingleCellExperiment")
+```
+
 ## Create sparse counts
 
 ```r
@@ -133,6 +142,102 @@ materialized for PCA. Exact kNN compares all cells but holds at most
 `batch_size * cells` distances at once; changing `batch_size` changes peak
 memory, not the selected neighbours. kNN indices are one-based positions into
 `cell_ids`; `neighbor_cell_ids` above converts them to stable identifiers.
+
+## Keep the workflow in a SingleCellExperiment
+
+`cudacell_sce()` provides the same computation without replacing the
+Bioconductor object model. It returns a modified copy and writes each result to
+its native location:
+
+```r
+library(SingleCellExperiment)
+
+sce <- SingleCellExperiment(
+  assays = list(
+    counts = counts,
+    untouched = counts * 2
+  ),
+  rowData = S4Vectors::DataFrame(
+    symbol = paste0("symbol_", seq_len(nrow(counts)))
+  ),
+  colData = S4Vectors::DataFrame(
+    batch = rep(c("one", "two"), length.out = ncol(counts))
+  ),
+  metadata = list(owner = "unchanged")
+)
+
+sce_result <- cudacell_sce(
+  sce,
+  assay = "counts",
+  n_hvg = 200,
+  n_components = 15,
+  k = 12,
+  batch_size = 32,
+  device = "cpu"
+)
+
+assayNames(sce_result)
+#> [1] "counts"              "untouched"
+#> [3] "cudacell_logcounts"
+
+reducedDimNames(sce_result)
+#> [1] "CUDACELL_PCA"
+
+colPairNames(sce_result)
+#> [1] "CUDACELL_KNN"
+
+stopifnot(
+  identical(assay(sce_result, "counts"), assay(sce, "counts")),
+  identical(assay(sce_result, "untouched"), assay(sce, "untouched")),
+  identical(rowData(sce_result)$symbol, rowData(sce)$symbol),
+  identical(colData(sce_result)$batch, colData(sce)$batch),
+  identical(metadata(sce_result)$owner, "unchanged"),
+  identical(
+    rownames(reducedDim(sce_result, "CUDACELL_PCA")),
+    cell_ids
+  )
+)
+
+cudacellr::cuda_provenance(sce_result)
+```
+
+Natural-log normalized expression is namespaced as
+`cudacell_logcounts`; PCA is `CUDACELL_PCA`; HVG statistics are added to
+namespaced `rowData` columns; and directed neighbours are a
+`CUDACELL_KNN` `SelfHits` object in `colPair`. Existing assays, row/column
+metadata, reduced dimensions, alternative experiments, pairings, labels, size
+factors, and user metadata remain intact.
+
+Every output name is collision-checked before compute. Delayed assays also
+remain lazy unless the caller explicitly opts into in-memory sparse
+realization with `realize = TRUE`.
+
+All embedding entry points can consume the recorded PCA directly:
+
+```r
+sce_embedding <- cuda_diffusion_map(
+  sce_result,
+  n_components = 2,
+  device = "cpu"
+)
+
+stopifnot(
+  identical(
+    rownames(embedding_coordinates(sce_embedding)),
+    cell_ids
+  ),
+  identical(
+    sce_embedding$parameters$reduced_dim,
+    "CUDACELL_PCA"
+  ),
+  inherits(sce_embedding$source_provenance, "cuda_provenance")
+)
+```
+
+For a generic SCE without cudacellr metadata, `cudaembedr` uses a uniquely
+named standard `PCA` reduced dimension. Any non-PCA reduced dimension must be
+selected explicitly; its source device is reported as `"unknown"` when no
+provenance record exists.
 
 ## Build and cluster a graph
 

@@ -73,6 +73,77 @@ workflow_provenance <- check_provenance(
   )
 )
 
+sce <- SingleCellExperiment::SingleCellExperiment(
+  assays = list(
+    counts = counts,
+    untouched = counts * 2
+  ),
+  rowData = S4Vectors::DataFrame(
+    symbol = paste0("symbol_", seq_len(nrow(counts)))
+  ),
+  colData = S4Vectors::DataFrame(
+    batch = rep(c("one", "two"), length.out = ncol(counts))
+  ),
+  metadata = list(owner = "preserve-me"),
+  reducedDims = list(
+    EXISTING = matrix(
+      seq_len(ncol(counts) * 2L),
+      nrow = ncol(counts),
+      dimnames = list(colnames(counts), c("OLD1", "OLD2"))
+    )
+  )
+)
+sce_result <- cudacellr::cudacell_sce(
+  sce,
+  n_hvg = 20,
+  n_components = 5,
+  k = 4,
+  batch_size = 5,
+  device = "cpu"
+)
+stopifnot(
+  identical(
+    SummarizedExperiment::assay(sce_result, "counts"),
+    SummarizedExperiment::assay(sce, "counts")
+  ),
+  identical(
+    SummarizedExperiment::assay(sce_result, "untouched"),
+    SummarizedExperiment::assay(sce, "untouched")
+  ),
+  identical(
+    SummarizedExperiment::rowData(sce_result)$symbol,
+    SummarizedExperiment::rowData(sce)$symbol
+  ),
+  identical(
+    SummarizedExperiment::colData(sce_result)$batch,
+    SummarizedExperiment::colData(sce)$batch
+  ),
+  identical(
+    SingleCellExperiment::reducedDim(sce_result, "EXISTING"),
+    SingleCellExperiment::reducedDim(sce, "EXISTING")
+  ),
+  identical(S4Vectors::metadata(sce_result)$owner, "preserve-me"),
+  "cudacell_logcounts" %in%
+    SummarizedExperiment::assayNames(sce_result),
+  "CUDACELL_PCA" %in%
+    SingleCellExperiment::reducedDimNames(sce_result),
+  "CUDACELL_KNN" %in%
+    SingleCellExperiment::colPairNames(sce_result),
+  identical(
+    rownames(
+      SingleCellExperiment::reducedDim(
+        sce_result,
+        "CUDACELL_PCA"
+      )
+    ),
+    colnames(counts)
+  ),
+  identical(
+    cudacellr::cuda_provenance(sce_result)$stage,
+    workflow_provenance$stage
+  )
+)
+
 graph <- cudagraphR::cuda_knn_graph(workflow$neighbors)
 stopifnot(
   identical(graph$vertex_names, colnames(counts)),
@@ -108,6 +179,32 @@ stopifnot(
 )
 check_provenance(
   embedding,
+  c("distance", "kernel", "eigendecomposition")
+)
+
+sce_embedding <- cudaembedr::cuda_diffusion_map(
+  sce_result,
+  n_components = 2,
+  device = "cpu"
+)
+stopifnot(
+  identical(
+    rownames(cudaembedr::embedding_coordinates(sce_embedding)),
+    colnames(counts)
+  ),
+  identical(
+    sce_embedding$parameters$reduced_dim,
+    "CUDACELL_PCA"
+  ),
+  inherits(sce_embedding$source_provenance, "cuda_provenance"),
+  identical(
+    sce_embedding$source_provenance$stage,
+    workflow_provenance$stage
+  ),
+  identical(sce_embedding$source_compute_device, "cpu")
+)
+check_provenance(
+  sce_embedding,
   c("distance", "kernel", "eigendecomposition")
 )
 

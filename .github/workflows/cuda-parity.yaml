@@ -99,8 +99,13 @@ jobs:
         shell: Rscript {0}
         run: |
           install.packages(
-            c("Matrix", "igraph"),
+            c("Matrix", "igraph", "BiocManager"),
             repos = "https://cloud.r-project.org"
+          )
+          BiocManager::install(
+            "SingleCellExperiment",
+            ask = FALSE,
+            update = FALSE
           )
 
       - name: Install the source stack in dependency order

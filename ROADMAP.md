@@ -11,8 +11,9 @@ implementation details belong in the repository that owns them.
 - [x] `cudasparsr`: sparse conversion, COO/CSR metadata, multiplication,
       reductions, and CPU fallback
 - [x] `cudalearnr`: SVD, PCA, distances, exact batched kNN, and k-means
-- [x] `cudacellr`: sparse normalization, HVG selection, PCA, neighbours, and a
-      composable feature-by-cell workflow
+- [x] `cudacellr`: sparse normalization, HVG selection, PCA, neighbours, a
+      composable feature-by-cell workflow, and native optional
+      `SingleCellExperiment` result mapping
 - [x] `cudagraphR`: sparse kNN graphs and CPU Louvain/Leiden clustering
 - [x] `cudaembedr`: CPU UMAP/t-SNE adapters and diffusion-map-style embeddings
       with optional CUDA distance computation
@@ -50,15 +51,21 @@ runner executes it successfully on every required change.
 
 ## R and Bioconductor integration
 
-- [ ] Add an optional `SingleCellExperiment` adapter with assay selection
-- [ ] Preserve row names, column names, `rowData`, `colData`, metadata, existing
+- [x] Add an optional `SingleCellExperiment` adapter with explicit assay
+      selection, collision checks, and opt-in delayed-assay realization
+- [x] Preserve row names, column names, `rowData`, `colData`, metadata, existing
       assays, and unrelated reduced dimensions across that adapter
+- [x] Store normalized assays, PCA, feature statistics, and kNN relationships
+      in native assay, `reducedDim`, `rowData`, and `colPair` locations
+- [x] Accept those SCE reduced dimensions directly in all `cudaembedr`
+      entry points without guessing non-PCA sources
 - [ ] Add Seurat integration after the Bioconductor object contract is stable
 - [x] Compose neighbours with graph clustering without losing cell identifiers
 
 The current public inputs are base matrices/arrays, `Matrix` sparse matrices,
-and cudaverse result objects. `SingleCellExperiment` and Seurat are target
-integrations, not implemented capabilities.
+cudaverse result objects, and optional `SingleCellExperiment` reduced
+dimensions/workflows. Seurat remains a target integration, not a current
+capability.
 
 ## Backend depth
 

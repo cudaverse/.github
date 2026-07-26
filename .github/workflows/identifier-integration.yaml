@@ -88,16 +88,22 @@ jobs:
         uses: r-lib/actions/setup-r-dependencies@v2
         with:
           working-directory: packages/cudagraphR
-          packages: any::Matrix, any::igraph
+          packages: any::Matrix, any::igraph, bioc::SingleCellExperiment
 
       - name: Verify integration dependencies
         run: |
           stopifnot(
             requireNamespace("Matrix", quietly = TRUE),
-            requireNamespace("igraph", quietly = TRUE)
+            requireNamespace("igraph", quietly = TRUE),
+            requireNamespace("SingleCellExperiment", quietly = TRUE)
           )
           cat("Matrix", as.character(packageVersion("Matrix")), "\n")
           cat("igraph", as.character(packageVersion("igraph")), "\n")
+          cat(
+            "SingleCellExperiment",
+            as.character(packageVersion("SingleCellExperiment")),
+            "\n"
+          )
         shell: Rscript {0}
 
       - name: Install the source stack in dependency order

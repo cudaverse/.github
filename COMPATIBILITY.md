@@ -12,9 +12,9 @@ separately once the packages enter CRAN.
 | `cudatensr` | 0.2.0 | — |
 | `cudasparsr` | 0.2.0 | `cudatensr (>= 0.2.0)` |
 | `cudalearnr` | 0.2.0 | `cudatensr (>= 0.2.0)` |
-| `cudacellr` | 0.2.0 | `cudatensr (>= 0.2.0)`, `cudasparsr (>= 0.2.0)`, `cudalearnr (>= 0.2.0)` |
+| `cudacellr` | 0.3.0 | `cudatensr (>= 0.2.0)`, `cudasparsr (>= 0.2.0)`, `cudalearnr (>= 0.2.0)` |
 | `cudagraphR` | 0.2.0 | `cudatensr (>= 0.2.0)`; optional `cudalearnr (>= 0.2.0)` |
-| `cudaembedr` | 0.2.0 | `cudatensr (>= 0.2.0)`, `cudalearnr (>= 0.2.0)`; optional `cudacellr (>= 0.2.0)` |
+| `cudaembedr` | 0.3.0 | `cudatensr (>= 0.2.0)`, `cudalearnr (>= 0.2.0)`; optional `cudacellr (>= 0.3.0)` |
 
 These are source-package versions, not published release tags.
 
@@ -29,9 +29,9 @@ exactly reproducible development stack is required.
 | `cudatensr` | `adb2423949792cd6becf15f1bfd7ce15324eda5c` |
 | `cudasparsr` | `f8fd20d6c212ac6ce5f03a3f10a358b471db96fb` |
 | `cudalearnr` | `adfa2c7367e7ff296a0c5df6e97cd67ded032603` |
-| `cudacellr` | `87e040ae9a31b95101cda0a1ac4bfe8e92dd617d` |
+| `cudacellr` | `f10c258e534a4245fd0547c28c1d48217bc6248e` |
 | `cudagraphR` | `3bde230eb27befda8f0848aa3320dbc0d5e92f79` |
-| `cudaembedr` | `adf659e9489163f497a161554736e151ba5b3554` |
+| `cudaembedr` | `7f5a554bcb7bafb45d3500a36f611de4e82ee167` |
 
 **Verified on:** `2026-07-26`
 
@@ -60,6 +60,8 @@ Optional backends are not installed automatically:
 - `uwot` enables UMAP;
 - `Rtsne` enables t-SNE;
 - `RSpectra` accelerates supported CPU eigendecompositions.
+- `SingleCellExperiment` enables native Bioconductor object workflows in
+  `cudacellr` and direct reduced-dimension inputs in `cudaembedr`.
 
 ## Platform evidence
 

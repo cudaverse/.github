@@ -7,6 +7,9 @@ required <- c(
   "cudaembedr",
   "Matrix",
   "igraph",
+  "SingleCellExperiment",
+  "S4Vectors",
+  "SummarizedExperiment",
   "torch"
 )
 missing <- required[
@@ -619,6 +622,103 @@ equal_numeric(
 expect_stage(gpu_cells, "pca_decomposition", "cuda", "hybrid")
 expect_stage(gpu_cells, "knn_distance", "cuda", "hybrid")
 
+cat("Checking SingleCellExperiment workflow parity...\n")
+sce <- SingleCellExperiment::SingleCellExperiment(
+  assays = list(
+    counts = counts,
+    untouched = counts * 2
+  ),
+  metadata = list(owner = "preserve-me")
+)
+cpu_sce <- cudacellr::cudacell_sce(
+  sce,
+  n_hvg = 25,
+  n_components = 5,
+  k = 5,
+  batch_size = 8,
+  device = "cpu"
+)
+gpu_sce <- cudacellr::cudacell_sce(
+  sce,
+  n_hvg = 25,
+  n_components = 5,
+  k = 5,
+  batch_size = 8,
+  device = "cuda"
+)
+equal_numeric(
+  as.matrix(
+    SummarizedExperiment::assay(
+      gpu_sce,
+      "cudacell_logcounts"
+    )
+  ),
+  as.matrix(
+    SummarizedExperiment::assay(
+      cpu_sce,
+      "cudacell_logcounts"
+    )
+  ),
+  label = "SCE normalized assay"
+)
+equal_numeric(
+  as.matrix(stats::dist(
+    SingleCellExperiment::reducedDim(
+      gpu_sce,
+      "CUDACELL_PCA"
+    )
+  )),
+  as.matrix(stats::dist(
+    SingleCellExperiment::reducedDim(
+      cpu_sce,
+      "CUDACELL_PCA"
+    )
+  )),
+  tolerance = 1e-6,
+  label = "SCE PCA geometry"
+)
+gpu_hits <- as.data.frame(
+  SingleCellExperiment::colPair(gpu_sce, "CUDACELL_KNN")
+)
+cpu_hits <- as.data.frame(
+  SingleCellExperiment::colPair(cpu_sce, "CUDACELL_KNN")
+)
+stopifnot(
+  identical(gpu_hits[c("from", "to", "rank")],
+            cpu_hits[c("from", "to", "rank")]),
+  identical(
+    SummarizedExperiment::assay(gpu_sce, "counts"),
+    SummarizedExperiment::assay(sce, "counts")
+  ),
+  identical(
+    SummarizedExperiment::assay(gpu_sce, "untouched"),
+    SummarizedExperiment::assay(sce, "untouched")
+  ),
+  identical(S4Vectors::metadata(gpu_sce)$owner, "preserve-me")
+)
+equal_numeric(
+  gpu_hits$distance,
+  cpu_hits$distance,
+  tolerance = 1e-6,
+  label = "SCE kNN distances"
+)
+sce_provenance <- cudacellr::cuda_provenance(gpu_sce)
+stopifnot(
+  identical(attr(sce_provenance, "compute_device"), "hybrid"),
+  identical(
+    sce_provenance$device[
+      sce_provenance$stage == "pca_decomposition"
+    ],
+    "cuda"
+  ),
+  identical(
+    sce_provenance$device[
+      sce_provenance$stage == "knn_distance"
+    ],
+    "cuda"
+  )
+)
+
 cat("Checking graph and embedding integration...\n")
 graph <- cudagraphR::cuda_knn_graph(gpu_knn, weighting = "gaussian")
 expect_stage(graph, "graph_assembly", "cpu", "cpu")
@@ -657,5 +757,41 @@ equal_numeric(
   label = "diffusion coordinate geometry"
 )
 expect_stage(gpu_embedding, "distance", "cuda", "hybrid")
+
+cpu_sce_embedding <- cudaembedr::cuda_diffusion_map(
+  cpu_sce,
+  n_components = 3,
+  device = "cpu"
+)
+gpu_sce_embedding <- cudaembedr::cuda_diffusion_map(
+  gpu_sce,
+  n_components = 3,
+  device = "cuda"
+)
+equal_numeric(
+  gpu_sce_embedding$eigenvalues,
+  cpu_sce_embedding$eigenvalues,
+  tolerance = 1e-6,
+  label = "SCE diffusion eigenvalues"
+)
+equal_numeric(
+  as.matrix(stats::dist(gpu_sce_embedding$coordinates)),
+  as.matrix(stats::dist(cpu_sce_embedding$coordinates)),
+  tolerance = 1e-5,
+  label = "SCE diffusion coordinate geometry"
+)
+stopifnot(
+  identical(
+    rownames(gpu_sce_embedding$coordinates),
+    colnames(sce)
+  ),
+  identical(
+    gpu_sce_embedding$parameters$reduced_dim,
+    "CUDACELL_PCA"
+  ),
+  inherits(gpu_sce_embedding$source_provenance, "cuda_provenance"),
+  identical(gpu_sce_embedding$source_compute_device, "hybrid")
+)
+expect_stage(gpu_sce_embedding, "distance", "cuda", "hybrid")
 
 cat("All required cudaverse CUDA paths passed hardware parity checks.\n")

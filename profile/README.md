@@ -14,7 +14,7 @@ reports the backend that actually ran.
 | Dense foundation | [cudatensr](https://github.com/cudaverse/cudatensr) | Tensors, device transfer, arithmetic, matrix multiplication, reductions, and broadcasting |
 | Sparse foundation | [cudasparsr](https://github.com/cudaverse/cudasparsr) | COO/CSR metadata, `Matrix` conversion, sparse multiplication, and reductions |
 | Algorithms | [cudalearnr](https://github.com/cudaverse/cudalearnr) | SVD, PCA, distances, k-nearest neighbours, and k-means |
-| Single-cell workflow | [cudacellr](https://github.com/cudaverse/cudacellr) | Sparse normalization, variable-feature selection, PCA, and neighbours |
+| Single-cell workflow | [cudacellr](https://github.com/cudaverse/cudacellr) | Sparse normalization, variable-feature selection, PCA, neighbours, and native `SingleCellExperiment` mapping |
 | Graph analysis | [cudagraphR](https://github.com/cudaverse/cudagraphR) | Weighted kNN graphs plus Louvain and Leiden community detection |
 | Embeddings | [cudaembedr](https://github.com/cudaverse/cudaembedr) | UMAP, t-SNE, and diffusion-map-style embeddings with compute provenance |
 
@@ -72,8 +72,9 @@ embedding layers, follow the
 The APIs are under active development and are not yet CRAN releases. CPU paths
 run in cross-platform `R CMD check`; CUDA paths require a CUDA-enabled R
 `torch` installation. Exact neighbour search now uses bounded distance blocks.
-Current priorities are dedicated NVIDIA CI, Bioconductor adapters, CRAN
-submission readiness, and broader real-data validation. Progress and acceptance
+Current priorities are dedicated NVIDIA CI, exercising the new
+`SingleCellExperiment` contract on real data, CRAN submission readiness, and
+broader validation. Progress and acceptance
 gates are tracked in the
 [current roadmap](https://github.com/cudaverse/.github/blob/main/ROADMAP.md).
 The hard-failing NVIDIA parity workflow is implemented, but continuous

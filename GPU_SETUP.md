@@ -98,7 +98,7 @@ Some workflows are intentionally hybrid. For example, diffusion-map distances
 may run on CUDA while kernel construction and eigendecomposition run on CPU.
 Such a result reports `"hybrid"` rather than claiming end-to-end GPU execution.
 
-Every 0.2.0 result supports the same detailed inspector:
+Every current result supports the same detailed inspector:
 
 ```r
 selection <- cudatensr::cuda_select_device("auto")
