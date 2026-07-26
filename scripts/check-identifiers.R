@@ -25,6 +25,74 @@ check_provenance <- function(x, expected_stages, compute_device = "cpu") {
   invisible(provenance)
 }
 
+check_provenance_load_order <- function(container = NULL) {
+  packages <- c(
+    "cudasparsr",
+    "cudalearnr",
+    "cudacellr",
+    "cudagraphR",
+    "cudaembedr"
+  )
+  canonical <- cudatensr::cuda_provenance
+  probe_class <- "cudaverse_provenance_load_order_probe"
+  registerS3method(
+    "cuda_provenance",
+    probe_class,
+    function(x) x$value,
+    envir = asNamespace("cudatensr")
+  )
+
+  on.exit({
+    for (package in rev(packages)) {
+      attached <- paste0("package:", package)
+      if (attached %in% search()) {
+        detach(attached, character.only = TRUE, unload = FALSE)
+      }
+    }
+  }, add = TRUE)
+
+  for (package in packages) {
+    suppressPackageStartupMessages(
+      library(package, character.only = TRUE)
+    )
+  }
+
+  stopifnot(
+    utils::isS3stdGeneric(canonical),
+    all(vapply(
+      packages,
+      function(package) {
+        !exists(
+          "cuda_provenance",
+          envir = asNamespace(package),
+          inherits = FALSE
+        )
+      },
+      logical(1)
+    )),
+    all(vapply(
+      packages,
+      function(package) {
+        identical(
+          getExportedValue(package, "cuda_provenance"),
+          canonical
+        )
+      },
+      logical(1)
+    )),
+    identical(
+      cuda_provenance(structure(
+        list(value = "registered-method-preserved"),
+        class = probe_class
+      )),
+      "registered-method-preserved"
+    ),
+    is.null(container) ||
+      identical(cuda_provenance(container), canonical(container))
+  )
+  invisible(TRUE)
+}
+
 counts <- matrix(rpois(60 * 24, lambda = 2), nrow = 60, ncol = 24)
 rownames(counts) <- paste0("gene_", seq_len(nrow(counts)))
 colnames(counts) <- paste0("cell_", seq_len(ncol(counts)))
@@ -143,6 +211,7 @@ stopifnot(
     workflow_provenance$stage
   )
 )
+check_provenance_load_order(sce_result)
 
 graph <- cudagraphR::cuda_knn_graph(workflow$neighbors)
 stopifnot(

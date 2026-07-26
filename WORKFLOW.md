@@ -239,6 +239,55 @@ named standard `PCA` reduced dimension. Any non-PCA reduced dimension must be
 selected explicitly; its source device is reported as `"unknown"` when no
 provenance record exists.
 
+## Keep the workflow in a SeuratObject v5 object
+
+`cudacell_seurat()` offers the same native-object path without requiring the
+full Seurat package. Install `SeuratObject >= 5.0.0`, then select one exact
+assay layer:
+
+```r
+seurat <- SeuratObject::CreateSeuratObject(counts)
+
+seurat_result <- cudacell_seurat(
+  seurat,
+  assay = "RNA",
+  layer = "counts",
+  n_hvg = 200,
+  n_components = 15,
+  k = 12,
+  batch_size = 32,
+  device = "cpu"
+)
+
+SeuratObject::Layers(seurat_result[["CUDACELL"]])
+#> [1] "data"
+
+head(SeuratObject::Embeddings(
+  seurat_result[["cudacell_pca"]]
+))
+head(SeuratObject::Indices(
+  seurat_result[["cudacell_knn"]]
+))
+
+cudacellr::cuda_provenance(seurat_result)
+SeuratObject::Tool(
+  seurat_result,
+  slot = "cudacell_seurat"
+)$outputs
+```
+
+The output uses a native data-only `Assay5`, `DimReduc`, and `Neighbor`, plus
+namespaced feature and cell metadata. Existing assays and layers, identities,
+reductions, graphs, neighbours, metadata, images, tools, and miscellaneous
+state remain intact. All names and Seurat keys are checked before computation;
+`overwrite = TRUE` replaces only the explicitly named cudacellr outputs.
+Non-memory-backed layers require the explicit, memory-conscious
+`realize = TRUE` opt-in.
+
+The
+[SeuratObject v5 article](https://cudaverse.github.io/cudacellr/articles/seurat-object.html)
+contains the complete preservation and collision-safety walkthrough.
+
 ## Build and cluster a graph
 
 ```r

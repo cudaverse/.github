@@ -9,7 +9,7 @@ separately once the packages enter CRAN.
 
 | Package | Development version | cudaverse dependencies |
 |---|---:|---|
-| `cudatensr` | 0.2.0 | — |
+| `cudatensr` | 0.2.0 | None |
 | `cudasparsr` | 0.2.0 | `cudatensr (>= 0.2.0)` |
 | `cudalearnr` | 0.2.0 | `cudatensr (>= 0.2.0)` |
 | `cudacellr` | 0.3.0 | `cudatensr (>= 0.2.0)`, `cudasparsr (>= 0.2.0)`, `cudalearnr (>= 0.2.0)` |
@@ -20,18 +20,21 @@ These are source-package versions, not published release tags.
 
 ## Verified source tuple
 
-This source tuple passed clean-library installation, all six package checks,
-and the cross-package identifier workflow. Use the full commit hashes when an
-exactly reproducible development stack is required.
+This source tuple passed clean-library installation, all six package test
+suites, the `cudacellr` package check, and the cross-package identifier
+workflow. The integration gate also verifies that every package exports the
+same canonical `cuda_provenance()` generic and that native
+`SingleCellExperiment` dispatch survives package attachment order. Use the
+full commit hashes when an exactly reproducible development stack is required.
 
 | Package | Verified commit |
 |---|---|
-| `cudatensr` | `b33d6d1dd405ffe586d18c10e117848c04c42ace` |
-| `cudasparsr` | `fd27094aac7526383c7aabc56433dcfa88e2bdf1` |
-| `cudalearnr` | `38f2bc6fb5a9926832deb66df7e7cd42e527269f` |
-| `cudacellr` | `1dd95a1ebd3ff2b538307c13ad866cf92630f86c` |
-| `cudagraphR` | `89710452fe8beb505f7ae5e0a1e21479e237d8d7` |
-| `cudaembedr` | `3cc7fd555ed5a2093bb200aae120ba667af94668` |
+| `cudatensr` | `71366584ca99ec3fdd008945090cec60658f2311` |
+| `cudasparsr` | `5e45a089f90d794d6b0f56ee2e4a5f9650bd8b16` |
+| `cudalearnr` | `d94aecfb7c0b099ada02b754abcdb7c96f1c887b` |
+| `cudacellr` | `12a5f6b400beef3812ee15cdaecc7ddd82dc6d72` |
+| `cudagraphR` | `fef7b0fa69676d653dccf45394c741d89f9ea14f` |
+| `cudaembedr` | `945ea3796175d4036a701f357a1dd68e9878ba28` |
 
 **Verified on:** `2026-07-26`
 
@@ -39,19 +42,21 @@ exactly reproducible development stack is required.
 
 Users normally install only the top-level package they need with `pak`, which
 resolves its current `Remotes`. This is convenient development installation,
-not a lockfile. For an explicit clean-library installation of current branch
-heads, use:
+not a lockfile. To reproduce the verified tuple exactly, pin every source:
 
 ```r
 pak::pak(c(
-  "cudaverse/cudatensr",
-  "cudaverse/cudasparsr",
-  "cudaverse/cudalearnr",
-  "cudaverse/cudacellr",
-  "cudaverse/cudagraphR",
-  "cudaverse/cudaembedr"
+  "cudaverse/cudatensr@71366584ca99ec3fdd008945090cec60658f2311",
+  "cudaverse/cudasparsr@5e45a089f90d794d6b0f56ee2e4a5f9650bd8b16",
+  "cudaverse/cudalearnr@d94aecfb7c0b099ada02b754abcdb7c96f1c887b",
+  "cudaverse/cudacellr@12a5f6b400beef3812ee15cdaecc7ddd82dc6d72",
+  "cudaverse/cudagraphR@fef7b0fa69676d653dccf45394c741d89f9ea14f",
+  "cudaverse/cudaembedr@945ea3796175d4036a701f357a1dd68e9878ba28"
 ))
 ```
+
+Omit the `@<commit>` suffixes only when deliberately installing the latest
+default-branch heads instead of the verified tuple.
 
 Optional backends are not installed automatically:
 
@@ -62,6 +67,8 @@ Optional backends are not installed automatically:
 - `RSpectra` accelerates supported CPU eigendecompositions.
 - `SingleCellExperiment` enables native Bioconductor object workflows in
   `cudacellr` and direct reduced-dimension inputs in `cudaembedr`.
+- `SeuratObject >= 5.0.0` enables native Seurat v5 workflows in `cudacellr`;
+  the full Seurat package is not required.
 
 ## Platform evidence
 

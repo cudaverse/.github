@@ -14,14 +14,15 @@ implementation details belong in the repository that owns them.
       k-means, and feature-aligned post-fit PCA and k-means prediction
 - [x] `cudacellr`: sparse normalization, HVG selection, PCA, neighbours, a
       composable feature-by-cell workflow, and native optional
-      `SingleCellExperiment` result mapping
+      `SingleCellExperiment` and SeuratObject v5 result mapping
 - [x] `cudagraphR`: sparse kNN graphs and CPU Louvain/Leiden clustering
 - [x] `cudaembedr`: CPU UMAP/t-SNE adapters and diffusion-map-style embeddings
       with optional CUDA distance computation
 - [x] Cross-platform R release and R-devel checks, pkgdown sites, explicit
       backend provenance, and a CPU-first end-to-end workflow
 - [x] A shared `cudaverse-stage/1` provenance schema with structured CUDA
-      diagnostics, strict device selection, and source-provenance propagation
+      diagnostics, strict device selection, source-provenance propagation, and
+      one canonical cross-package `cuda_provenance()` S3 generic
 
 The source dependency graph is:
 
@@ -73,13 +74,15 @@ replace the external runner-group or private-orchestrator access boundary.
       in native assay, `reducedDim`, `rowData`, and `colPair` locations
 - [x] Accept those SCE reduced dimensions directly in all `cudaembedr`
       entry points without guessing non-PCA sources
-- [ ] Add Seurat integration after the Bioconductor object contract is stable
+- [x] Add native SeuratObject v5 integration with exact assay/layer selection,
+      opt-in realization, pre-compute collision checks, targeted overwrite,
+      and native `Assay5`, `DimReduc`, `Neighbor`, metadata, and tool outputs
 - [x] Compose neighbours with graph clustering without losing cell identifiers
 
 The current public inputs are base matrices/arrays, `Matrix` sparse matrices,
-cudaverse result objects, and optional `SingleCellExperiment` reduced
-dimensions/workflows. Seurat remains a target integration, not a current
-capability.
+cudaverse result objects, optional `SingleCellExperiment` reduced
+dimensions/workflows, and optional SeuratObject v5 objects. The Seurat adapter
+requires `SeuratObject`, not the full Seurat package.
 
 ## Backend depth
 
