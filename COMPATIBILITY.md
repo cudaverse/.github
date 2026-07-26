@@ -28,7 +28,7 @@ exactly reproducible development stack is required.
 |---|---|
 | `cudatensr` | `b33d6d1dd405ffe586d18c10e117848c04c42ace` |
 | `cudasparsr` | `fd27094aac7526383c7aabc56433dcfa88e2bdf1` |
-| `cudalearnr` | `069db8adb8fde4bc2931f9e7936e8d656221cb6e` |
+| `cudalearnr` | `38f2bc6fb5a9926832deb66df7e7cd42e527269f` |
 | `cudacellr` | `1dd95a1ebd3ff2b538307c13ad866cf92630f86c` |
 | `cudagraphR` | `89710452fe8beb505f7ae5e0a1e21479e237d8d7` |
 | `cudaembedr` | `3cc7fd555ed5a2093bb200aae120ba667af94668` |

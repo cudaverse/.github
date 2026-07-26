@@ -10,7 +10,8 @@ implementation details belong in the repository that owns them.
       matrix multiplication, reshape, transpose, broadcasting, and CPU fallback
 - [x] `cudasparsr`: sparse conversion, COO/CSR metadata, multiplication,
       reductions, and CPU fallback
-- [x] `cudalearnr`: SVD, PCA, distances, exact batched kNN, and k-means
+- [x] `cudalearnr`: SVD, PCA, numerically stable distances, exact batched kNN,
+      k-means, and feature-aligned post-fit PCA and k-means prediction
 - [x] `cudacellr`: sparse normalization, HVG selection, PCA, neighbours, a
       composable feature-by-cell workflow, and native optional
       `SingleCellExperiment` result mapping
