@@ -38,16 +38,29 @@ cudacellr -. optional workflow adapter .-> cudaembedr
       in `COMPATIBILITY.md`
 - [x] Define a hard-failing, full-stack CPU/CUDA parity contract and reusable
       workflow for an NVIDIA self-hosted runner
+- [x] Derive exact same-repository pull request SHAs inside the reusable
+      contract and reject forks, bots, drafts, and non-collaborator authors
+      before requesting its named runner group
+- [x] Run all six package-owned `testthat` suites in the hardware contract and
+      treat every skip as a failure
+- [ ] Establish the external runner boundary before registering hardware:
+      prove selected-workflow restriction for `cudaverse-nvidia`, or dispatch
+      reviewed SHAs from a private orchestration repository; require isolated
+      ephemeral runners for every pull-request execution
 - [ ] Run all CUDA-capable public paths on dedicated NVIDIA CI hardware
-- [ ] Enable the hardware contract on every push with the repository variable
+- [ ] Enable the hardware contract on every default-branch push and
+      same-repository pull request with the repository variable
       `CUDAVERSE_NVIDIA_CI=enabled` after an online
-      `self-hosted,linux,x64,cuda` runner is available
+      `cudaverse-nvidia` runner is safely available
 - [x] Add runnable long-form package articles for installation, backend
       semantics, memory limits, and the end-to-end workflow
 
 The contract itself refuses to skip when CUDA is unavailable. No CUDA
 performance or continuous hardware-coverage claim is complete until an NVIDIA
-runner executes it successfully on every required change.
+runner executes it successfully on every required change. A public-fork pull
+request is deliberately skipped by these workflow paths; that skipped state is
+not a pass and does not provide hardware evidence. Workflow guards do not
+replace the external runner-group or private-orchestrator access boundary.
 
 ## R and Bioconductor integration
 

@@ -187,18 +187,62 @@ device/backend fields, and whether the same call succeeds with
 
 The organization owns a full-stack parity script at
 `scripts/check-cuda-parity.R` and a reusable `cuda-parity` workflow. It covers
-all public CUDA-capable paths in the six core packages and fails immediately
-when torch cannot see a physical NVIDIA device.
+all public CUDA-capable paths in the six core packages, then runs each
+package-owned `testthat` suite. The job fails when torch cannot see a physical
+NVIDIA device, when any test fails, or when any package test is skipped.
 
-A self-hosted runner must provide:
+A self-hosted runner must belong to the `cudaverse-nvidia` runner group and
+provide:
 
 - labels `self-hosted`, `linux`, `x64`, and `cuda`;
 - R and a CUDA-enabled R torch runtime;
 - a working `nvidia-smi`;
 - network access needed to install ordinary R dependencies.
 
-Each package exposes a manual `cuda-parity` workflow. After the runner is
-online and the manual contract passes, set the repository Actions variable
-`CUDAVERSE_NVIDIA_CI=enabled` to require the same job on pushes and pull
-requests. A skipped job while that variable is absent is infrastructure
-readiness, not CUDA coverage.
+Do not register a persistent GPU runner or set `CUDAVERSE_NVIDIA_CI` until the
+organization's actual runner-group settings or API prove that
+`cudaverse-nvidia` can be restricted to the selected workflow
+`cudaverse/.github/.github/workflows/cuda-parity.yaml@refs/heads/main`.
+Repository access alone is insufficient for these public repositories: another
+workflow in an allowed repository could otherwise address the same runner
+group directly. GitHub's general runner-group documentation covers GitHub Free
+and Team repository access, while selected-workflow access must be verified
+against the current account capability. GitHub also explicitly recommends
+against exposing persistent self-hosted runners to public repositories:
+
+- [general runner-group access](https://docs.github.com/en/actions/how-tos/manage-runners/self-hosted-runners/manage-access);
+- [public-repository self-hosted runner warning](https://docs.github.com/en/actions/how-tos/manage-runners/self-hosted-runners/add-runners).
+
+If selected-workflow restriction is unavailable, use a private orchestration
+repository as the only repository allowed to access the runner, and dispatch
+reviewed public-package SHAs from its trusted default branch. Do not fall back
+to a label-only public-repository runner. Any runner that executes pull request
+code must be isolated and ephemeral, then destroyed after that one job; do not
+reuse it across runs. This follows GitHub's
+[`pull_request_target` hardening guidance](https://docs.github.com/en/actions/reference/security/securely-using-pull_request_target#hardening-a-pull_request_target-workflow).
+
+Each package exposes a manual `cuda-parity` workflow. The reusable workflow
+accepts no repository or ref inputs: it allowlists the six packages plus the
+central contract repository and derives the exact source commit from the
+trusted event. Default-branch pushes use the pushed commit. Non-draft,
+same-repository pull requests use the exact head SHA only when the author is a
+human owner, member, or collaborator and the event sender is also human.
+Public forks, bots such as Dependabot, bot-triggered synchronizations, and
+other associations are rejected before the named GPU group is requested. A
+skipped job is a trust-boundary result, not a CUDA pass or hardware evidence.
+Test a reviewed fork change only after moving it to a trusted
+same-repository branch.
+
+Changes to the central `.github` contract follow the same trust boundary. A
+default-branch `pull_request_target` caller accepts only non-draft,
+same-repository changes from human collaborators, keeps the reusable workflow
+pinned to `main`, and lets that trusted workflow derive the exact contract head
+SHA for checkout and testing. Fork-controlled workflow definitions do not enter
+this reusable path.
+
+Only after the selected-workflow or private-orchestrator access boundary is
+verified, the runner is online, and the manual contract passes should
+maintainers set `CUDAVERSE_NVIDIA_CI=enabled`. That variable requires the same
+job on default-branch pushes and qualifying same-repository pull requests. A
+skipped job while the variable is absent, or because a change fails the trust
+gate, is infrastructure or trust-boundary status, not CUDA coverage.

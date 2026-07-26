@@ -68,7 +68,18 @@ Optional backends are not installed automatically:
 - CPU paths are checked on current R release for Windows, macOS, and Linux.
 - All six packages additionally check R-devel on Linux.
 - A hard-failing full-stack CPU/CUDA parity workflow is defined for a labelled
-  self-hosted NVIDIA runner.
+  self-hosted NVIDIA runner. It also runs all six package-owned `testthat`
+  suites and fails if any test is skipped.
+- Package pull requests from non-draft same-repository branches authored by a
+  human owner, member, or collaborator are derived from the event and tested at
+  their exact head SHA. Central contract pull requests use a trusted
+  default-branch caller and the same event-derived rule.
+- Public forks, bots, and non-collaborator pull requests are intentionally
+  skipped by these workflow paths. That skip is a trust-boundary result, not a
+  CUDA pass or hardware evidence. Before hardware is registered, the named
+  runner group must prove selected-workflow restriction or the contract must
+  move to a private orchestration repository; pull-request execution also
+  requires an isolated ephemeral runner as described in `GPU_SETUP.md`.
 - The public GitHub-hosted CI does not currently provide an NVIDIA runner.
   CUDA performance and hardware coverage are therefore not claimed as
   continuously verified yet.

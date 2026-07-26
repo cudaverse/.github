@@ -1,21 +1,5 @@
 on:
   workflow_call:
-    inputs:
-      changed_repository:
-        description: Cudaverse package repository whose ref replaces main
-        required: false
-        type: string
-        default: ""
-      changed_source_repository:
-        description: Repository containing changed_ref, including a PR fork
-        required: false
-        type: string
-        default: ""
-      changed_ref:
-        description: Commit or ref to test for the changed repository
-        required: false
-        type: string
-        default: ""
   workflow_dispatch:
 
 name: cuda-parity
@@ -25,8 +9,57 @@ permissions:
 
 jobs:
   hardware-contract:
-    name: NVIDIA hardware contract
-    runs-on: [self-hosted, linux, x64, cuda]
+    name: NVIDIA hardware contract (trusted changes only)
+    # This is the final pre-runner security boundary. Only default-branch
+    # push/dispatch events or non-draft same-repository PRs authored by a human
+    # owner/member/collaborator in the seven allowlisted repositories can pass.
+    # All source repositories and refs below are derived from this event rather
+    # than accepted as caller-controlled inputs.
+    if: >-
+      contains(
+        fromJSON(
+          '["cudaverse/.github","cudaverse/cudatensr","cudaverse/cudasparsr","cudaverse/cudalearnr","cudaverse/cudacellr","cudaverse/cudagraphR","cudaverse/cudaembedr"]'
+        ),
+        github.repository
+      ) &&
+      (
+        (
+          (github.event_name == 'push' ||
+           github.event_name == 'workflow_dispatch') &&
+          github.ref == 'refs/heads/main'
+        ) ||
+        (
+          github.repository != 'cudaverse/.github' &&
+          github.event_name == 'pull_request' &&
+          github.event.pull_request.base.ref == 'main' &&
+          github.event.pull_request.draft == false &&
+          github.event.pull_request.head.repo.full_name == github.repository &&
+          github.event.pull_request.user.type == 'User' &&
+          github.event.sender.type == 'User' &&
+          !endsWith(github.actor, '[bot]') &&
+          contains(
+            fromJSON('["OWNER","MEMBER","COLLABORATOR"]'),
+            github.event.pull_request.author_association
+          )
+        ) ||
+        (
+          github.repository == 'cudaverse/.github' &&
+          github.event_name == 'pull_request_target' &&
+          github.event.pull_request.base.ref == 'main' &&
+          github.event.pull_request.draft == false &&
+          github.event.pull_request.head.repo.full_name == github.repository &&
+          github.event.pull_request.user.type == 'User' &&
+          github.event.sender.type == 'User' &&
+          !endsWith(github.actor, '[bot]') &&
+          contains(
+            fromJSON('["OWNER","MEMBER","COLLABORATOR"]'),
+            github.event.pull_request.author_association
+          )
+        )
+      )
+    runs-on:
+      group: cudaverse-nvidia
+      labels: [self-hosted, linux, x64, cuda]
     timeout-minutes: 60
     env:
       CUDAVERSE_REQUIRE_CUDA: "true"
@@ -35,49 +68,49 @@ jobs:
         uses: actions/checkout@v7
         with:
           repository: cudaverse/.github
-          ref: main
+          ref: ${{ github.repository == 'cudaverse/.github' && github.event_name == 'pull_request_target' && github.event.pull_request.head.sha || github.repository == 'cudaverse/.github' && github.sha || 'refs/heads/main' }}
           path: contract
 
       - name: Check out cudatensr
         uses: actions/checkout@v7
         with:
-          repository: ${{ inputs.changed_repository == 'cudaverse/cudatensr' && inputs.changed_source_repository || 'cudaverse/cudatensr' }}
-          ref: ${{ inputs.changed_repository == 'cudaverse/cudatensr' && inputs.changed_ref || 'main' }}
+          repository: cudaverse/cudatensr
+          ref: ${{ github.repository == 'cudaverse/cudatensr' && (github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.sha) || 'refs/heads/main' }}
           path: packages/cudatensr
 
       - name: Check out cudasparsr
         uses: actions/checkout@v7
         with:
-          repository: ${{ inputs.changed_repository == 'cudaverse/cudasparsr' && inputs.changed_source_repository || 'cudaverse/cudasparsr' }}
-          ref: ${{ inputs.changed_repository == 'cudaverse/cudasparsr' && inputs.changed_ref || 'main' }}
+          repository: cudaverse/cudasparsr
+          ref: ${{ github.repository == 'cudaverse/cudasparsr' && (github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.sha) || 'refs/heads/main' }}
           path: packages/cudasparsr
 
       - name: Check out cudalearnr
         uses: actions/checkout@v7
         with:
-          repository: ${{ inputs.changed_repository == 'cudaverse/cudalearnr' && inputs.changed_source_repository || 'cudaverse/cudalearnr' }}
-          ref: ${{ inputs.changed_repository == 'cudaverse/cudalearnr' && inputs.changed_ref || 'main' }}
+          repository: cudaverse/cudalearnr
+          ref: ${{ github.repository == 'cudaverse/cudalearnr' && (github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.sha) || 'refs/heads/main' }}
           path: packages/cudalearnr
 
       - name: Check out cudacellr
         uses: actions/checkout@v7
         with:
-          repository: ${{ inputs.changed_repository == 'cudaverse/cudacellr' && inputs.changed_source_repository || 'cudaverse/cudacellr' }}
-          ref: ${{ inputs.changed_repository == 'cudaverse/cudacellr' && inputs.changed_ref || 'main' }}
+          repository: cudaverse/cudacellr
+          ref: ${{ github.repository == 'cudaverse/cudacellr' && (github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.sha) || 'refs/heads/main' }}
           path: packages/cudacellr
 
       - name: Check out cudagraphR
         uses: actions/checkout@v7
         with:
-          repository: ${{ inputs.changed_repository == 'cudaverse/cudagraphR' && inputs.changed_source_repository || 'cudaverse/cudagraphR' }}
-          ref: ${{ inputs.changed_repository == 'cudaverse/cudagraphR' && inputs.changed_ref || 'main' }}
+          repository: cudaverse/cudagraphR
+          ref: ${{ github.repository == 'cudaverse/cudagraphR' && (github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.sha) || 'refs/heads/main' }}
           path: packages/cudagraphR
 
       - name: Check out cudaembedr
         uses: actions/checkout@v7
         with:
-          repository: ${{ inputs.changed_repository == 'cudaverse/cudaembedr' && inputs.changed_source_repository || 'cudaverse/cudaembedr' }}
-          ref: ${{ inputs.changed_repository == 'cudaverse/cudaembedr' && inputs.changed_ref || 'main' }}
+          repository: cudaverse/cudaembedr
+          ref: ${{ github.repository == 'cudaverse/cudaembedr' && (github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.sha) || 'refs/heads/main' }}
           path: packages/cudaembedr
 
       - uses: r-lib/actions/setup-r@v2
@@ -99,7 +132,15 @@ jobs:
         shell: Rscript {0}
         run: |
           install.packages(
-            c("Matrix", "igraph", "BiocManager"),
+            c(
+              "Matrix",
+              "igraph",
+              "testthat",
+              "RSpectra",
+              "Rtsne",
+              "uwot",
+              "BiocManager"
+            ),
             repos = "https://cloud.r-project.org"
           )
           BiocManager::install(
@@ -116,6 +157,9 @@ jobs:
           R CMD INSTALL packages/cudacellr
           R CMD INSTALL packages/cudagraphR
           R CMD INSTALL packages/cudaembedr
+
+      - name: Run package-owned testthat suites without skips
+        run: Rscript contract/scripts/check-cuda-package-tests.R
 
       - name: Run required CPU-CUDA parity and provenance checks
         run: Rscript contract/scripts/check-cuda-parity.R

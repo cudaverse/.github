@@ -1,0 +1,36 @@
+on:
+  push:
+    branches: [main]
+  # pull_request_target keeps this caller on the trusted default-branch
+  # definition. The job below accepts only non-draft same-repository changes
+  # from human collaborators; the reusable workflow derives their exact SHA
+  # from the event context.
+  pull_request_target:
+    branches: [main]
+    types: [opened, synchronize, reopened, ready_for_review]
+  workflow_dispatch:
+
+name: cuda-parity-contract
+
+permissions:
+  contents: read
+
+jobs:
+  hardware-contract:
+    if: >-
+      (github.event_name == 'workflow_dispatch' ||
+       vars.CUDAVERSE_NVIDIA_CI == 'enabled') &&
+      (github.event_name != 'workflow_dispatch' ||
+       github.ref == 'refs/heads/main') &&
+      (github.event_name != 'pull_request_target' ||
+       (github.event.pull_request.base.ref == 'main' &&
+        github.event.pull_request.draft == false &&
+        github.event.pull_request.head.repo.full_name == github.repository &&
+        github.event.pull_request.user.type == 'User' &&
+        github.event.sender.type == 'User' &&
+        !endsWith(github.actor, '[bot]') &&
+        contains(
+          fromJSON('["OWNER","MEMBER","COLLABORATOR"]'),
+          github.event.pull_request.author_association
+        )))
+    uses: cudaverse/.github/.github/workflows/cuda-parity.yaml@main
