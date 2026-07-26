@@ -9,12 +9,12 @@ separately once the packages enter CRAN.
 
 | Package | Development version | cudaverse dependencies |
 |---|---:|---|
-| `cudatensr` | 0.1.2 | — |
-| `cudasparsr` | 0.1.2 | `cudatensr (>= 0.1.2)` |
-| `cudalearnr` | 0.1.2 | `cudatensr (>= 0.1.2)` |
-| `cudacellr` | 0.1.2 | `cudasparsr (>= 0.1.2)`, `cudalearnr (>= 0.1.2)` |
-| `cudagraphR` | 0.1.2 | optional `cudalearnr (>= 0.1.2)` |
-| `cudaembedr` | 0.1.2 | `cudalearnr (>= 0.1.2)`; optional `cudatensr (>= 0.1.2)` and `cudacellr (>= 0.1.2)` |
+| `cudatensr` | 0.2.0 | — |
+| `cudasparsr` | 0.2.0 | `cudatensr (>= 0.2.0)` |
+| `cudalearnr` | 0.2.0 | `cudatensr (>= 0.2.0)` |
+| `cudacellr` | 0.2.0 | `cudatensr (>= 0.2.0)`, `cudasparsr (>= 0.2.0)`, `cudalearnr (>= 0.2.0)` |
+| `cudagraphR` | 0.2.0 | `cudatensr (>= 0.2.0)`; optional `cudalearnr (>= 0.2.0)` |
+| `cudaembedr` | 0.2.0 | `cudatensr (>= 0.2.0)`, `cudalearnr (>= 0.2.0)`; optional `cudacellr (>= 0.2.0)` |
 
 These are source-package versions, not published release tags.
 
@@ -26,14 +26,14 @@ exactly reproducible development stack is required.
 
 | Package | Verified commit |
 |---|---|
-| `cudatensr` | `3eec71fab7859655e5ffe7f21f298a7e32176e77` |
-| `cudasparsr` | `6e6bb7e8f8f055a78da479aa777c10c0855ee926` |
-| `cudalearnr` | `78a7ccec3dc2adef6e0ad7e2349e9f1e0925974f` |
-| `cudacellr` | `385abd4f992fcffca770d7fa690113dfc912dd5a` |
-| `cudagraphR` | `8a33ad64289e7eed6d998be83aca9e66a09f2bd7` |
-| `cudaembedr` | `90b585cc212709c6594d4bd2aa619a49b0088229` |
+| `cudatensr` | `adb2423949792cd6becf15f1bfd7ce15324eda5c` |
+| `cudasparsr` | `f8fd20d6c212ac6ce5f03a3f10a358b471db96fb` |
+| `cudalearnr` | `adfa2c7367e7ff296a0c5df6e97cd67ded032603` |
+| `cudacellr` | `87e040ae9a31b95101cda0a1ac4bfe8e92dd617d` |
+| `cudagraphR` | `3bde230eb27befda8f0848aa3320dbc0d5e92f79` |
+| `cudaembedr` | `adf659e9489163f497a161554736e151ba5b3554` |
 
-**Verified on:** `2026-07-25`
+**Verified on:** `2026-07-26`
 
 ## Installation order
 
@@ -65,8 +65,8 @@ Optional backends are not installed automatically:
 
 - CPU paths are checked on current R release for Windows, macOS, and Linux.
 - All six packages additionally check R-devel on Linux.
-- CUDA code is guarded by CPU-reference parity tests that run when a CUDA
-  backend is present.
+- A hard-failing full-stack CPU/CUDA parity workflow is defined for a labelled
+  self-hosted NVIDIA runner.
 - The public GitHub-hosted CI does not currently provide an NVIDIA runner.
   CUDA performance and hardware coverage are therefore not claimed as
   continuously verified yet.
