@@ -102,8 +102,10 @@ Its
 built one source tarball with R 4.6.1, verified its SHA-256 as
 `7a1c8c0bbe6f0d404f986770f860ef1408e313a3c304d036896f10cf5623002a`,
 and passed the full R-devel check with only the expected new-submission note.
-That exact tarball was uploaded to the official Win-builder R-devel queue on
-2026-07-27; its emailed result is pending.
+That exact tarball also passed official Win-builder R-devel on Windows Server
+2022 with 0 errors, 0 warnings, and 1 incoming-feasibility note containing the
+new-submission marker plus a spelling flag for the valid CUDA proper name.
+Installation, examples, tests, vignettes, and PDF/HTML manuals all passed.
 
 Publish from the dependency foundation upward:
 
