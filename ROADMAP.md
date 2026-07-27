@@ -95,6 +95,16 @@ requires `SeuratObject`, not the full Seurat package.
 
 ## Release sequence
 
+The current `cudatensr` 0.2.0 candidate is pinned to
+[`1b7b412`](https://github.com/cudaverse/cudatensr/commit/1b7b412707224765da5cdc679cc66cf2ef4cc56f).
+Its
+[CRAN-readiness run](https://github.com/cudaverse/cudatensr/actions/runs/30245455085)
+built one source tarball with R 4.6.1, verified its SHA-256 as
+`7a1c8c0bbe6f0d404f986770f860ef1408e313a3c304d036896f10cf5623002a`,
+and passed the full R-devel check with only the expected new-submission note.
+That exact tarball was uploaded to the official Win-builder R-devel queue on
+2026-07-27; its emailed result is pending.
+
 Publish from the dependency foundation upward:
 
 1. `cudatensr`
