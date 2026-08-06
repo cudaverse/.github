@@ -38,26 +38,12 @@ jobs:
           ref: main
           path: contract
 
-      - name: Check out cudatensr
+      - name: Check out cudaverse
         uses: actions/checkout@v7
         with:
-          repository: ${{ inputs.changed_repository == 'cudaverse/cudatensr' && inputs.changed_source_repository || 'cudaverse/cudatensr' }}
-          ref: ${{ inputs.changed_repository == 'cudaverse/cudatensr' && inputs.changed_ref || 'main' }}
-          path: packages/cudatensr
-
-      - name: Check out cudasparsr
-        uses: actions/checkout@v7
-        with:
-          repository: ${{ inputs.changed_repository == 'cudaverse/cudasparsr' && inputs.changed_source_repository || 'cudaverse/cudasparsr' }}
-          ref: ${{ inputs.changed_repository == 'cudaverse/cudasparsr' && inputs.changed_ref || 'main' }}
-          path: packages/cudasparsr
-
-      - name: Check out cudalearnr
-        uses: actions/checkout@v7
-        with:
-          repository: ${{ inputs.changed_repository == 'cudaverse/cudalearnr' && inputs.changed_source_repository || 'cudaverse/cudalearnr' }}
-          ref: ${{ inputs.changed_repository == 'cudaverse/cudalearnr' && inputs.changed_ref || 'main' }}
-          path: packages/cudalearnr
+          repository: ${{ inputs.changed_repository == 'cudaverse/cudaverse' && inputs.changed_source_repository || 'cudaverse/cudaverse' }}
+          ref: ${{ inputs.changed_repository == 'cudaverse/cudaverse' && inputs.changed_ref || 'main' }}
+          path: packages/cudaverse
 
       - name: Check out cudacellr
         uses: actions/checkout@v7
@@ -66,55 +52,21 @@ jobs:
           ref: ${{ inputs.changed_repository == 'cudaverse/cudacellr' && inputs.changed_ref || 'main' }}
           path: packages/cudacellr
 
-      - name: Check out cudagraphR
-        uses: actions/checkout@v7
-        with:
-          repository: ${{ inputs.changed_repository == 'cudaverse/cudagraphR' && inputs.changed_source_repository || 'cudaverse/cudagraphR' }}
-          ref: ${{ inputs.changed_repository == 'cudaverse/cudagraphR' && inputs.changed_ref || 'main' }}
-          path: packages/cudagraphR
-
-      - name: Check out cudaembedr
-        uses: actions/checkout@v7
-        with:
-          repository: ${{ inputs.changed_repository == 'cudaverse/cudaembedr' && inputs.changed_source_repository || 'cudaverse/cudaembedr' }}
-          ref: ${{ inputs.changed_repository == 'cudaverse/cudaembedr' && inputs.changed_ref || 'main' }}
-          path: packages/cudaembedr
-
       - uses: r-lib/actions/setup-r@v2
         with:
           use-public-rspm: true
 
-      - name: Install integration dependencies and system requirements
+      - name: Install integration dependencies
         uses: r-lib/actions/setup-r-dependencies@v2
         with:
-          working-directory: packages/cudagraphR
+          working-directory: packages/cudaverse
           packages: any::Matrix, any::igraph, bioc::SingleCellExperiment
           dependencies: '"hard"'
 
-      - name: Verify integration dependencies
+      - name: Install the two-package source stack
         run: |
-          stopifnot(
-            requireNamespace("Matrix", quietly = TRUE),
-            requireNamespace("igraph", quietly = TRUE),
-            requireNamespace("SingleCellExperiment", quietly = TRUE)
-          )
-          cat("Matrix", as.character(packageVersion("Matrix")), "\n")
-          cat("igraph", as.character(packageVersion("igraph")), "\n")
-          cat(
-            "SingleCellExperiment",
-            as.character(packageVersion("SingleCellExperiment")),
-            "\n"
-          )
-        shell: Rscript {0}
-
-      - name: Install the source stack in dependency order
-        run: |
-          R CMD INSTALL packages/cudatensr
-          R CMD INSTALL packages/cudasparsr
-          R CMD INSTALL packages/cudalearnr
+          R CMD INSTALL packages/cudaverse
           R CMD INSTALL packages/cudacellr
-          R CMD INSTALL packages/cudagraphR
-          R CMD INSTALL packages/cudaembedr
 
       - name: Verify identifier preservation across packages
         run: Rscript contract/scripts/check-identifiers.R

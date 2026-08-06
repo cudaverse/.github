@@ -1,0 +1,95 @@
+{
+  "schema_version": "cudaverse-benchmark/1",
+  "evidence_status": "example",
+  "benchmark_id": "cudaverse-dense-matmul-example",
+  "recorded_at": "2026-08-05T00:00:00Z",
+  "sources": [
+    {
+      "repository": "cudaverse/cudaverse",
+      "commit": "1111111111111111111111111111111111111111",
+      "dirty": false
+    }
+  ],
+  "environment": {
+    "hardware_label": "illustrative hardware; not a measured result",
+    "os": "Example OS",
+    "architecture": "x86_64",
+    "cpu": {
+      "model": "Example CPU",
+      "logical_cores": 8
+    },
+    "memory_bytes": 17179869184,
+    "gpu": {
+      "model": "Example NVIDIA GPU",
+      "count": 1,
+      "memory_bytes": 8589934592
+    },
+    "software": {
+      "r_version": "4.6.0",
+      "cuda_driver": "example",
+      "cuda_runtime": "example",
+      "package_versions": {
+        "cudaverse": "0.1.0",
+        "torch": "example"
+      }
+    }
+  },
+  "workload": {
+    "name": "dense matrix multiplication",
+    "category": "dense",
+    "seed": 42,
+    "dtype": "float32",
+    "dimensions": [4096, 4096, 4096],
+    "sparsity": 0,
+    "parameters": {
+      "operation": "matrix_multiply"
+    }
+  },
+  "correctness": {
+    "passed": true,
+    "reference_backend": "cpu-base",
+    "comparison": "maximum absolute error",
+    "tolerance": 0.00001,
+    "max_abs_error": 0.000003
+  },
+  "timing": {
+    "clock": "elapsed_wall",
+    "warmup_iterations": 2,
+    "measured_iterations": 3,
+    "cuda_synchronized": true,
+    "transfer_policy": "excluded"
+  },
+  "measurements": [
+    {
+      "implementation": "cpu-base",
+      "device": "cpu",
+      "metric": "elapsed_seconds",
+      "unit": "seconds",
+      "values": [1.1, 1.2, 1.3],
+      "summary": {
+        "count": 3,
+        "minimum": 1.1,
+        "median": 1.2,
+        "maximum": 1.3
+      }
+    },
+    {
+      "implementation": "cuda-torch",
+      "device": "cuda",
+      "metric": "elapsed_seconds",
+      "unit": "seconds",
+      "values": [0.4, 0.5, 0.6],
+      "summary": {
+        "count": 3,
+        "minimum": 0.4,
+        "median": 0.5,
+        "maximum": 0.6
+      }
+    }
+  ],
+  "claims": {
+    "publication_ready": false,
+    "scope": "Illustrative values only; this file is not benchmark evidence.",
+    "break_even": null
+  }
+}

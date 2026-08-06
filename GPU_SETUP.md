@@ -9,9 +9,9 @@ Install the package you need and force the portable backend:
 
 ```r
 # install.packages("pak")
-pak::pak("cudaverse/cudalearnr")
+pak::pak("cudaverse/cudaverse")
 
-library(cudalearnr)
+library(cudaverse)
 
 x <- scale(iris[, 1:4])
 fit <- cuda_pca(x, n_components = 2, device = "cpu")
@@ -53,8 +53,8 @@ Run these checks in a fresh R session:
 packageVersion("torch")
 torch::cuda_is_available()
 torch::cuda_device_count()
-cudatensr::cuda_available()
-cudatensr::cuda_diagnostics()
+cudaverse::cuda_available()
+cudaverse::cuda_diagnostics()
 ```
 
 Both availability checks must return `TRUE` before `device = "cuda"` can work.
@@ -67,7 +67,7 @@ torch::install_torch_sitrep()
 Then require CUDA explicitly in a small smoke test:
 
 ```r
-library(cudatensr)
+library(cudaverse)
 
 x <- cuda_tensor(matrix(1:6, 2, 3), device = "cuda")
 tensor_device(x)
@@ -84,7 +84,7 @@ Do not use a large biological dataset as the first GPU test.
 | Request | Behaviour |
 |---|---|
 | `device = "cpu"` | Always use the portable CPU backend |
-| `device = "auto"` | Use CUDA only when `cudatensr::cuda_available()` is true; otherwise use CPU |
+| `device = "auto"` | Use CUDA only when `cudaverse::cuda_available()` is true; otherwise use CPU |
 | `device = "cuda"` | Require CUDA and fail clearly when it is unavailable |
 
 `"auto"` is a convenience, not a GPU guarantee. Inspect the returned object:
@@ -101,15 +101,15 @@ Such a result reports `"hybrid"` rather than claiming end-to-end GPU execution.
 Every current result supports the same detailed inspector:
 
 ```r
-selection <- cudatensr::cuda_select_device("auto")
+selection <- cudaverse::cuda_select_device("auto")
 selection
 
-fit <- cudalearnr::cuda_knn(
+fit <- cudaverse::cuda_knn(
   scale(iris[, 1:4]),
   k = 5,
   device = "auto"
 )
-cudalearnr::cuda_provenance(fit)
+cudaverse::cuda_provenance(fit)
 ```
 
 The stage table separates:
@@ -176,7 +176,7 @@ Include:
 sessionInfo()
 torch::install_torch_sitrep()
 torch::cuda_is_available()
-cudatensr::cuda_available()
+cudaverse::cuda_available()
 ```
 
 Also provide a small reproducible input, the requested device, the actual

@@ -1,10 +1,6 @@
 package_names <- c(
-  "cudatensr",
-  "cudasparsr",
-  "cudalearnr",
-  "cudacellr",
-  "cudagraphR",
-  "cudaembedr"
+  "cudaverse",
+  "cudacellr"
 )
 required_packages <- c(
   package_names,
@@ -37,7 +33,7 @@ if (!identical(
   )
 }
 
-diagnostics <- cudatensr::cuda_diagnostics()
+diagnostics <- cudaverse::cuda_diagnostics()
 if (!isTRUE(diagnostics$cuda_available) ||
     is.na(diagnostics$cuda_device_count) ||
     diagnostics$cuda_device_count < 1L) {
