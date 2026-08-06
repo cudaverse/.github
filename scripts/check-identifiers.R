@@ -1,7 +1,7 @@
 set.seed(42)
 
 check_provenance <- function(x, expected_stages, compute_device = "cpu") {
-  provenance <- cudatensr::cuda_provenance(x)
+  provenance <- cudaverse::cuda_provenance(x)
   stopifnot(
     inherits(provenance, "cuda_provenance"),
     identical(
@@ -27,19 +27,15 @@ check_provenance <- function(x, expected_stages, compute_device = "cpu") {
 
 check_provenance_load_order <- function(container = NULL) {
   packages <- c(
-    "cudasparsr",
-    "cudalearnr",
-    "cudacellr",
-    "cudagraphR",
-    "cudaembedr"
+    "cudacellr"
   )
-  canonical <- cudatensr::cuda_provenance
+  canonical <- cudaverse::cuda_provenance
   probe_class <- "cudaverse_provenance_load_order_probe"
   registerS3method(
     "cuda_provenance",
     probe_class,
     function(x) x$value,
-    envir = asNamespace("cudatensr")
+    envir = asNamespace("cudaverse")
   )
 
   on.exit({
@@ -97,14 +93,14 @@ counts <- matrix(rpois(60 * 24, lambda = 2), nrow = 60, ncol = 24)
 rownames(counts) <- paste0("gene_", seq_len(nrow(counts)))
 colnames(counts) <- paste0("cell_", seq_len(ncol(counts)))
 
-tensor <- cudatensr::cuda_tensor(counts, device = "cpu")
-stopifnot(identical(dimnames(cudatensr::to_cpu(tensor)), dimnames(counts)))
+tensor <- cudaverse::cuda_tensor(counts, device = "cpu")
+stopifnot(identical(dimnames(cudaverse::to_cpu(tensor)), dimnames(counts)))
 check_provenance(tensor, "tensor_materialization")
 
-sparse <- cudasparsr::cuda_sparse(counts, device = "cpu")
+sparse <- cudaverse::cuda_sparse(counts, device = "cpu")
 stopifnot(
   identical(
-    dimnames(cudasparsr::to_dgCMatrix(sparse)),
+    dimnames(cudaverse::to_dgCMatrix(sparse)),
     dimnames(counts)
   )
 )
@@ -213,11 +209,11 @@ stopifnot(
 )
 check_provenance_load_order(sce_result)
 
-graph <- cudagraphR::cuda_knn_graph(workflow$neighbors)
+graph <- cudaverse::cuda_knn_graph(workflow$neighbors)
 stopifnot(
   identical(graph$vertex_names, colnames(counts)),
   identical(
-    dimnames(cudagraphR::as_adjacency_matrix(graph)),
+    dimnames(cudaverse::as_adjacency_matrix(graph)),
     list(colnames(counts), colnames(counts))
   ),
   inherits(graph$source_provenance, "cuda_provenance"),
@@ -226,21 +222,21 @@ stopifnot(
 check_provenance(graph, "graph_assembly")
 
 set.seed(1)
-communities <- cudagraphR::cuda_louvain(graph)
+communities <- cudaverse::cuda_louvain(graph)
 stopifnot(
   identical(names(communities$membership), colnames(counts)),
   inherits(communities$source_provenance, "cuda_provenance")
 )
 check_provenance(communities, "community_detection")
 
-embedding <- cudaembedr::cuda_diffusion_map(
+embedding <- cudaverse::cuda_diffusion_map(
   workflow,
   n_components = 2,
   device = "cpu"
 )
 stopifnot(
   identical(
-    rownames(cudaembedr::embedding_coordinates(embedding)),
+    rownames(cudaverse::embedding_coordinates(embedding)),
     colnames(counts)
   ),
   inherits(embedding$source_provenance, "cuda_provenance"),
@@ -251,14 +247,14 @@ check_provenance(
   c("distance", "kernel", "eigendecomposition")
 )
 
-sce_embedding <- cudaembedr::cuda_diffusion_map(
+sce_embedding <- cudaverse::cuda_diffusion_map(
   sce_result,
   n_components = 2,
   device = "cpu"
 )
 stopifnot(
   identical(
-    rownames(cudaembedr::embedding_coordinates(sce_embedding)),
+    rownames(cudaverse::embedding_coordinates(sce_embedding)),
     colnames(counts)
   ),
   identical(

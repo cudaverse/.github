@@ -10,15 +10,10 @@ permissions:
 jobs:
   hardware-contract:
     name: NVIDIA hardware contract (trusted changes only)
-    # This is the final pre-runner security boundary. Only default-branch
-    # push/dispatch events or non-draft same-repository PRs authored by a human
-    # owner/member/collaborator in the seven allowlisted repositories can pass.
-    # All source repositories and refs below are derived from this event rather
-    # than accepted as caller-controlled inputs.
     if: >-
       contains(
         fromJSON(
-          '["cudaverse/.github","cudaverse/cudatensr","cudaverse/cudasparsr","cudaverse/cudalearnr","cudaverse/cudacellr","cudaverse/cudagraphR","cudaverse/cudaembedr"]'
+          '["cudaverse/.github","cudaverse/cudaverse","cudaverse/cudacellr"]'
         ),
         github.repository
       ) &&
@@ -71,26 +66,12 @@ jobs:
           ref: ${{ github.repository == 'cudaverse/.github' && github.event_name == 'pull_request_target' && github.event.pull_request.head.sha || github.repository == 'cudaverse/.github' && github.sha || 'refs/heads/main' }}
           path: contract
 
-      - name: Check out cudatensr
+      - name: Check out cudaverse
         uses: actions/checkout@v7
         with:
-          repository: cudaverse/cudatensr
-          ref: ${{ github.repository == 'cudaverse/cudatensr' && (github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.sha) || 'refs/heads/main' }}
-          path: packages/cudatensr
-
-      - name: Check out cudasparsr
-        uses: actions/checkout@v7
-        with:
-          repository: cudaverse/cudasparsr
-          ref: ${{ github.repository == 'cudaverse/cudasparsr' && (github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.sha) || 'refs/heads/main' }}
-          path: packages/cudasparsr
-
-      - name: Check out cudalearnr
-        uses: actions/checkout@v7
-        with:
-          repository: cudaverse/cudalearnr
-          ref: ${{ github.repository == 'cudaverse/cudalearnr' && (github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.sha) || 'refs/heads/main' }}
-          path: packages/cudalearnr
+          repository: cudaverse/cudaverse
+          ref: ${{ github.repository == 'cudaverse/cudaverse' && (github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.sha) || 'refs/heads/main' }}
+          path: packages/cudaverse
 
       - name: Check out cudacellr
         uses: actions/checkout@v7
@@ -98,20 +79,6 @@ jobs:
           repository: cudaverse/cudacellr
           ref: ${{ github.repository == 'cudaverse/cudacellr' && (github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.sha) || 'refs/heads/main' }}
           path: packages/cudacellr
-
-      - name: Check out cudagraphR
-        uses: actions/checkout@v7
-        with:
-          repository: cudaverse/cudagraphR
-          ref: ${{ github.repository == 'cudaverse/cudagraphR' && (github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.sha) || 'refs/heads/main' }}
-          path: packages/cudagraphR
-
-      - name: Check out cudaembedr
-        uses: actions/checkout@v7
-        with:
-          repository: cudaverse/cudaembedr
-          ref: ${{ github.repository == 'cudaverse/cudaembedr' && (github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.sha) || 'refs/heads/main' }}
-          path: packages/cudaembedr
 
       - uses: r-lib/actions/setup-r@v2
         with:
@@ -133,13 +100,8 @@ jobs:
         run: |
           install.packages(
             c(
-              "Matrix",
-              "igraph",
-              "testthat",
-              "RSpectra",
-              "Rtsne",
-              "uwot",
-              "BiocManager"
+              "Matrix", "igraph", "testthat", "RSpectra", "Rtsne",
+              "uwot", "SeuratObject", "BiocManager"
             ),
             repos = "https://cloud.r-project.org"
           )
@@ -149,14 +111,10 @@ jobs:
             update = FALSE
           )
 
-      - name: Install the source stack in dependency order
+      - name: Install the two-package source stack
         run: |
-          R CMD INSTALL packages/cudatensr
-          R CMD INSTALL packages/cudasparsr
-          R CMD INSTALL packages/cudalearnr
+          R CMD INSTALL packages/cudaverse
           R CMD INSTALL packages/cudacellr
-          R CMD INSTALL packages/cudagraphR
-          R CMD INSTALL packages/cudaembedr
 
       - name: Run package-owned testthat suites without skips
         run: Rscript contract/scripts/check-cuda-package-tests.R

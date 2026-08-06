@@ -1,10 +1,6 @@
 required <- c(
-  "cudatensr",
-  "cudasparsr",
-  "cudalearnr",
+  "cudaverse",
   "cudacellr",
-  "cudagraphR",
-  "cudaembedr",
   "Matrix",
   "igraph",
   "SingleCellExperiment",
@@ -23,7 +19,7 @@ if (length(missing)) {
   )
 }
 
-diagnostics <- cudatensr::cuda_diagnostics()
+diagnostics <- cudaverse::cuda_diagnostics()
 print(diagnostics)
 if (!isTRUE(diagnostics$cuda_available) ||
     is.na(diagnostics$cuda_device_count) ||
@@ -69,7 +65,7 @@ equal_numeric <- function(actual, expected, tolerance = 1e-7,
 }
 
 expect_stage <- function(x, stage, device, aggregate = NULL) {
-  provenance <- cudatensr::cuda_provenance(x)
+  provenance <- cudaverse::cuda_provenance(x)
   selected <- provenance[provenance$stage == stage, , drop = FALSE]
   if (nrow(selected) != 1L || !identical(selected$device, device)) {
     stop(
@@ -110,7 +106,7 @@ expect_tensor_contract <- function(x, dtype, shape, device, backend, stage) {
     )
   }
   shape <- as.integer(shape)
-  observed_shape <- cudatensr::tensor_shape(x)
+  observed_shape <- cudaverse::tensor_shape(x)
   if (!identical(observed_shape, shape)) {
     stop(
       sprintf(
@@ -121,7 +117,7 @@ expect_tensor_contract <- function(x, dtype, shape, device, backend, stage) {
       call. = FALSE
     )
   }
-  observed_device <- unname(cudatensr::tensor_device(x))
+  observed_device <- unname(cudaverse::tensor_device(x))
   expected_device <- c(device, backend)
   if (!identical(observed_device, expected_device)) {
     stop(
@@ -157,7 +153,7 @@ expect_tensor_contract <- function(x, dtype, shape, device, backend, stage) {
   invisible(provenance)
 }
 
-cat("Checking cudatensr public CUDA paths...\n")
+cat("Checking cudaverse dense tensor CUDA paths...\n")
 set.seed(20260726)
 dense <- matrix(
   rnorm(60),
@@ -165,78 +161,78 @@ dense <- matrix(
   ncol = 5,
   dimnames = list(paste0("row_", 1:12), paste0("feature_", 1:5))
 )
-cpu_tensor <- cudatensr::cuda_tensor(
+cpu_tensor <- cudaverse::cuda_tensor(
   dense,
   device = "cpu",
   dtype = "float64"
 )
-gpu_tensor <- cudatensr::cuda_tensor(
+gpu_tensor <- cudaverse::cuda_tensor(
   dense,
   device = "cuda",
   dtype = "float64"
 )
 stopifnot(
-  identical(unname(cudatensr::tensor_device(gpu_tensor)),
+  identical(unname(cudaverse::tensor_device(gpu_tensor)),
             c("cuda", "torch"))
 )
-equal_numeric(cudatensr::to_cpu(gpu_tensor), dense, label = "tensor upload")
+equal_numeric(cudaverse::to_cpu(gpu_tensor), dense, label = "tensor upload")
 
 equal_numeric(
-  cudatensr::to_cpu(gpu_tensor + 0.25),
-  cudatensr::to_cpu(cpu_tensor + 0.25),
+  cudaverse::to_cpu(gpu_tensor + 0.25),
+  cudaverse::to_cpu(cpu_tensor + 0.25),
   label = "tensor arithmetic"
 )
 expect_stage(gpu_tensor + 0.25, "arithmetic", "cuda", "cuda")
 
 right <- matrix(rnorm(20), 5, 4)
-gpu_product <- cudatensr::tensor_matmul(
+gpu_product <- cudaverse::tensor_matmul(
   gpu_tensor,
-  cudatensr::cuda_tensor(right, "cuda", "float64")
+  cudaverse::cuda_tensor(right, "cuda", "float64")
 )
-cpu_product <- cudatensr::tensor_matmul(cpu_tensor, right)
+cpu_product <- cudaverse::tensor_matmul(cpu_tensor, right)
 equal_numeric(
-  cudatensr::to_cpu(gpu_product),
-  cudatensr::to_cpu(cpu_product),
+  cudaverse::to_cpu(gpu_product),
+  cudaverse::to_cpu(cpu_product),
   tolerance = 1e-6,
   label = "tensor matrix multiplication"
 )
 expect_stage(gpu_product, "matrix_multiply", "cuda", "cuda")
 
 equal_numeric(
-  cudatensr::to_cpu(cudatensr::tensor_sum(gpu_tensor, dim = 1)),
-  cudatensr::to_cpu(cudatensr::tensor_sum(cpu_tensor, dim = 1)),
+  cudaverse::to_cpu(cudaverse::tensor_sum(gpu_tensor, dim = 1)),
+  cudaverse::to_cpu(cudaverse::tensor_sum(cpu_tensor, dim = 1)),
   tolerance = 1e-6,
   label = "tensor sum"
 )
 equal_numeric(
-  cudatensr::to_cpu(cudatensr::tensor_mean(gpu_tensor, dim = 2)),
-  cudatensr::to_cpu(cudatensr::tensor_mean(cpu_tensor, dim = 2)),
+  cudaverse::to_cpu(cudaverse::tensor_mean(gpu_tensor, dim = 2)),
+  cudaverse::to_cpu(cudaverse::tensor_mean(cpu_tensor, dim = 2)),
   tolerance = 1e-6,
   label = "tensor mean"
 )
 equal_numeric(
-  cudatensr::to_cpu(cudatensr::tensor_reshape(gpu_tensor, c(3, 20))),
-  cudatensr::to_cpu(cudatensr::tensor_reshape(cpu_tensor, c(3, 20))),
+  cudaverse::to_cpu(cudaverse::tensor_reshape(gpu_tensor, c(3, 20))),
+  cudaverse::to_cpu(cudaverse::tensor_reshape(cpu_tensor, c(3, 20))),
   label = "tensor reshape"
 )
 equal_numeric(
-  cudatensr::to_cpu(t(gpu_tensor)),
-  cudatensr::to_cpu(t(cpu_tensor)),
+  cudaverse::to_cpu(t(gpu_tensor)),
+  cudaverse::to_cpu(t(cpu_tensor)),
   label = "tensor transpose"
 )
 gpu_subset <- gpu_tensor[1:4, 2:4, drop = FALSE]
 cpu_subset <- cpu_tensor[1:4, 2:4, drop = FALSE]
 equal_numeric(
-  cudatensr::to_cpu(gpu_subset),
-  cudatensr::to_cpu(cpu_subset),
+  cudaverse::to_cpu(gpu_subset),
+  cudaverse::to_cpu(cpu_subset),
   label = "tensor subset"
 )
 expect_stage(gpu_subset, "subset", "cpu", "hybrid")
 gpu_tensor[1, 1] <- 10
 cpu_tensor[1, 1] <- 10
 equal_numeric(
-  cudatensr::to_cpu(gpu_tensor),
-  cudatensr::to_cpu(cpu_tensor),
+  cudaverse::to_cpu(gpu_tensor),
+  cudaverse::to_cpu(cpu_tensor),
   label = "tensor replacement"
 )
 expect_stage(gpu_tensor, "replacement", "cpu", "hybrid")
@@ -254,7 +250,7 @@ float_values <- matrix(
     feature = paste0("float_feature_", 1:4)
   )
 )
-cpu_float <- cudatensr::cuda_tensor(
+cpu_float <- cudaverse::cuda_tensor(
   float_values,
   device = "cpu",
   dtype = "float32"
@@ -263,10 +259,10 @@ expect_tensor_contract(
   cpu_float, "float32", c(3, 4), "cpu", "base",
   "tensor_materialization"
 )
-gpu_float <- cudatensr::to_device(cpu_float, "cuda")
+gpu_float <- cudaverse::to_device(cpu_float, "cuda")
 equal_numeric(
-  cudatensr::to_cpu(gpu_float),
-  cudatensr::to_cpu(cpu_float),
+  cudaverse::to_cpu(gpu_float),
+  cudaverse::to_cpu(cpu_float),
   tolerance = 2e-6,
   label = "float32 CPU-to-CUDA transfer"
 )
@@ -274,10 +270,10 @@ expect_tensor_contract(
   gpu_float, "float32", c(3, 4), "cuda", "torch",
   "device_transfer"
 )
-cpu_float_roundtrip <- cudatensr::to_device(gpu_float, "cpu")
+cpu_float_roundtrip <- cudaverse::to_device(gpu_float, "cpu")
 equal_numeric(
-  cudatensr::to_cpu(cpu_float_roundtrip),
-  cudatensr::to_cpu(cpu_float),
+  cudaverse::to_cpu(cpu_float_roundtrip),
+  cudaverse::to_cpu(cpu_float),
   tolerance = 2e-6,
   label = "float32 CUDA-to-CPU transfer"
 )
@@ -290,23 +286,23 @@ float_offset_values <- setNames(
   c(0.125, -0.2, 0.45, 1.1),
   colnames(float_values)
 )
-cpu_float_offset <- cudatensr::cuda_tensor(
+cpu_float_offset <- cudaverse::cuda_tensor(
   float_offset_values,
   device = "cpu",
   dtype = "float32"
 )
-gpu_float_offset <- cudatensr::to_device(cpu_float_offset, "cuda")
-cpu_float_broadcast <- cudatensr::tensor_broadcast_to(
+gpu_float_offset <- cudaverse::to_device(cpu_float_offset, "cuda")
+cpu_float_broadcast <- cudaverse::tensor_broadcast_to(
   cpu_float_offset,
   c(3, 4)
 )
-gpu_float_broadcast <- cudatensr::tensor_broadcast_to(
+gpu_float_broadcast <- cudaverse::tensor_broadcast_to(
   gpu_float_offset,
   c(3, 4)
 )
 equal_numeric(
-  cudatensr::to_cpu(gpu_float_broadcast),
-  cudatensr::to_cpu(cpu_float_broadcast),
+  cudaverse::to_cpu(gpu_float_broadcast),
+  cudaverse::to_cpu(cpu_float_broadcast),
   tolerance = 2e-6,
   label = "float32 broadcast"
 )
@@ -322,8 +318,8 @@ expect_tensor_contract(
 cpu_float_arithmetic <- cpu_float + cpu_float_broadcast
 gpu_float_arithmetic <- gpu_float + gpu_float_broadcast
 equal_numeric(
-  cudatensr::to_cpu(gpu_float_arithmetic),
-  cudatensr::to_cpu(cpu_float_arithmetic),
+  cudaverse::to_cpu(gpu_float_arithmetic),
+  cudaverse::to_cpu(cpu_float_arithmetic),
   tolerance = 3e-6,
   label = "float32 arithmetic"
 )
@@ -350,23 +346,23 @@ float_right_values <- matrix(
     output = c("float_score_1", "float_score_2")
   )
 )
-cpu_float_right <- cudatensr::cuda_tensor(
+cpu_float_right <- cudaverse::cuda_tensor(
   float_right_values,
   device = "cpu",
   dtype = "float32"
 )
-gpu_float_right <- cudatensr::to_device(cpu_float_right, "cuda")
-cpu_float_product <- cudatensr::tensor_matmul(
+gpu_float_right <- cudaverse::to_device(cpu_float_right, "cuda")
+cpu_float_product <- cudaverse::tensor_matmul(
   cpu_float,
   cpu_float_right
 )
-gpu_float_product <- cudatensr::tensor_matmul(
+gpu_float_product <- cudaverse::tensor_matmul(
   gpu_float,
   gpu_float_right
 )
 equal_numeric(
-  cudatensr::to_cpu(gpu_float_product),
-  cudatensr::to_cpu(cpu_float_product),
+  cudaverse::to_cpu(gpu_float_product),
+  cudaverse::to_cpu(cpu_float_product),
   tolerance = 1e-5,
   label = "float32 matrix multiplication"
 )
@@ -379,11 +375,11 @@ expect_tensor_contract(
   "matrix_multiply"
 )
 
-cpu_float_sum <- cudatensr::tensor_sum(cpu_float, dim = 1)
-gpu_float_sum <- cudatensr::tensor_sum(gpu_float, dim = 1)
+cpu_float_sum <- cudaverse::tensor_sum(cpu_float, dim = 1)
+gpu_float_sum <- cudaverse::tensor_sum(gpu_float, dim = 1)
 equal_numeric(
-  cudatensr::to_cpu(gpu_float_sum),
-  cudatensr::to_cpu(cpu_float_sum),
+  cudaverse::to_cpu(gpu_float_sum),
+  cudaverse::to_cpu(cpu_float_sum),
   tolerance = 1e-5,
   label = "float32 sum"
 )
@@ -394,19 +390,19 @@ expect_tensor_contract(
   gpu_float_sum, "float32", 4, "cuda", "torch", "sum"
 )
 
-cpu_float_mean <- cudatensr::tensor_mean(
+cpu_float_mean <- cudaverse::tensor_mean(
   cpu_float,
   dim = 2,
   keepdim = TRUE
 )
-gpu_float_mean <- cudatensr::tensor_mean(
+gpu_float_mean <- cudaverse::tensor_mean(
   gpu_float,
   dim = 2,
   keepdim = TRUE
 )
 equal_numeric(
-  cudatensr::to_cpu(gpu_float_mean),
-  cudatensr::to_cpu(cpu_float_mean),
+  cudaverse::to_cpu(gpu_float_mean),
+  cudaverse::to_cpu(cpu_float_mean),
   tolerance = 1e-5,
   label = "float32 mean"
 )
@@ -417,47 +413,47 @@ expect_tensor_contract(
   gpu_float_mean, "float32", c(3, 1), "cuda", "torch", "mean"
 )
 
-cat("Checking cudasparsr public CUDA paths...\n")
+cat("Checking cudaverse sparse matrix CUDA paths...\n")
 sparse_source <- dense
 sparse_source[abs(sparse_source) < 0.7] <- 0
 sparse_source <- Matrix::Matrix(sparse_source, sparse = TRUE)
-cpu_sparse <- cudasparsr::cuda_sparse(sparse_source, device = "cpu")
-gpu_sparse <- cudasparsr::cuda_sparse(sparse_source, device = "cuda")
+cpu_sparse <- cudaverse::cuda_sparse(sparse_source, device = "cpu")
+gpu_sparse <- cudaverse::cuda_sparse(sparse_source, device = "cuda")
 equal_numeric(
-  as.matrix(cudasparsr::to_dgCMatrix(gpu_sparse)),
+  as.matrix(cudaverse::to_dgCMatrix(gpu_sparse)),
   as.matrix(sparse_source),
   label = "sparse conversion"
 )
 
 sparse_right <- matrix(rnorm(15), 5, 3)
-cpu_sparse_product <- cudasparsr::sparse_matmul_dense(
+cpu_sparse_product <- cudaverse::sparse_matmul_dense(
   cpu_sparse,
   sparse_right
 )
-gpu_sparse_product <- cudasparsr::sparse_matmul_dense(
+gpu_sparse_product <- cudaverse::sparse_matmul_dense(
   gpu_sparse,
   sparse_right
 )
 equal_numeric(
-  cudatensr::to_cpu(gpu_sparse_product),
-  cudatensr::to_cpu(cpu_sparse_product),
+  cudaverse::to_cpu(gpu_sparse_product),
+  cudaverse::to_cpu(cpu_sparse_product),
   tolerance = 1e-6,
   label = "sparse dense multiplication"
 )
 expect_stage(gpu_sparse_product, "sparse_multiply", "cuda", "hybrid")
 equal_numeric(
-  cudasparsr::sparse_matvec(gpu_sparse, seq_len(ncol(sparse_source))),
-  cudasparsr::sparse_matvec(cpu_sparse, seq_len(ncol(sparse_source))),
+  cudaverse::sparse_matvec(gpu_sparse, seq_len(ncol(sparse_source))),
+  cudaverse::sparse_matvec(cpu_sparse, seq_len(ncol(sparse_source))),
   tolerance = 1e-6,
   label = "sparse matrix vector multiplication"
 )
 equal_numeric(
-  cudasparsr::sparse_row_sums(gpu_sparse),
+  cudaverse::sparse_row_sums(gpu_sparse),
   Matrix::rowSums(sparse_source),
   label = "sparse row sums"
 )
 equal_numeric(
-  cudasparsr::sparse_col_sums(gpu_sparse),
+  cudaverse::sparse_col_sums(gpu_sparse),
   Matrix::colSums(sparse_source),
   label = "sparse column sums"
 )
@@ -468,37 +464,37 @@ explicit_zero <- Matrix::sparseMatrix(
   x = c(0, 1),
   dims = c(2L, 2L)
 )
-zero_object <- cudasparsr::cuda_sparse(
+zero_object <- cudaverse::cuda_sparse(
   explicit_zero,
   device = "cuda",
   drop_zeros = FALSE
 )
-zero_dropped <- cudasparsr::cuda_sparse(
+zero_dropped <- cudaverse::cuda_sparse(
   zero_object,
   device = "cuda",
   drop_zeros = TRUE
 )
 stopifnot(!any(zero_dropped$values == 0))
 
-cat("Checking cudalearnr algorithms...\n")
+cat("Checking cudaverse numerical algorithms...\n")
 learning <- matrix(
   rnorm(120),
   nrow = 24,
   ncol = 5,
   dimnames = list(paste0("sample_", 1:24), paste0("variable_", 1:5))
 )
-cpu_svd <- cudalearnr::cuda_svd(learning, device = "cpu")
-gpu_svd <- cudalearnr::cuda_svd(learning, device = "cuda")
+cpu_svd <- cudaverse::cuda_svd(learning, device = "cpu")
+gpu_svd <- cudaverse::cuda_svd(learning, device = "cuda")
 equal_numeric(gpu_svd$d, cpu_svd$d, tolerance = 1e-6, label = "SVD")
 expect_stage(gpu_svd, "decomposition", "cuda", "cuda")
 
-cpu_pca <- cudalearnr::cuda_pca(
+cpu_pca <- cudaverse::cuda_pca(
   learning,
   n_components = 3,
   scale. = TRUE,
   device = "cpu"
 )
-gpu_pca <- cudalearnr::cuda_pca(
+gpu_pca <- cudaverse::cuda_pca(
   learning,
   n_components = 3,
   scale. = TRUE,
@@ -514,12 +510,12 @@ equal_numeric(
 expect_stage(gpu_pca, "decomposition", "cuda", "cuda")
 
 for (metric in c("euclidean", "cosine")) {
-  cpu_distance <- cudalearnr::cuda_distance(
+  cpu_distance <- cudaverse::cuda_distance(
     learning,
     metric = metric,
     device = "cpu"
   )
-  gpu_distance <- cudalearnr::cuda_distance(
+  gpu_distance <- cudaverse::cuda_distance(
     learning,
     metric = metric,
     device = "cuda"
@@ -533,13 +529,13 @@ for (metric in c("euclidean", "cosine")) {
   expect_stage(gpu_distance, "distance", "cuda", "cuda")
 }
 
-cpu_knn <- cudalearnr::cuda_knn(
+cpu_knn <- cudaverse::cuda_knn(
   learning,
   k = 5,
   batch_size = 7,
   device = "cpu"
 )
-gpu_knn <- cudalearnr::cuda_knn(
+gpu_knn <- cudaverse::cuda_knn(
   learning,
   k = 5,
   batch_size = 7,
@@ -555,12 +551,12 @@ equal_numeric(
 expect_stage(gpu_knn, "distance", "cuda", "hybrid")
 
 initial_centers <- learning[c(1L, 13L), , drop = FALSE]
-cpu_kmeans <- cudalearnr::cuda_kmeans(
+cpu_kmeans <- cudaverse::cuda_kmeans(
   learning,
   centers = initial_centers,
   device = "cpu"
 )
-gpu_kmeans <- cudalearnr::cuda_kmeans(
+gpu_kmeans <- cudaverse::cuda_kmeans(
   learning,
   centers = initial_centers,
   device = "cuda"
@@ -720,7 +716,7 @@ stopifnot(
 )
 
 cat("Checking graph and embedding integration...\n")
-graph <- cudagraphR::cuda_knn_graph(gpu_knn, weighting = "gaussian")
+graph <- cudaverse::cuda_knn_graph(gpu_knn, weighting = "gaussian")
 expect_stage(graph, "graph_assembly", "cpu", "cpu")
 stopifnot(
   identical(graph$source_device, "cuda"),
@@ -730,16 +726,16 @@ stopifnot(
     "hybrid"
   )
 )
-communities <- cudagraphR::cuda_leiden(graph, n_iterations = 2)
+communities <- cudaverse::cuda_leiden(graph, n_iterations = 2)
 expect_stage(communities, "community_detection", "cpu", "cpu")
 stopifnot(length(communities$membership) == nrow(learning))
 
-cpu_embedding <- cudaembedr::cuda_diffusion_map(
+cpu_embedding <- cudaverse::cuda_diffusion_map(
   learning,
   n_components = 3,
   device = "cpu"
 )
-gpu_embedding <- cudaembedr::cuda_diffusion_map(
+gpu_embedding <- cudaverse::cuda_diffusion_map(
   learning,
   n_components = 3,
   device = "cuda"
@@ -758,12 +754,12 @@ equal_numeric(
 )
 expect_stage(gpu_embedding, "distance", "cuda", "hybrid")
 
-cpu_sce_embedding <- cudaembedr::cuda_diffusion_map(
+cpu_sce_embedding <- cudaverse::cuda_diffusion_map(
   cpu_sce,
   n_components = 3,
   device = "cpu"
 )
-gpu_sce_embedding <- cudaembedr::cuda_diffusion_map(
+gpu_sce_embedding <- cudaverse::cuda_diffusion_map(
   gpu_sce,
   n_components = 3,
   device = "cuda"

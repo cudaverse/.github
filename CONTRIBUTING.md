@@ -6,7 +6,7 @@ Thank you for helping build GPU-aware scientific computing tools for R.
 
 - Search existing issues and package documentation.
 - Include the package version, R version, operating system, backend, and device.
-- For CUDA problems, include `cudatensr::cuda_available()` and the installed
+- For CUDA problems, include `cudaverse::cuda_available()` and the installed
   R torch/libtorch versions. Do not include tokens or private system data.
 - Provide a small reproducible example whenever possible.
 
