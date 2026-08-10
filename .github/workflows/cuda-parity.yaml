@@ -5,6 +5,10 @@ on:
         description: Event that invoked the caller workflow.
         required: true
         type: string
+      caller_repository:
+        description: Repository in which the caller workflow is running.
+        required: true
+        type: string
       source_repository:
         description: Repository that owns the source ref.
         required: true
@@ -43,13 +47,13 @@ jobs:
         fromJSON(
           '["cudaverse/.github","cudaverse/cudaverse","cudaverse/cudacellr"]'
         ),
-        github.repository
+        inputs.caller_repository
       ) &&
       (
         (
           (inputs.caller_event == 'push' ||
            inputs.caller_event == 'workflow_dispatch') &&
-          inputs.source_repository == github.repository &&
+          inputs.source_repository == inputs.caller_repository &&
           contains(
             fromJSON(
               '["refs/heads/main","refs/heads/develop/native-cuda"]'
@@ -58,14 +62,14 @@ jobs:
           )
         ) ||
         (
-          github.repository != 'cudaverse/.github' &&
+          inputs.caller_repository != 'cudaverse/.github' &&
           inputs.caller_event == 'pull_request' &&
           contains(
             fromJSON('["main","develop/native-cuda"]'),
             inputs.base_ref
           ) &&
           inputs.draft == false &&
-          inputs.source_repository == github.repository &&
+          inputs.source_repository == inputs.caller_repository &&
           !endsWith(inputs.actor, '[bot]') &&
           contains(
             fromJSON('["OWNER","MEMBER","COLLABORATOR"]'),
@@ -73,11 +77,11 @@ jobs:
           )
         ) ||
         (
-          github.repository == 'cudaverse/.github' &&
+          inputs.caller_repository == 'cudaverse/.github' &&
           inputs.caller_event == 'pull_request_target' &&
           inputs.base_ref == 'main' &&
           inputs.draft == false &&
-          inputs.source_repository == github.repository &&
+          inputs.source_repository == inputs.caller_repository &&
           !endsWith(inputs.actor, '[bot]') &&
           contains(
             fromJSON('["OWNER","MEMBER","COLLABORATOR"]'),
@@ -97,21 +101,21 @@ jobs:
         uses: actions/checkout@v7
         with:
           repository: cudaverse/.github
-          ref: ${{ github.repository == 'cudaverse/.github' && inputs.source_ref || 'refs/heads/main' }}
+          ref: ${{ inputs.caller_repository == 'cudaverse/.github' && inputs.source_ref || 'refs/heads/main' }}
           path: contract
 
       - name: Check out cudaverse
         uses: actions/checkout@v7
         with:
           repository: cudaverse/cudaverse
-          ref: ${{ github.repository == 'cudaverse/cudaverse' && inputs.source_ref || 'refs/heads/main' }}
+          ref: ${{ inputs.caller_repository == 'cudaverse/cudaverse' && inputs.source_ref || 'refs/heads/main' }}
           path: packages/cudaverse
 
       - name: Check out cudacellr
         uses: actions/checkout@v7
         with:
           repository: cudaverse/cudacellr
-          ref: ${{ github.repository == 'cudaverse/cudacellr' && inputs.source_ref || 'refs/heads/main' }}
+          ref: ${{ inputs.caller_repository == 'cudaverse/cudacellr' && inputs.source_ref || 'refs/heads/main' }}
           path: packages/cudacellr
 
       - uses: r-lib/actions/setup-r@v2
