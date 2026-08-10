@@ -121,9 +121,7 @@ jobs:
     name: NVIDIA hardware contract (trusted changes only)
     needs: authorize-caller
     if: needs.authorize-caller.outputs.trusted == 'true'
-    runs-on:
-      group: cudaverse-nvidia
-      labels: [self-hosted, linux, x64, cuda]
+    runs-on: [self-hosted, Windows, X64, cuda]
     timeout-minutes: 60
     env:
       CUDAVERSE_REQUIRE_CUDA: "true"
@@ -166,9 +164,8 @@ jobs:
           print(torch::cuda_device_count())
 
       - name: Expose focused NVIDIA runtime libraries to the native backend
-        shell: bash
+        shell: Rscript {0}
         run: |
-          Rscript --vanilla - <<'RSCRIPT' >> "$GITHUB_ENV"
           root <- find.package("torch")
           find_runtime <- function(pattern, variable) {
             candidates <- list.files(
@@ -178,12 +175,25 @@ jobs:
               full.names = TRUE
             )
             if (length(candidates)) {
-              cat(variable, "=", normalizePath(candidates[[1L]]), "\n", sep = "")
+              cat(
+                variable,
+                "=",
+                normalizePath(candidates[[1L]], winslash = "/"),
+                "\n",
+                sep = "",
+                file = Sys.getenv("GITHUB_ENV"),
+                append = TRUE
+              )
             }
           }
-          find_runtime("^libcublas[.]so[.]12$", "CUDAVERSE_CUBLAS_PATH")
-          find_runtime("^libcusolver[.]so[.]11$", "CUDAVERSE_CUSOLVER_PATH")
-          RSCRIPT
+          find_runtime(
+            "^(libcublas[.]so[.]12|cublas64_12[.]dll)$",
+            "CUDAVERSE_CUBLAS_PATH"
+          )
+          find_runtime(
+            "^(libcusolver[.]so[.]11|cusolver64_11[.]dll)$",
+            "CUDAVERSE_CUSOLVER_PATH"
+          )
 
       - name: Install CPU-side integration dependencies
         shell: Rscript {0}
