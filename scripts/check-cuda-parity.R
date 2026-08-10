@@ -19,6 +19,11 @@ if (length(missing)) {
   )
 }
 
+# This script preserves the 0.1/torch compatibility contract. Integrated
+# native parity and lifecycle coverage runs in the package-owned test suite.
+old_backend_options <- options(cudaverse.cuda_backends = "torch")
+on.exit(options(old_backend_options), add = TRUE)
+
 diagnostics <- cudaverse::cuda_diagnostics()
 print(diagnostics)
 if (!isTRUE(diagnostics$cuda_available) ||

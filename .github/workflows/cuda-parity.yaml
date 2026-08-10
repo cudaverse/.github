@@ -21,12 +21,20 @@ jobs:
         (
           (github.event_name == 'push' ||
            github.event_name == 'workflow_dispatch') &&
-          github.ref == 'refs/heads/main'
+          contains(
+            fromJSON(
+              '["refs/heads/main","refs/heads/develop/native-cuda"]'
+            ),
+            github.ref
+          )
         ) ||
         (
           github.repository != 'cudaverse/.github' &&
           github.event_name == 'pull_request' &&
-          github.event.pull_request.base.ref == 'main' &&
+          contains(
+            fromJSON('["main","develop/native-cuda"]'),
+            github.event.pull_request.base.ref
+          ) &&
           github.event.pull_request.draft == false &&
           github.event.pull_request.head.repo.full_name == github.repository &&
           github.event.pull_request.user.type == 'User' &&
@@ -58,6 +66,7 @@ jobs:
     timeout-minutes: 60
     env:
       CUDAVERSE_REQUIRE_CUDA: "true"
+      CUDAVERSE_NATIVE_TESTS: "true"
     steps:
       - name: Check out the hardware contract
         uses: actions/checkout@v7
@@ -95,6 +104,26 @@ jobs:
           stopifnot(torch::cuda_device_count() > 0L)
           print(torch::cuda_device_count())
 
+      - name: Expose focused NVIDIA runtime libraries to the native backend
+        shell: bash
+        run: |
+          Rscript --vanilla - <<'RSCRIPT' >> "$GITHUB_ENV"
+          root <- find.package("torch")
+          find_runtime <- function(pattern, variable) {
+            candidates <- list.files(
+              root,
+              pattern = pattern,
+              recursive = TRUE,
+              full.names = TRUE
+            )
+            if (length(candidates)) {
+              cat(variable, "=", normalizePath(candidates[[1L]]), "\n", sep = "")
+            }
+          }
+          find_runtime("^libcublas[.]so[.]12$", "CUDAVERSE_CUBLAS_PATH")
+          find_runtime("^libcusolver[.]so[.]11$", "CUDAVERSE_CUSOLVER_PATH")
+          RSCRIPT
+
       - name: Install CPU-side integration dependencies
         shell: Rscript {0}
         run: |
@@ -115,6 +144,18 @@ jobs:
         run: |
           R CMD INSTALL packages/cudaverse
           R CMD INSTALL packages/cudacellr
+
+      - name: Require the integrated native backend
+        shell: Rscript {0}
+        run: |
+          diagnostics <- cudaverse::cuda_diagnostics()
+          native <- diagnostics$backend_diagnostics$native
+          stopifnot(
+            identical(diagnostics$selected_backend, "native"),
+            isTRUE(native$runtime_complete),
+            isTRUE(native$self_test$passed),
+            isTRUE(native$auto_eligible)
+          )
 
       - name: Run package-owned testthat suites without skips
         run: Rscript contract/scripts/check-cuda-package-tests.R
