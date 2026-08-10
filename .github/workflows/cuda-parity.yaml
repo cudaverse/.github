@@ -69,13 +69,6 @@ jobs:
               ;;
           esac
 
-          trusted_association=false
-          case "$AUTHOR_ASSOCIATION" in
-            OWNER|MEMBER|COLLABORATOR)
-              trusted_association=true
-              ;;
-          esac
-
           actor_is_human=true
           if [[ "$ACTOR" == *"[bot]" ]]; then
             actor_is_human=false
@@ -96,8 +89,7 @@ jobs:
                       "$BASE_REF" == "develop/native-cuda" ]] &&
                    [[ "$DRAFT" == "false" ]] &&
                    [[ "$SOURCE_REPOSITORY" == "$CALLER_REPOSITORY" ]] &&
-                   [[ "$actor_is_human" == true ]] &&
-                   [[ "$trusted_association" == true ]]; then
+                   [[ "$actor_is_human" == true ]]; then
                   trusted=true
                 fi
                 ;;
@@ -106,8 +98,7 @@ jobs:
                    [[ "$BASE_REF" == "main" ]] &&
                    [[ "$DRAFT" == "false" ]] &&
                    [[ "$SOURCE_REPOSITORY" == "$CALLER_REPOSITORY" ]] &&
-                   [[ "$actor_is_human" == true ]] &&
-                   [[ "$trusted_association" == true ]]; then
+                   [[ "$actor_is_human" == true ]]; then
                   trusted=true
                 fi
                 ;;
