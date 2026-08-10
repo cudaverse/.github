@@ -40,55 +40,96 @@ permissions:
   contents: read
 
 jobs:
+  authorize-caller:
+    name: Authorize NVIDIA runner caller
+    runs-on: ubuntu-latest
+    outputs:
+      trusted: ${{ steps.authorize.outputs.trusted }}
+    steps:
+      - name: Evaluate the explicit caller contract
+        id: authorize
+        shell: bash
+        env:
+          CALLER_EVENT: ${{ inputs.caller_event }}
+          CALLER_REPOSITORY: ${{ inputs.caller_repository }}
+          SOURCE_REPOSITORY: ${{ inputs.source_repository }}
+          SOURCE_REF: ${{ inputs.source_ref }}
+          BASE_REF: ${{ inputs.base_ref }}
+          DRAFT: ${{ inputs.draft }}
+          ACTOR: ${{ inputs.actor }}
+          AUTHOR_ASSOCIATION: ${{ inputs.author_association }}
+        run: |
+          set -euo pipefail
+
+          trusted=false
+          allowed_repository=false
+          case "$CALLER_REPOSITORY" in
+            cudaverse/.github|cudaverse/cudaverse|cudaverse/cudacellr)
+              allowed_repository=true
+              ;;
+          esac
+
+          trusted_association=false
+          case "$AUTHOR_ASSOCIATION" in
+            OWNER|MEMBER|COLLABORATOR)
+              trusted_association=true
+              ;;
+          esac
+
+          actor_is_human=true
+          if [[ "$ACTOR" == *"[bot]" ]]; then
+            actor_is_human=false
+          fi
+
+          if [[ "$allowed_repository" == true ]]; then
+            case "$CALLER_EVENT" in
+              push|workflow_dispatch)
+                if [[ "$SOURCE_REPOSITORY" == "$CALLER_REPOSITORY" ]] &&
+                   [[ "$SOURCE_REF" == "refs/heads/main" ||
+                      "$SOURCE_REF" == "refs/heads/develop/native-cuda" ]]; then
+                  trusted=true
+                fi
+                ;;
+              pull_request)
+                if [[ "$CALLER_REPOSITORY" != "cudaverse/.github" ]] &&
+                   [[ "$BASE_REF" == "main" ||
+                      "$BASE_REF" == "develop/native-cuda" ]] &&
+                   [[ "$DRAFT" == "false" ]] &&
+                   [[ "$SOURCE_REPOSITORY" == "$CALLER_REPOSITORY" ]] &&
+                   [[ "$actor_is_human" == true ]] &&
+                   [[ "$trusted_association" == true ]]; then
+                  trusted=true
+                fi
+                ;;
+              pull_request_target)
+                if [[ "$CALLER_REPOSITORY" == "cudaverse/.github" ]] &&
+                   [[ "$BASE_REF" == "main" ]] &&
+                   [[ "$DRAFT" == "false" ]] &&
+                   [[ "$SOURCE_REPOSITORY" == "$CALLER_REPOSITORY" ]] &&
+                   [[ "$actor_is_human" == true ]] &&
+                   [[ "$trusted_association" == true ]]; then
+                  trusted=true
+                fi
+                ;;
+            esac
+          fi
+
+          printf '%s\n' \
+            "caller_event=$CALLER_EVENT" \
+            "caller_repository=$CALLER_REPOSITORY" \
+            "source_repository=$SOURCE_REPOSITORY" \
+            "source_ref=$SOURCE_REF" \
+            "base_ref=$BASE_REF" \
+            "draft=$DRAFT" \
+            "actor=$ACTOR" \
+            "author_association=$AUTHOR_ASSOCIATION" \
+            "trusted=$trusted"
+          echo "trusted=$trusted" >> "$GITHUB_OUTPUT"
+
   hardware-contract:
     name: NVIDIA hardware contract (trusted changes only)
-    if: >-
-      contains(
-        fromJSON(
-          '["cudaverse/.github","cudaverse/cudaverse","cudaverse/cudacellr"]'
-        ),
-        inputs.caller_repository
-      ) &&
-      (
-        (
-          (inputs.caller_event == 'push' ||
-           inputs.caller_event == 'workflow_dispatch') &&
-          inputs.source_repository == inputs.caller_repository &&
-          contains(
-            fromJSON(
-              '["refs/heads/main","refs/heads/develop/native-cuda"]'
-            ),
-            inputs.source_ref
-          )
-        ) ||
-        (
-          inputs.caller_repository != 'cudaverse/.github' &&
-          inputs.caller_event == 'pull_request' &&
-          contains(
-            fromJSON('["main","develop/native-cuda"]'),
-            inputs.base_ref
-          ) &&
-          inputs.draft == false &&
-          inputs.source_repository == inputs.caller_repository &&
-          !endsWith(inputs.actor, '[bot]') &&
-          contains(
-            fromJSON('["OWNER","MEMBER","COLLABORATOR"]'),
-            inputs.author_association
-          )
-        ) ||
-        (
-          inputs.caller_repository == 'cudaverse/.github' &&
-          inputs.caller_event == 'pull_request_target' &&
-          inputs.base_ref == 'main' &&
-          inputs.draft == false &&
-          inputs.source_repository == inputs.caller_repository &&
-          !endsWith(inputs.actor, '[bot]') &&
-          contains(
-            fromJSON('["OWNER","MEMBER","COLLABORATOR"]'),
-            inputs.author_association
-          )
-        )
-      )
+    needs: authorize-caller
+    if: needs.authorize-caller.outputs.trusted == 'true'
     runs-on:
       group: cudaverse-nvidia
       labels: [self-hosted, linux, x64, cuda]
