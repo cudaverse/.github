@@ -3,35 +3,43 @@ on:
     inputs:
       caller_event:
         description: Event that invoked the caller workflow.
-        required: true
+        required: false
+        default: ""
         type: string
       caller_repository:
         description: Repository in which the caller workflow is running.
-        required: true
+        required: false
+        default: ""
         type: string
       source_repository:
         description: Repository that owns the source ref.
-        required: true
+        required: false
+        default: ""
         type: string
       source_ref:
         description: Exact commit SHA or trusted branch ref to test.
-        required: true
+        required: false
+        default: ""
         type: string
       base_ref:
         description: Pull-request base branch, or an empty string.
-        required: true
+        required: false
+        default: ""
         type: string
       draft:
         description: Whether the originating pull request is a draft.
-        required: true
+        required: false
+        default: true
         type: boolean
       actor:
         description: Login that triggered the caller workflow.
-        required: true
+        required: false
+        default: ""
         type: string
       author_association:
         description: Pull-request author association, or an empty string.
-        required: true
+        required: false
+        default: ""
         type: string
 
 name: cuda-parity
