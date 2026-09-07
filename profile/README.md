@@ -1,35 +1,38 @@
 # cudaverse
 
-GPU-aware numerical computing for R with one general-purpose package and one
-domain extension.
+Lightweight CUDA computing for R: accelerate matrix operations, PCA, exact
+nearest neighbours, and k-means on an NVIDIA GPU without installing a
+deep-learning framework. The native backend uses your system's NVIDIA
+libraries and does not bundle a CUDA runtime or LibTorch.
 
-| Package | Purpose |
-|---|---|
-| [`cudaverse`](https://github.com/cudaverse/cudaverse) | Dense tensors, sparse matrices, SVD, PCA, distances, nearest neighbours, k-means, graphs, community detection, UMAP, t-SNE, and diffusion maps |
-| [`cudacellr`](https://github.com/cudaverse/cudacellr) | Single-cell normalization, variable-feature selection, and native SingleCellExperiment and SeuratObject v5 workflows |
+| Package | Use it for |
+| --- | --- |
+| [cudaverse](https://github.com/cudaverse/cudaverse) | Dense and sparse numerical computing, PCA, nearest neighbours, clustering, and graph/embedding workflows |
+| [cudacellr](https://github.com/cudaverse/cudacellr) | Single-cell normalization, variable features, PCA/neighbours, and optional SingleCellExperiment or SeuratObject workflows |
 
-CUDA is optional. Both packages provide portable CPU behavior and record the
-backend and device used by each compute stage.
+## Start with a GPU workflow
+
+Prepare a Windows or Linux machine with an NVIDIA driver, cuBLAS 12, and
+cuSOLVER 11 using the [CUDA setup guide](https://github.com/cudaverse/.github/blob/main/GPU_SETUP.md).
+Current CUDA execution is unavailable on macOS.
 
 ```r
+# install.packages("pak")
 pak::pak("cudaverse/cudaverse")
 library(cudaverse)
 
-x <- matrix(rnorm(400), nrow = 40)
-pca <- cuda_pca(x, n_components = 5)
-neighbors <- cuda_knn(pca$x, k = 5)
-graph <- cuda_knn_graph(neighbors)
-embedding <- cuda_umap(pca$x)
+cuda_select_device("cuda")
+set.seed(1)
+x <- matrix(rnorm(1000 * 50), nrow = 1000)
+pca <- cuda_pca(x, n_components = 10, device = "cuda")
+neighbors <- cuda_knn(pca$x, k = 15, device = "cuda")
+head(neighbors$index)
 ```
 
-Single-cell users add only the extension:
+Use [tutorials](https://cudaverse.github.io/cudaverse/articles/index.html) for
+worked examples and `cuda_provenance()` to inspect which stages used CUDA.
+Graph assembly, community detection, and some embedding adapters use host
+computation; speedups depend on the operation and workload.
 
-```r
-pak::pak("cudaverse/cudacellr")
-library(cudacellr)
-result <- cudacell_workflow(counts)
-```
-
-The former component repositories are archived as development history. New
-general-purpose work belongs in `cudaverse`; single-cell-specific work belongs
-in `cudacellr`.
+Single-cell users can add `pak::pak("cudaverse/cudacellr")` and begin with
+the [single-cell workflow guide](https://cudaverse.github.io/cudacellr/).

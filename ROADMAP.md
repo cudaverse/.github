@@ -2,11 +2,10 @@
 
 ## Package structure
 
-- [x] Consolidate dense tensors, sparse matrices, numerical algorithms, graph
-      workflows, and embeddings into the user-facing `cudaverse` package.
+- [x] Provide dense tensors, sparse matrices, numerical algorithms, graph
+      workflows, and embeddings in the user-facing `cudaverse` package.
 - [x] Keep `cudacellr` as the only domain extension.
-- [x] Preserve existing public function names while removing the need to load
-      five separate general-purpose packages.
+- [x] Include the native CUDA backend in `cudaverse` without another package.
 - [x] Keep one canonical `cuda_provenance()` protocol and an acyclic dependency
       graph: `cudaverse -> cudacellr`.
 
@@ -35,10 +34,8 @@
 
 ## Backend depth
 
-- [ ] Add a native sparse CSR/cuSPARSE path when the supported R backend exposes
-      a stable contract.
-- [ ] Keep exact kNN selection and k-means centroid updates device-resident where
-      practical.
+- [x] Native sparse storage, multiplication, reductions, and sparse PCA.
+- [x] Device-side exact kNN selection and k-means centroid updates.
 - [ ] Let embedding adapters accept canonical precomputed neighbour or graph
       objects where their backend supports it.
 
@@ -46,8 +43,22 @@
 
 Submit only one package at a time and wait for acceptance plus completed checks:
 
-1. `cudaverse` 0.1.0
-2. `cudacellr` 0.4.0
+1. `cudaverse` 0.4.1: keep the CRAN candidate frozen except for reviewer fixes.
+2. `cudacellr` 0.4.0: revalidate against the accepted core, then wait for its
+   portfolio review slot. It does not bypass other prepared portfolio packages.
 
 Remove `cudacellr`'s development-only `Remotes` entry only after `cudaverse` is
-available from CRAN. The former component packages will not be submitted.
+available from CRAN. Successful CI is not CRAN acceptance.
+
+## Next evidence milestone
+
+Run the complete native parity, error recovery, interruption, and 1,000-cycle
+memory contract on the remote GPU host. Retain exact source revisions and
+machine-readable results; a skipped GPU job is not a pass. Publish benchmarks
+that separate startup, transfers, and device computation and report numerical
+accuracy alongside timing.
+
+Graph construction, Louvain/Leiden, UMAP, and t-SNE currently use CPU adapters;
+diffusion maps combine CUDA and CPU stages. Future GPU implementations and
+broader sparse dtype support are separate development milestones, not claims
+about the current release. Keep these within the existing package structure.
