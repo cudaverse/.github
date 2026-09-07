@@ -3,8 +3,8 @@
   "files": [
     {
       "file": "h100-contract-supplement.json",
-      "bytes": 45668,
-      "sha256": "24117ca937bf58005861baa7c840f11566d998c6ec6ab131494f613bef9e312c"
+      "bytes": 45830,
+      "sha256": "827baf379e5403bb01cfe3c855820ec3208698be531d2ca57a2ba4f200facad1"
     },
     {
       "file": "h100-contract-supplement.R",
@@ -48,8 +48,8 @@
     },
     {
       "file": "README.md",
-      "bytes": 2982,
-      "sha256": "d0fbe482a83abfab53a6d8a74c44df0cdaca4b52f2fa0fe8f1e4a6b06c363508"
+      "bytes": 3197,
+      "sha256": "dc55853ba885116758fa72e0e8980ddf765911717fd0f0bfa4fa6f78862e6ed3"
     },
     {
       "file": "verify-evidence.R",

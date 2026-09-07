@@ -1483,11 +1483,19 @@
     "device_global_measurement_scope": "whole GPU, may include other projects; informational only, not an isolated process leak measurement",
     "process_inventory_before": {
       "status": 0,
-      "output": ["978807, /home/exouser/histopia/.venv/bin/python, 5074", "987482, /home/exouser/histopia/.venv/bin/python, 5938", "997635, /home/exouser/cudaverse-validation/env/lib/R/bin/exec/R, 878"]
+      "process_count": 3,
+      "other_process_count": 2,
+      "current_process_memory_mib": 878,
+      "other_process_memory_mib": [5074, 5938],
+      "publication_note": "Process names and identifiers omitted from this public derivative; raw inventory retained in local evidence."
     },
     "process_inventory_after": {
       "status": 0,
-      "output": ["978807, /home/exouser/histopia/.venv/bin/python, 5074", "987482, /home/exouser/histopia/.venv/bin/python, 5938", "997635, /home/exouser/cudaverse-validation/env/lib/R/bin/exec/R, 878"]
+      "process_count": 3,
+      "other_process_count": 2,
+      "current_process_memory_mib": 878,
+      "other_process_memory_mib": [5074, 5938],
+      "publication_note": "Process names and identifiers omitted from this public derivative; raw inventory retained in local evidence."
     },
     "provenance_sample": {
       "pca": [

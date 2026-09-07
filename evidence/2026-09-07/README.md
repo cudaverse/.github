@@ -18,6 +18,10 @@ but cannot be attributed solely to this process. Retained timing benchmarks
 must wait for an idle GPU. Current R-release/R-devel and platform CI provide
 separate evidence; these Linux R 4.5.3 tests do not replace those checks.
 
+The public supplement omits process names and identifiers from its two GPU
+inventories. Counts and memory measurements are unchanged; the unredacted
+original is retained locally. Other report fields are unchanged.
+
 ## Reproduction
 
 `h100-linux-64.lock` pins 142 upstream archives with SHA-256 checksums; replay
