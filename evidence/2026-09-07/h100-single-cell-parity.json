@@ -1,0 +1,271 @@
+{
+  "passed": true,
+  "scope": "single-cell CPU/native workflow parity",
+  "time_utc": "2026-09-07 20:17:27 UTC",
+  "sources": {
+    "cudaverse": {
+      "commit": "2faaa385fcbc9365371476733236578baafaebae",
+      "clean": true
+    },
+    "cudacellr": {
+      "commit": "61f7b71838f1dbc6f9fc1303b1d65f05f867850f",
+      "clean": true
+    }
+  },
+  "installed_file_sha256": {
+    "cudaverse": ["2196edc9a8551c476a23a871abaeb2ff18659b96017fcfadda6ec85093cf9e8e  /home/exouser/cudaverse-validation/env/lib/R/library/cudaverse/benchmarks/contract.csv", "eebb85873d07b66ad2a76e0992674af9d2b5a46c076567f36543601e50ee24a0  /home/exouser/cudaverse-validation/env/lib/R/library/cudaverse/benchmarks/dense.R", "d98e7d13f1148a9b2ed356a8043817330bc9c4b763572d1eaf3513e38ef33b39  /home/exouser/cudaverse-validation/env/lib/R/library/cudaverse/benchmarks/pca-knn.R", "254f07df83096e66d568b76036276259d5942411d9b31975e75986cf4b5f8b8a  /home/exouser/cudaverse-validation/env/lib/R/library/cudaverse/benchmarks/README.md", "4ed6860406de81fbcfd0aa2ccc33369b8286185639a7b9ffd76caed04bc0b170  /home/exouser/cudaverse-validation/env/lib/R/library/cudaverse/benchmarks/sparse.R", "13add513aacd56f5dc79b7cd27881b07a53d61831999e65b7aa5743c8c84c8a2  /home/exouser/cudaverse-validation/env/lib/R/library/cudaverse/DESCRIPTION", "7d2cb95d34a098e028670351e3a8bfae3bb6437c247c55347ecbd3a890011f4b  /home/exouser/cudaverse-validation/env/lib/R/library/cudaverse/help/aliases.rds", "194c3ad0e4a2370354f497118efae830eb75e8ea360971198d74a2b3bb60f5ea  /home/exouser/cudaverse-validation/env/lib/R/library/cudaverse/help/AnIndex", "ef6707b9dd2ecfdaa0f0b48fe00a097cc1248a01323ff5bf8c889d2ad16c2eff  /home/exouser/cudaverse-validation/env/lib/R/library/cudaverse/help/cudaverse.rdb", "6e6943cc09cc0acd1c08beba02051edb5fd6440911d0a08040ab8b8a0c9bc722  /home/exouser/cudaverse-validation/env/lib/R/library/cudaverse/help/cudaverse.rdx", "44bf1cd1087e48a9dc00390877db11903d7be0aa9155e4b4b8faba8182db553e  /home/exouser/cudaverse-validation/env/lib/R/library/cudaverse/help/figures/cudaverse-logo.svg", "911142f97afdbabb643f16e01c1081beee1a5242d575207235bf37adfa6a0582  /home/exouser/cudaverse-validation/env/lib/R/library/cudaverse/help/figures/logo.png", "be5528077c121b3d77fbf0a60865e779f73029676b7b8296c204e30ece897900  /home/exouser/cudaverse-validation/env/lib/R/library/cudaverse/help/figures/logo.svg", "eeb1b3b9662f57841681f3f347df2af73a8bd5a976fd1b386715258696afbab4  /home/exouser/cudaverse-validation/env/lib/R/library/cudaverse/help/paths.rds", "b97a5e97dfbff708e01622c871546706ac7b7051f151fc648f12d891edf02886  /home/exouser/cudaverse-validation/env/lib/R/library/cudaverse/html/00Index.html", "52144cf4c349f7f2cf131342f81bbc43c6514ba2274556815df88918fdeb189b  /home/exouser/cudaverse-validation/env/lib/R/library/cudaverse/html/R.css", "40dcf5cf83c081eedc2a9f601454c4bd8ff62899ca63c8a78ba5f2ca5cfb7429  /home/exouser/cudaverse-validation/env/lib/R/library/cudaverse/INDEX", "839666346300d40e761b6a01608be77806ed1d63ce36c9001ba6ba5ef5a6215f  /home/exouser/cudaverse-validation/env/lib/R/library/cudaverse/kernels/cudaverse_dense_kernels.ptx", "f54d8d9173a93c9ea87f9ace7ef3f0a6f7af80c1ad4bd4e2d05c9df288917455  /home/exouser/cudaverse-validation/env/lib/R/library/cudaverse/kernels/SHA256SUMS", "63d71ed6a07b909732fa49d2940512cd8dd4d3cd27101985b5126d19d7b06c06  /home/exouser/cudaverse-validation/env/lib/R/library/cudaverse/libs/cudaverse.so", "e0f2b56cef0591af78b6276803a3df9da57aed913e807b34d26645ed9e66e112  /home/exouser/cudaverse-validation/env/lib/R/library/cudaverse/LICENSE", "3d0dc41bc2f8db966da9c2b0e2a291e6137e628e676f88a64a127d73b459b93e  /home/exouser/cudaverse-validation/env/lib/R/library/cudaverse/Meta/features.rds", "fecd30b662dd026b5752dba41776b651185793bdb5cb20d70320bd46590b3f83  /home/exouser/cudaverse-validation/env/lib/R/library/cudaverse/Meta/hsearch.rds", "92c8cada07e4399f3c097354e0d8d2e4aa92b26bf6195b5d89946e42675b74a0  /home/exouser/cudaverse-validation/env/lib/R/library/cudaverse/Meta/links.rds", "4fe9e82506934757536e8e4c32012a0df84217b0755f0ea019d5ddd7f4bbe2d2  /home/exouser/cudaverse-validation/env/lib/R/library/cudaverse/Meta/nsInfo.rds", "5f4b331d25ff5408ab38a19e20dd24e10d85fdeb0704f57fd2ee590e7c656fd4  /home/exouser/cudaverse-validation/env/lib/R/library/cudaverse/Meta/package.rds", "d30f745e03bf3894c956527b1758e57800ab9f00079b5b1f0120dae44af60ca2  /home/exouser/cudaverse-validation/env/lib/R/library/cudaverse/Meta/Rd.rds", "c3d612466e3b71c0fb82b19528cf23f5e849f3ab9ac1fbb9dc7b13027a155121  /home/exouser/cudaverse-validation/env/lib/R/library/cudaverse/NAMESPACE", "ae00e2462425ca225e6c5b9c11dc7a8a25910010664365b56fcb5d21bdd7c632  /home/exouser/cudaverse-validation/env/lib/R/library/cudaverse/NEWS.md", "570ca456b280cdeb201ef5ebdf22dc8f80092e2c0c68e33c7f73340e420f3759  /home/exouser/cudaverse-validation/env/lib/R/library/cudaverse/R/cudaverse", "4edf8f939cabca61f52cb68f95cf40124bc81bb5f6b67feabf628d1a4843a80b  /home/exouser/cudaverse-validation/env/lib/R/library/cudaverse/R/cudaverse.rdb", "31163dddd7865530ec32a7054ff6f99f2122be0e7b9704c6f67244fb4f7de725  /home/exouser/cudaverse-validation/env/lib/R/library/cudaverse/R/cudaverse.rdx", "01e25f8a40e3e40224701be5120caa52ea7fd54a0d2e95f057f7951f3ddb5e61  /home/exouser/cudaverse-validation/env/lib/R/library/cudaverse/reports/backend-capability-matrix.csv", "2cea1372a3674583159838a1875fb8ce81545bed0fd9ba55bfcbee6e78962164  /home/exouser/cudaverse-validation/env/lib/R/library/cudaverse/reports/benchmarks/CP05-SMOKE.md", "95088a8f377f76f3a76111b3e560bbeb69486a8136141d913b5cfbd4c45b9c49  /home/exouser/cudaverse-validation/env/lib/R/library/cudaverse/reports/benchmarks/CP06-FULL-CHECK.log", "097ac8677652c9cd6b594dd5e9e6afc97bce2b8542191e333629126e64646bed  /home/exouser/cudaverse-validation/env/lib/R/library/cudaverse/reports/benchmarks/CP06-FULL-SUMMARY-CHECK.log", "9363aba0c4f5af0ee7ef84648bc2d6bec2177c7deccfd445454f9f7bdda43e93  /home/exouser/cudaverse-validation/env/lib/R/library/cudaverse/reports/benchmarks/CP06-FULL.json", "901d1973b5163ffaa6f40e50641ba0b63d4bf2d954c8636860184cd61c70f7f5  /home/exouser/cudaverse-validation/env/lib/R/library/cudaverse/reports/benchmarks/CP06-FULL.md", "4371dd93c89b42d7e1c6031794b0cffa9aa2992f0c5f1fa5e2108c5ff3efd470  /home/exouser/cudaverse-validation/env/lib/R/library/cudaverse/reports/benchmarks/CP07-FULL-CHECK.log", "9ad73c12618936b511d2d0b24289309bd87a83aebe455fec03363184222fd788  /home/exouser/cudaverse-validation/env/lib/R/library/cudaverse/reports/benchmarks/CP07-FULL-RUN.log", "59ce252fb34ab34befbcf620272bb8d9acc74d77945363c5dca0fbda0e570fee  /home/exouser/cudaverse-validation/env/lib/R/library/cudaverse/reports/benchmarks/CP07-FULL-SUMMARY-CHECK.log", "be25daad1268c4faacbfe09e92ce3c84179cf9f41c8fb6fabec4dd2fc3e20fb5  /home/exouser/cudaverse-validation/env/lib/R/library/cudaverse/reports/benchmarks/CP07-FULL.json", "2207434fa18b13743031a373f2fd4f892049be227a1cff71e9e4f5f3b75aca5f  /home/exouser/cudaverse-validation/env/lib/R/library/cudaverse/reports/benchmarks/CP07-FULL.md", "5f29e96ec2cd38d075f9d8c23205327a1d6ef7588ce2793d945b7498198fb707  /home/exouser/cudaverse-validation/env/lib/R/library/cudaverse/reports/benchmarks/CP07-SMOKE.json", "514dd6973916058e8c52303f01812976eec0a49776c221ad72a3f15681fcb56f  /home/exouser/cudaverse-validation/env/lib/R/library/cudaverse/reports/benchmarks/CP07-SMOKE.md", "0ea234d7640a020c4611a764cca274b643127f253f6e875145f629e3b00b1647  /home/exouser/cudaverse-validation/env/lib/R/library/cudaverse/reports/native/consolidation-rtx2000.json", "0711ced7c4e895f973881a20edd620da83023f0ca73b3892ba4520155d53c1cb  /home/exouser/cudaverse-validation/env/lib/R/library/cudaverse/reports/native/phase2-rtx2000.json", "e0d7f1120c21323d6e94ca7930a797f42ab7730fc254897eb2a2c3a4da67f43a  /home/exouser/cudaverse-validation/env/lib/R/library/cudaverse/reports/native/phase3-rtx2000.json", "e6ab55930ee941fc39c38c2bc79db161ec22d0bd6a74bbff0e9aae093cae3d42  /home/exouser/cudaverse-validation/env/lib/R/library/cudaverse/reports/native/phase4-rtx2000.json", "102d5be1a085812be978d76d568cbb0baea1b0577ee15dff93843ae622fac64a  /home/exouser/cudaverse-validation/env/lib/R/library/cudaverse/reports/native/session-contract-rtx2000.json", "7b8986a8934dbb8347eb71525478c8877ee8f744ecd8d3a8f1b23be1247ff908  /home/exouser/cudaverse-validation/env/lib/R/library/cudaverse/reports/native/stage1-rtx2000.json", "58f0469f526673cc9ec1927ec1993876ca3c7437f63d6811805d72447d56dce5  /home/exouser/cudaverse-validation/env/lib/R/library/cudaverse/reports/native/STAGE1.md", "82ab88669c5119861beb4d9dccf2bd3d4a4dcd0bb4a273da4adfd5e580d87a55  /home/exouser/cudaverse-validation/env/lib/R/library/cudaverse/reports/native/STAGE2.md", "6c25356023a6d17cb37c5d77d1af9ed349cf1417b29b363a6bfbf72b6295ca4c  /home/exouser/cudaverse-validation/env/lib/R/library/cudaverse/reports/native/STAGE3.md", "7b1b0e73491b5e310e491d19600f97fe9c15bc9c250d922127cc047360783c41  /home/exouser/cudaverse-validation/env/lib/R/library/cudaverse/reports/native/STAGE4.md", "397e7c8e299f0eff170e680127dcaf6094eb4b175de7f88b08253b0ab0cd74ad  /home/exouser/cudaverse-validation/env/lib/R/library/cudaverse/reports/native/STAGE5-CONSOLIDATION.md", "6cc30582a4f45ebaccedf0ee9556c98992274bbf8867bd0b61cbde57e325b017  /home/exouser/cudaverse-validation/env/lib/R/library/cudaverse/reports/sbom.cdx.json", "83f1f97d31dac433fbbbda788832f95b2fd68661f7ce01f49b4beb2685780637  /home/exouser/cudaverse-validation/env/lib/R/library/cudaverse/reports/THIRD_PARTY_LICENSES.md", "22b5c0032b9b0a7ace7d932127fa6e46b38bbefe209ac8bd850eddb9b13d38c6  /home/exouser/cudaverse-validation/env/lib/R/library/cudaverse/WORDLIST"],
+    "cudacellr": ["84679ef93d9a9885e93e546fbfd2d3a89eb2daf32a133e767a994e47c136bf40  /home/exouser/cudaverse-validation/env/lib/R/library/cudacellr/DESCRIPTION", "d6b96af0e058bf36668c206b7443eb15b5c339239b6d69fab7223632be9cc2cc  /home/exouser/cudaverse-validation/env/lib/R/library/cudacellr/help/aliases.rds", "13e7e5d8e26435f7792954bb30f2aee3b05820ef4d5f6dff498c3e9911aa029e  /home/exouser/cudaverse-validation/env/lib/R/library/cudacellr/help/AnIndex", "a7c9189c4929b65830c9b114ebb9107fa6e9c7bc6d90b875af8e3f6143211b66  /home/exouser/cudaverse-validation/env/lib/R/library/cudacellr/help/cudacellr.rdb", "21cacf883bf55d3238a63e658bc28ddc9199c3856482089fab90d3c6bc532601  /home/exouser/cudaverse-validation/env/lib/R/library/cudacellr/help/cudacellr.rdx", "ab8aead7f095ddb6fe34422039548159c6a627872b6b804db713a6b99baceee6  /home/exouser/cudaverse-validation/env/lib/R/library/cudacellr/help/paths.rds", "923c259ead77a2b6f680e82f3065ada3f0becd965adff7decb5c005611fd37f8  /home/exouser/cudaverse-validation/env/lib/R/library/cudacellr/html/00Index.html", "52144cf4c349f7f2cf131342f81bbc43c6514ba2274556815df88918fdeb189b  /home/exouser/cudaverse-validation/env/lib/R/library/cudacellr/html/R.css", "6553bd80ba640c10694bcfec6e69406b0d5b4da34a44e4e99440220cecd5bfe7  /home/exouser/cudaverse-validation/env/lib/R/library/cudacellr/INDEX", "e0f2b56cef0591af78b6276803a3df9da57aed913e807b34d26645ed9e66e112  /home/exouser/cudaverse-validation/env/lib/R/library/cudacellr/LICENSE", "3d0dc41bc2f8db966da9c2b0e2a291e6137e628e676f88a64a127d73b459b93e  /home/exouser/cudaverse-validation/env/lib/R/library/cudacellr/Meta/features.rds", "252677aed3e61090395f192396cf6c62f621dacf868290b286452c773c62a661  /home/exouser/cudaverse-validation/env/lib/R/library/cudacellr/Meta/hsearch.rds", "44a18887d97f1f85856e54967e88cec362d31abaefb89d4b1b7c38cbdee85335  /home/exouser/cudaverse-validation/env/lib/R/library/cudacellr/Meta/links.rds", "2cab498e1ae2d91011f7e09d158e082f030e0ffa9a1ff32366287a0ada2852a8  /home/exouser/cudaverse-validation/env/lib/R/library/cudacellr/Meta/nsInfo.rds", "4843bd74dab24068011c1c4341c14ce48d447c25f54700af32e7335210aeb57a  /home/exouser/cudaverse-validation/env/lib/R/library/cudacellr/Meta/package.rds", "d9154f7d76bb0165e853b5f58f8f2fd50646838dc6f17657f00b10f7b4df13cb  /home/exouser/cudaverse-validation/env/lib/R/library/cudacellr/Meta/Rd.rds", "acc5eb8c0e9f575265bf831994785c7c1849555e1c4620396271dd27a11af12a  /home/exouser/cudaverse-validation/env/lib/R/library/cudacellr/NAMESPACE", "80137f46214a546b1f144cc1f92114019a1bb6db9ba78656dc16cdbcdec550b8  /home/exouser/cudaverse-validation/env/lib/R/library/cudacellr/NEWS.md", "570ca456b280cdeb201ef5ebdf22dc8f80092e2c0c68e33c7f73340e420f3759  /home/exouser/cudaverse-validation/env/lib/R/library/cudacellr/R/cudacellr", "5838b59a9cbe2ee9e78b4d27fab997fdd3a3ffe12406829596cabd857a6d6203  /home/exouser/cudaverse-validation/env/lib/R/library/cudacellr/R/cudacellr.rdb", "807f0b0c200b70b73afeafd7599a4d207c9b0527eb65af509f194b1301fe2c21  /home/exouser/cudaverse-validation/env/lib/R/library/cudacellr/R/cudacellr.rdx"]
+  },
+  "torch_installed": false,
+  "cudaverse": "0.4.1",
+  "cudacellr": "0.4.0",
+  "seeds": [
+    {
+      "seed": 1,
+      "neighbors_identical": true,
+      "max_distance_error": 2.3181e-13,
+      "rtol": 1e-08,
+      "atol": 1e-10,
+      "max_error_to_limit_ratio": 3.1451e-06,
+      "provenance": [
+        {
+          "stage": "normalization",
+          "requested_device": "fixed-cpu",
+          "device": "cpu",
+          "backend": "Matrix",
+          "selection_reason": "algorithm_cpu_only",
+          "fallback": false,
+          "output_device": "cpu"
+        },
+        {
+          "stage": "hvg",
+          "requested_device": "fixed-cpu",
+          "device": "cpu",
+          "backend": "Matrix",
+          "selection_reason": "algorithm_cpu_only",
+          "fallback": false,
+          "output_device": "cpu"
+        },
+        {
+          "stage": "pca_preprocessing",
+          "requested_device": "cuda",
+          "device": "cuda",
+          "backend": "native",
+          "selection_reason": "explicit_cuda",
+          "fallback": false,
+          "output_device": "cuda"
+        },
+        {
+          "stage": "pca_decomposition",
+          "requested_device": "cuda",
+          "device": "cuda",
+          "backend": "native",
+          "selection_reason": "explicit_cuda",
+          "fallback": false,
+          "output_device": "cpu"
+        },
+        {
+          "stage": "pca_scores_resident",
+          "requested_device": "cuda",
+          "device": "cuda",
+          "backend": "native",
+          "selection_reason": "device_resident_output",
+          "fallback": false,
+          "output_device": "cuda"
+        },
+        {
+          "stage": "knn_input_materialization",
+          "requested_device": "inherited",
+          "device": "cuda",
+          "backend": "native",
+          "selection_reason": "device_resident_input",
+          "fallback": false,
+          "output_device": "cuda"
+        },
+        {
+          "stage": "knn_distance",
+          "requested_device": "cuda",
+          "device": "cuda",
+          "backend": "native",
+          "selection_reason": "explicit_cuda",
+          "fallback": false,
+          "output_device": "cuda"
+        },
+        {
+          "stage": "knn_neighbor_selection",
+          "requested_device": "cuda",
+          "device": "cuda",
+          "backend": "native",
+          "selection_reason": "explicit_cuda",
+          "fallback": false,
+          "output_device": "cpu"
+        }
+      ]
+    },
+    {
+      "seed": 42,
+      "neighbors_identical": true,
+      "max_distance_error": 2.9932e-13,
+      "rtol": 1e-08,
+      "atol": 1e-10,
+      "max_error_to_limit_ratio": 5.1622e-06,
+      "provenance": [
+        {
+          "stage": "normalization",
+          "requested_device": "fixed-cpu",
+          "device": "cpu",
+          "backend": "Matrix",
+          "selection_reason": "algorithm_cpu_only",
+          "fallback": false,
+          "output_device": "cpu"
+        },
+        {
+          "stage": "hvg",
+          "requested_device": "fixed-cpu",
+          "device": "cpu",
+          "backend": "Matrix",
+          "selection_reason": "algorithm_cpu_only",
+          "fallback": false,
+          "output_device": "cpu"
+        },
+        {
+          "stage": "pca_preprocessing",
+          "requested_device": "cuda",
+          "device": "cuda",
+          "backend": "native",
+          "selection_reason": "explicit_cuda",
+          "fallback": false,
+          "output_device": "cuda"
+        },
+        {
+          "stage": "pca_decomposition",
+          "requested_device": "cuda",
+          "device": "cuda",
+          "backend": "native",
+          "selection_reason": "explicit_cuda",
+          "fallback": false,
+          "output_device": "cpu"
+        },
+        {
+          "stage": "pca_scores_resident",
+          "requested_device": "cuda",
+          "device": "cuda",
+          "backend": "native",
+          "selection_reason": "device_resident_output",
+          "fallback": false,
+          "output_device": "cuda"
+        },
+        {
+          "stage": "knn_input_materialization",
+          "requested_device": "inherited",
+          "device": "cuda",
+          "backend": "native",
+          "selection_reason": "device_resident_input",
+          "fallback": false,
+          "output_device": "cuda"
+        },
+        {
+          "stage": "knn_distance",
+          "requested_device": "cuda",
+          "device": "cuda",
+          "backend": "native",
+          "selection_reason": "explicit_cuda",
+          "fallback": false,
+          "output_device": "cuda"
+        },
+        {
+          "stage": "knn_neighbor_selection",
+          "requested_device": "cuda",
+          "device": "cuda",
+          "backend": "native",
+          "selection_reason": "explicit_cuda",
+          "fallback": false,
+          "output_device": "cpu"
+        }
+      ]
+    },
+    {
+      "seed": 2026,
+      "neighbors_identical": true,
+      "max_distance_error": 2.7711e-13,
+      "rtol": 1e-08,
+      "atol": 1e-10,
+      "max_error_to_limit_ratio": 3.2624e-06,
+      "provenance": [
+        {
+          "stage": "normalization",
+          "requested_device": "fixed-cpu",
+          "device": "cpu",
+          "backend": "Matrix",
+          "selection_reason": "algorithm_cpu_only",
+          "fallback": false,
+          "output_device": "cpu"
+        },
+        {
+          "stage": "hvg",
+          "requested_device": "fixed-cpu",
+          "device": "cpu",
+          "backend": "Matrix",
+          "selection_reason": "algorithm_cpu_only",
+          "fallback": false,
+          "output_device": "cpu"
+        },
+        {
+          "stage": "pca_preprocessing",
+          "requested_device": "cuda",
+          "device": "cuda",
+          "backend": "native",
+          "selection_reason": "explicit_cuda",
+          "fallback": false,
+          "output_device": "cuda"
+        },
+        {
+          "stage": "pca_decomposition",
+          "requested_device": "cuda",
+          "device": "cuda",
+          "backend": "native",
+          "selection_reason": "explicit_cuda",
+          "fallback": false,
+          "output_device": "cpu"
+        },
+        {
+          "stage": "pca_scores_resident",
+          "requested_device": "cuda",
+          "device": "cuda",
+          "backend": "native",
+          "selection_reason": "device_resident_output",
+          "fallback": false,
+          "output_device": "cuda"
+        },
+        {
+          "stage": "knn_input_materialization",
+          "requested_device": "inherited",
+          "device": "cuda",
+          "backend": "native",
+          "selection_reason": "device_resident_input",
+          "fallback": false,
+          "output_device": "cuda"
+        },
+        {
+          "stage": "knn_distance",
+          "requested_device": "cuda",
+          "device": "cuda",
+          "backend": "native",
+          "selection_reason": "explicit_cuda",
+          "fallback": false,
+          "output_device": "cuda"
+        },
+        {
+          "stage": "knn_neighbor_selection",
+          "requested_device": "cuda",
+          "device": "cuda",
+          "backend": "native",
+          "selection_reason": "explicit_cuda",
+          "fallback": false,
+          "output_device": "cpu"
+        }
+      ]
+    }
+  ],
+  "session": ["R version 4.5.3 (2026-03-11)", "Platform: x86_64-conda-linux-gnu", "Running under: Ubuntu 24.04.4 LTS", "", "Matrix products: default", "BLAS/LAPACK: /home/exouser/cudaverse-validation/env/lib/libopenblasp-r0.3.34.so;  LAPACK version 3.12.0", "", "locale:", " [1] LC_CTYPE=C.UTF-8       LC_NUMERIC=C           LC_TIME=C.UTF-8       ", " [4] LC_COLLATE=C.UTF-8     LC_MONETARY=C.UTF-8    LC_MESSAGES=C.UTF-8   ", " [7] LC_PAPER=C.UTF-8       LC_NAME=C              LC_ADDRESS=C          ", "[10] LC_TELEPHONE=C         LC_MEASUREMENT=C.UTF-8 LC_IDENTIFICATION=C   ", "", "time zone: Etc/UTC", "tzcode source: system (glibc)", "", "attached base packages:", "[1] stats     graphics  grDevices utils     datasets  methods   base     ", "", "other attached packages:", "[1] cudaverse_0.4.1 cudacellr_0.4.0", "", "loaded via a namespace (and not attached):", "[1] compiler_4.5.3 Matrix_1.7-6   grid_4.5.3     lattice_0.23-1"]
+}

@@ -1,0 +1,1566 @@
+{
+  "schema": "cudaverse-native-contract-supplement/1",
+  "generated_at_utc": "2026-09-07 20:15:55 UTC",
+  "scope": "small strict numeric contracts and 1000 resident PCA-to-kNN lifecycle cycles",
+  "timing_benchmark": false,
+  "source": {
+    "commit": "2faaa385fcbc9365371476733236578baafaebae",
+    "status": [],
+    "clean": true,
+    "script": {
+      "path": "/home/exouser/cudaverse-validation/h100-contract-supplement.R",
+      "md5": "0ef0946b499eb91f1a7935db0456c0e8",
+      "sha256": "20aff7d1fd9b12374d7647775f9b658efbb6857127417a4f24900717ae5f2039",
+      "sha256_unavailable_reason": null
+    },
+    "archive": {
+      "path": "/home/exouser/cudaverse-validation/cudaverse-submitted-0.4.1.tar.gz",
+      "md5": "1094e140864fc4c5a329d7a34a909c1b",
+      "sha256": "a6c4cc0c8a35de6d148f502b257158f4d91d5cd0827913f726fdfb0c0847f1ab",
+      "sha256_unavailable_reason": null
+    }
+  },
+  "hardware": {
+    "status": 0,
+    "output": "NVIDIA H100 80GB HBM3, 595.84, 81559, 9.0"
+  },
+  "parameters": {
+    "seeds": [1, 42, 2026],
+    "float32": {
+      "rtol": 1.0000000000000001e-05,
+      "atol": 9.9999999999999995e-07
+    },
+    "float64_ordinary": {
+      "rtol": 1e-10,
+      "atol": 0
+    },
+    "float64_matmul_reduce_pca": {
+      "rtol": 1e-08,
+      "atol": 0
+    },
+    "integer": {
+      "rtol": 0,
+      "atol": 0
+    },
+    "criterion": "every element: abs(actual - expected) <= atol + rtol * abs(expected)",
+    "lifecycle_iterations": 1000,
+    "warmups": 5,
+    "lifecycle_memory_limit_bytes": 1048576
+  },
+  "cases": [
+    {
+      "name": "float32/1/transfer",
+      "passed": true,
+      "elements": 91,
+      "same_shape": true,
+      "all_finite": true,
+      "rtol": 1.0000000000000001e-05,
+      "atol": 9.9999999999999995e-07,
+      "max_absolute_error": 9.641930187598291e-08,
+      "max_error_to_allowance_ratio": 0.0048599514278930148,
+      "violations": 0,
+      "seed": 1,
+      "dtype": "float32",
+      "shape": [13, 7]
+    },
+    {
+      "name": "float32/1/addition",
+      "passed": true,
+      "elements": 91,
+      "same_shape": true,
+      "all_finite": true,
+      "rtol": 1.0000000000000001e-05,
+      "atol": 9.9999999999999995e-07,
+      "max_absolute_error": 1.9283860375196582e-07,
+      "max_error_to_allowance_ratio": 0.005066770031133698,
+      "violations": 0,
+      "provenance": {
+        "schema": "cudaverse-stage/1",
+        "stages": [
+          {
+            "stage": "arithmetic",
+            "requested_device": "inherited",
+            "device": "cuda",
+            "backend": "native",
+            "selection_reason": "inherited_device",
+            "fallback": false,
+            "output_device": "cuda"
+          }
+        ]
+      }
+    },
+    {
+      "name": "float32/1/matmul",
+      "passed": true,
+      "elements": 117,
+      "same_shape": true,
+      "all_finite": true,
+      "rtol": 1.0000000000000001e-05,
+      "atol": 9.9999999999999995e-07,
+      "max_absolute_error": 6.9209661113234233e-07,
+      "max_error_to_allowance_ratio": 0.051763882762938009,
+      "violations": 0,
+      "left_shape": [13, 7],
+      "right_shape": [7, 9],
+      "provenance": {
+        "schema": "cudaverse-stage/1",
+        "stages": [
+          {
+            "stage": "matrix_multiply",
+            "requested_device": "inherited",
+            "device": "cuda",
+            "backend": "native",
+            "selection_reason": "inherited_device",
+            "fallback": false,
+            "output_device": "cuda"
+          }
+        ]
+      }
+    },
+    {
+      "name": "float32/1/column_sum",
+      "passed": true,
+      "elements": 7,
+      "same_shape": true,
+      "all_finite": true,
+      "rtol": 1.0000000000000001e-05,
+      "atol": 9.9999999999999995e-07,
+      "max_absolute_error": 2.4014465083155301e-07,
+      "max_error_to_allowance_ratio": 0.014483210921510623,
+      "violations": 0,
+      "provenance": {
+        "schema": "cudaverse-stage/1",
+        "stages": [
+          {
+            "stage": "sum",
+            "requested_device": "inherited",
+            "device": "cuda",
+            "backend": "native",
+            "selection_reason": "inherited_device",
+            "fallback": false,
+            "output_device": "cuda"
+          }
+        ]
+      }
+    },
+    {
+      "name": "float32/1/row_mean",
+      "passed": true,
+      "elements": 13,
+      "same_shape": true,
+      "all_finite": true,
+      "rtol": 1.0000000000000001e-05,
+      "atol": 9.9999999999999995e-07,
+      "max_absolute_error": 3.6329080077557308e-08,
+      "max_error_to_allowance_ratio": 0.0055884205864000173,
+      "violations": 0,
+      "provenance": {
+        "schema": "cudaverse-stage/1",
+        "stages": [
+          {
+            "stage": "mean",
+            "requested_device": "inherited",
+            "device": "cuda",
+            "backend": "native",
+            "selection_reason": "inherited_device",
+            "fallback": false,
+            "output_device": "cuda"
+          }
+        ]
+      }
+    },
+    {
+      "name": "float64/1/transfer",
+      "passed": true,
+      "elements": 91,
+      "same_shape": true,
+      "all_finite": true,
+      "rtol": 1e-10,
+      "atol": 0,
+      "max_absolute_error": 0,
+      "max_error_to_allowance_ratio": 0,
+      "violations": 0,
+      "seed": 1,
+      "dtype": "float64",
+      "shape": [13, 7]
+    },
+    {
+      "name": "float64/1/addition",
+      "passed": true,
+      "elements": 91,
+      "same_shape": true,
+      "all_finite": true,
+      "rtol": 1e-10,
+      "atol": 0,
+      "max_absolute_error": 0,
+      "max_error_to_allowance_ratio": 0,
+      "violations": 0,
+      "provenance": {
+        "schema": "cudaverse-stage/1",
+        "stages": [
+          {
+            "stage": "arithmetic",
+            "requested_device": "inherited",
+            "device": "cuda",
+            "backend": "native",
+            "selection_reason": "inherited_device",
+            "fallback": false,
+            "output_device": "cuda"
+          }
+        ]
+      }
+    },
+    {
+      "name": "float64/1/matmul",
+      "passed": true,
+      "elements": 117,
+      "same_shape": true,
+      "all_finite": true,
+      "rtol": 1e-08,
+      "atol": 0,
+      "max_absolute_error": 0,
+      "max_error_to_allowance_ratio": 0,
+      "violations": 0,
+      "left_shape": [13, 7],
+      "right_shape": [7, 9],
+      "provenance": {
+        "schema": "cudaverse-stage/1",
+        "stages": [
+          {
+            "stage": "matrix_multiply",
+            "requested_device": "inherited",
+            "device": "cuda",
+            "backend": "native",
+            "selection_reason": "inherited_device",
+            "fallback": false,
+            "output_device": "cuda"
+          }
+        ]
+      }
+    },
+    {
+      "name": "float64/1/column_sum",
+      "passed": true,
+      "elements": 7,
+      "same_shape": true,
+      "all_finite": true,
+      "rtol": 1e-08,
+      "atol": 0,
+      "max_absolute_error": 1.3322676295501878e-15,
+      "max_error_to_allowance_ratio": 3.3429249165288373e-08,
+      "violations": 0,
+      "provenance": {
+        "schema": "cudaverse-stage/1",
+        "stages": [
+          {
+            "stage": "sum",
+            "requested_device": "inherited",
+            "device": "cuda",
+            "backend": "native",
+            "selection_reason": "inherited_device",
+            "fallback": false,
+            "output_device": "cuda"
+          }
+        ]
+      }
+    },
+    {
+      "name": "float64/1/row_mean",
+      "passed": true,
+      "elements": 13,
+      "same_shape": true,
+      "all_finite": true,
+      "rtol": 1e-08,
+      "atol": 0,
+      "max_absolute_error": 1.1102230246251565e-16,
+      "max_error_to_allowance_ratio": 3.1975779871786989e-08,
+      "violations": 0,
+      "provenance": {
+        "schema": "cudaverse-stage/1",
+        "stages": [
+          {
+            "stage": "mean",
+            "requested_device": "inherited",
+            "device": "cuda",
+            "backend": "native",
+            "selection_reason": "inherited_device",
+            "fallback": false,
+            "output_device": "cuda"
+          }
+        ]
+      }
+    },
+    {
+      "name": "float32/42/transfer",
+      "passed": true,
+      "elements": 91,
+      "same_shape": true,
+      "all_finite": true,
+      "rtol": 1.0000000000000001e-05,
+      "atol": 9.9999999999999995e-07,
+      "max_absolute_error": 9.5910409836363897e-08,
+      "max_error_to_allowance_ratio": 0.0045276916343908189,
+      "violations": 0,
+      "seed": 42,
+      "dtype": "float32",
+      "shape": [13, 7]
+    },
+    {
+      "name": "float32/42/addition",
+      "passed": true,
+      "elements": 91,
+      "same_shape": true,
+      "all_finite": true,
+      "rtol": 1.0000000000000001e-05,
+      "atol": 9.9999999999999995e-07,
+      "max_absolute_error": 1.9182081967272779e-07,
+      "max_error_to_allowance_ratio": 0.0047356689548582066,
+      "violations": 0,
+      "provenance": {
+        "schema": "cudaverse-stage/1",
+        "stages": [
+          {
+            "stage": "arithmetic",
+            "requested_device": "inherited",
+            "device": "cuda",
+            "backend": "native",
+            "selection_reason": "inherited_device",
+            "fallback": false,
+            "output_device": "cuda"
+          }
+        ]
+      }
+    },
+    {
+      "name": "float32/42/matmul",
+      "passed": true,
+      "elements": 117,
+      "same_shape": true,
+      "all_finite": true,
+      "rtol": 1.0000000000000001e-05,
+      "atol": 9.9999999999999995e-07,
+      "max_absolute_error": 5.6454157970620145e-07,
+      "max_error_to_allowance_ratio": 0.055614593531134085,
+      "violations": 0,
+      "left_shape": [13, 7],
+      "right_shape": [7, 9],
+      "provenance": {
+        "schema": "cudaverse-stage/1",
+        "stages": [
+          {
+            "stage": "matrix_multiply",
+            "requested_device": "inherited",
+            "device": "cuda",
+            "backend": "native",
+            "selection_reason": "inherited_device",
+            "fallback": false,
+            "output_device": "cuda"
+          }
+        ]
+      }
+    },
+    {
+      "name": "float32/42/column_sum",
+      "passed": true,
+      "elements": 7,
+      "same_shape": true,
+      "all_finite": true,
+      "rtol": 1.0000000000000001e-05,
+      "atol": 9.9999999999999995e-07,
+      "max_absolute_error": 1.4071624399036864e-07,
+      "max_error_to_allowance_ratio": 0.013346304525851772,
+      "violations": 0,
+      "provenance": {
+        "schema": "cudaverse-stage/1",
+        "stages": [
+          {
+            "stage": "sum",
+            "requested_device": "inherited",
+            "device": "cuda",
+            "backend": "native",
+            "selection_reason": "inherited_device",
+            "fallback": false,
+            "output_device": "cuda"
+          }
+        ]
+      }
+    },
+    {
+      "name": "float32/42/row_mean",
+      "passed": true,
+      "elements": 13,
+      "same_shape": true,
+      "all_finite": true,
+      "rtol": 1.0000000000000001e-05,
+      "atol": 9.9999999999999995e-07,
+      "max_absolute_error": 2.4225840222769079e-08,
+      "max_error_to_allowance_ratio": 0.0051546138313210742,
+      "violations": 0,
+      "provenance": {
+        "schema": "cudaverse-stage/1",
+        "stages": [
+          {
+            "stage": "mean",
+            "requested_device": "inherited",
+            "device": "cuda",
+            "backend": "native",
+            "selection_reason": "inherited_device",
+            "fallback": false,
+            "output_device": "cuda"
+          }
+        ]
+      }
+    },
+    {
+      "name": "float64/42/transfer",
+      "passed": true,
+      "elements": 91,
+      "same_shape": true,
+      "all_finite": true,
+      "rtol": 1e-10,
+      "atol": 0,
+      "max_absolute_error": 0,
+      "max_error_to_allowance_ratio": 0,
+      "violations": 0,
+      "seed": 42,
+      "dtype": "float64",
+      "shape": [13, 7]
+    },
+    {
+      "name": "float64/42/addition",
+      "passed": true,
+      "elements": 91,
+      "same_shape": true,
+      "all_finite": true,
+      "rtol": 1e-10,
+      "atol": 0,
+      "max_absolute_error": 0,
+      "max_error_to_allowance_ratio": 0,
+      "violations": 0,
+      "provenance": {
+        "schema": "cudaverse-stage/1",
+        "stages": [
+          {
+            "stage": "arithmetic",
+            "requested_device": "inherited",
+            "device": "cuda",
+            "backend": "native",
+            "selection_reason": "inherited_device",
+            "fallback": false,
+            "output_device": "cuda"
+          }
+        ]
+      }
+    },
+    {
+      "name": "float64/42/matmul",
+      "passed": true,
+      "elements": 117,
+      "same_shape": true,
+      "all_finite": true,
+      "rtol": 1e-08,
+      "atol": 0,
+      "max_absolute_error": 0,
+      "max_error_to_allowance_ratio": 0,
+      "violations": 0,
+      "left_shape": [13, 7],
+      "right_shape": [7, 9],
+      "provenance": {
+        "schema": "cudaverse-stage/1",
+        "stages": [
+          {
+            "stage": "matrix_multiply",
+            "requested_device": "inherited",
+            "device": "cuda",
+            "backend": "native",
+            "selection_reason": "inherited_device",
+            "fallback": false,
+            "output_device": "cuda"
+          }
+        ]
+      }
+    },
+    {
+      "name": "float64/42/column_sum",
+      "passed": true,
+      "elements": 7,
+      "same_shape": true,
+      "all_finite": true,
+      "rtol": 1e-08,
+      "atol": 0,
+      "max_absolute_error": 8.8817841970012523e-16,
+      "max_error_to_allowance_ratio": 2.1529995333433878e-08,
+      "violations": 0,
+      "provenance": {
+        "schema": "cudaverse-stage/1",
+        "stages": [
+          {
+            "stage": "sum",
+            "requested_device": "inherited",
+            "device": "cuda",
+            "backend": "native",
+            "selection_reason": "inherited_device",
+            "fallback": false,
+            "output_device": "cuda"
+          }
+        ]
+      }
+    },
+    {
+      "name": "float64/42/row_mean",
+      "passed": true,
+      "elements": 13,
+      "same_shape": true,
+      "all_finite": true,
+      "rtol": 1e-08,
+      "atol": 0,
+      "max_absolute_error": 1.1102230246251565e-16,
+      "max_error_to_allowance_ratio": 8.8508210496368483e-07,
+      "violations": 0,
+      "provenance": {
+        "schema": "cudaverse-stage/1",
+        "stages": [
+          {
+            "stage": "mean",
+            "requested_device": "inherited",
+            "device": "cuda",
+            "backend": "native",
+            "selection_reason": "inherited_device",
+            "fallback": false,
+            "output_device": "cuda"
+          }
+        ]
+      }
+    },
+    {
+      "name": "float32/2026/transfer",
+      "passed": true,
+      "elements": 91,
+      "same_shape": true,
+      "all_finite": true,
+      "rtol": 1.0000000000000001e-05,
+      "atol": 9.9999999999999995e-07,
+      "max_absolute_error": 7.9238590799945996e-08,
+      "max_error_to_allowance_ratio": 0.0045007751049073817,
+      "violations": 0,
+      "seed": 2026,
+      "dtype": "float32",
+      "shape": [13, 7]
+    },
+    {
+      "name": "float32/2026/addition",
+      "passed": true,
+      "elements": 91,
+      "same_shape": true,
+      "all_finite": true,
+      "rtol": 1.0000000000000001e-05,
+      "atol": 9.9999999999999995e-07,
+      "max_absolute_error": 1.5847718159989199e-07,
+      "max_error_to_allowance_ratio": 0.0046802001139146813,
+      "violations": 0,
+      "provenance": {
+        "schema": "cudaverse-stage/1",
+        "stages": [
+          {
+            "stage": "arithmetic",
+            "requested_device": "inherited",
+            "device": "cuda",
+            "backend": "native",
+            "selection_reason": "inherited_device",
+            "fallback": false,
+            "output_device": "cuda"
+          }
+        ]
+      }
+    },
+    {
+      "name": "float32/2026/matmul",
+      "passed": true,
+      "elements": 117,
+      "same_shape": true,
+      "all_finite": true,
+      "rtol": 1.0000000000000001e-05,
+      "atol": 9.9999999999999995e-07,
+      "max_absolute_error": 5.1337605455614721e-07,
+      "max_error_to_allowance_ratio": 0.1547106076712764,
+      "violations": 0,
+      "left_shape": [13, 7],
+      "right_shape": [7, 9],
+      "provenance": {
+        "schema": "cudaverse-stage/1",
+        "stages": [
+          {
+            "stage": "matrix_multiply",
+            "requested_device": "inherited",
+            "device": "cuda",
+            "backend": "native",
+            "selection_reason": "inherited_device",
+            "fallback": false,
+            "output_device": "cuda"
+          }
+        ]
+      }
+    },
+    {
+      "name": "float32/2026/column_sum",
+      "passed": true,
+      "elements": 7,
+      "same_shape": true,
+      "all_finite": true,
+      "rtol": 1.0000000000000001e-05,
+      "atol": 9.9999999999999995e-07,
+      "max_absolute_error": 2.5213135579349455e-07,
+      "max_error_to_allowance_ratio": 0.025093171364093021,
+      "violations": 0,
+      "provenance": {
+        "schema": "cudaverse-stage/1",
+        "stages": [
+          {
+            "stage": "sum",
+            "requested_device": "inherited",
+            "device": "cuda",
+            "backend": "native",
+            "selection_reason": "inherited_device",
+            "fallback": false,
+            "output_device": "cuda"
+          }
+        ]
+      }
+    },
+    {
+      "name": "float32/2026/row_mean",
+      "passed": true,
+      "elements": 13,
+      "same_shape": true,
+      "all_finite": true,
+      "rtol": 1.0000000000000001e-05,
+      "atol": 9.9999999999999995e-07,
+      "max_absolute_error": 1.2580510438953141e-08,
+      "max_error_to_allowance_ratio": 0.0056520402858250265,
+      "violations": 0,
+      "provenance": {
+        "schema": "cudaverse-stage/1",
+        "stages": [
+          {
+            "stage": "mean",
+            "requested_device": "inherited",
+            "device": "cuda",
+            "backend": "native",
+            "selection_reason": "inherited_device",
+            "fallback": false,
+            "output_device": "cuda"
+          }
+        ]
+      }
+    },
+    {
+      "name": "float64/2026/transfer",
+      "passed": true,
+      "elements": 91,
+      "same_shape": true,
+      "all_finite": true,
+      "rtol": 1e-10,
+      "atol": 0,
+      "max_absolute_error": 0,
+      "max_error_to_allowance_ratio": 0,
+      "violations": 0,
+      "seed": 2026,
+      "dtype": "float64",
+      "shape": [13, 7]
+    },
+    {
+      "name": "float64/2026/addition",
+      "passed": true,
+      "elements": 91,
+      "same_shape": true,
+      "all_finite": true,
+      "rtol": 1e-10,
+      "atol": 0,
+      "max_absolute_error": 0,
+      "max_error_to_allowance_ratio": 0,
+      "violations": 0,
+      "provenance": {
+        "schema": "cudaverse-stage/1",
+        "stages": [
+          {
+            "stage": "arithmetic",
+            "requested_device": "inherited",
+            "device": "cuda",
+            "backend": "native",
+            "selection_reason": "inherited_device",
+            "fallback": false,
+            "output_device": "cuda"
+          }
+        ]
+      }
+    },
+    {
+      "name": "float64/2026/matmul",
+      "passed": true,
+      "elements": 117,
+      "same_shape": true,
+      "all_finite": true,
+      "rtol": 1e-08,
+      "atol": 0,
+      "max_absolute_error": 0,
+      "max_error_to_allowance_ratio": 0,
+      "violations": 0,
+      "left_shape": [13, 7],
+      "right_shape": [7, 9],
+      "provenance": {
+        "schema": "cudaverse-stage/1",
+        "stages": [
+          {
+            "stage": "matrix_multiply",
+            "requested_device": "inherited",
+            "device": "cuda",
+            "backend": "native",
+            "selection_reason": "inherited_device",
+            "fallback": false,
+            "output_device": "cuda"
+          }
+        ]
+      }
+    },
+    {
+      "name": "float64/2026/column_sum",
+      "passed": true,
+      "elements": 7,
+      "same_shape": true,
+      "all_finite": true,
+      "rtol": 1e-08,
+      "atol": 0,
+      "max_absolute_error": 8.8817841970012523e-16,
+      "max_error_to_allowance_ratio": 1.45285510313237e-08,
+      "violations": 0,
+      "provenance": {
+        "schema": "cudaverse-stage/1",
+        "stages": [
+          {
+            "stage": "sum",
+            "requested_device": "inherited",
+            "device": "cuda",
+            "backend": "native",
+            "selection_reason": "inherited_device",
+            "fallback": false,
+            "output_device": "cuda"
+          }
+        ]
+      }
+    },
+    {
+      "name": "float64/2026/row_mean",
+      "passed": true,
+      "elements": 13,
+      "same_shape": true,
+      "all_finite": true,
+      "rtol": 1e-08,
+      "atol": 0,
+      "max_absolute_error": 1.1102230246251565e-16,
+      "max_error_to_allowance_ratio": 1.0620795569565658e-07,
+      "violations": 0,
+      "provenance": {
+        "schema": "cudaverse-stage/1",
+        "stages": [
+          {
+            "stage": "mean",
+            "requested_device": "inherited",
+            "device": "cuda",
+            "backend": "native",
+            "selection_reason": "inherited_device",
+            "fallback": false,
+            "output_device": "cuda"
+          }
+        ]
+      }
+    },
+    {
+      "name": "integer/exact_transfer",
+      "passed": true,
+      "elements": 48,
+      "same_shape": true,
+      "all_finite": true,
+      "rtol": 0,
+      "atol": 0,
+      "max_absolute_error": 0,
+      "max_error_to_allowance_ratio": 0,
+      "violations": 0,
+      "dtype_preserved": true
+    },
+    {
+      "name": "integer/transfer_dtype",
+      "passed": true
+    },
+    {
+      "name": "integer/exact_sum",
+      "passed": true,
+      "elements": 6,
+      "same_shape": true,
+      "all_finite": true,
+      "rtol": 0,
+      "atol": 0,
+      "max_absolute_error": 0,
+      "max_error_to_allowance_ratio": 0,
+      "violations": 0,
+      "output_dtype": "float64",
+      "provenance": {
+        "schema": "cudaverse-stage/1",
+        "stages": [
+          {
+            "stage": "sum",
+            "requested_device": "inherited",
+            "device": "cuda",
+            "backend": "native",
+            "selection_reason": "inherited_device",
+            "fallback": false,
+            "output_device": "cuda"
+          }
+        ]
+      }
+    },
+    {
+      "name": "pca/1/reconstruction",
+      "passed": true,
+      "elements": 240,
+      "same_shape": true,
+      "all_finite": true,
+      "rtol": 1e-08,
+      "atol": 0,
+      "max_absolute_error": 4.4408920985006262e-15,
+      "max_error_to_allowance_ratio": 1.474674317612488e-05,
+      "violations": 0,
+      "seed": 1,
+      "input_shape": [40, 6],
+      "components": 3
+    },
+    {
+      "name": "pca/1/subspace_projector",
+      "passed": true,
+      "elements": 36,
+      "same_shape": true,
+      "all_finite": true,
+      "rtol": 1e-08,
+      "atol": 0,
+      "max_absolute_error": 4.4408920985006262e-16,
+      "max_error_to_allowance_ratio": 1.7171247139741637e-06,
+      "violations": 0,
+      "provenance": {
+        "schema": "cudaverse-stage/1",
+        "stages": [
+          {
+            "stage": "input_materialization",
+            "requested_device": "inherited",
+            "device": "cuda",
+            "backend": "native",
+            "selection_reason": "device_resident_input",
+            "fallback": false,
+            "output_device": "cuda"
+          },
+          {
+            "stage": "preprocessing",
+            "requested_device": "cuda",
+            "device": "cuda",
+            "backend": "native",
+            "selection_reason": "explicit_cuda",
+            "fallback": false,
+            "output_device": "cuda"
+          },
+          {
+            "stage": "decomposition",
+            "requested_device": "cuda",
+            "device": "cuda",
+            "backend": "native",
+            "selection_reason": "explicit_cuda",
+            "fallback": false,
+            "output_device": "cpu"
+          },
+          {
+            "stage": "scores_resident",
+            "requested_device": "cuda",
+            "device": "cuda",
+            "backend": "native",
+            "selection_reason": "device_resident_output",
+            "fallback": false,
+            "output_device": "cuda"
+          }
+        ]
+      }
+    },
+    {
+      "name": "pca/1/resident_scores",
+      "passed": true
+    },
+    {
+      "name": "pca/42/reconstruction",
+      "passed": true,
+      "elements": 240,
+      "same_shape": true,
+      "all_finite": true,
+      "rtol": 1e-08,
+      "atol": 0,
+      "max_absolute_error": 8.4376949871511897e-15,
+      "max_error_to_allowance_ratio": 9.1879949520749088e-05,
+      "violations": 0,
+      "seed": 42,
+      "input_shape": [40, 6],
+      "components": 3
+    },
+    {
+      "name": "pca/42/subspace_projector",
+      "passed": true,
+      "elements": 36,
+      "same_shape": true,
+      "all_finite": true,
+      "rtol": 1e-08,
+      "atol": 0,
+      "max_absolute_error": 2.0261570199409107e-15,
+      "max_error_to_allowance_ratio": 2.4150933092660972e-05,
+      "violations": 0,
+      "provenance": {
+        "schema": "cudaverse-stage/1",
+        "stages": [
+          {
+            "stage": "input_materialization",
+            "requested_device": "inherited",
+            "device": "cuda",
+            "backend": "native",
+            "selection_reason": "device_resident_input",
+            "fallback": false,
+            "output_device": "cuda"
+          },
+          {
+            "stage": "preprocessing",
+            "requested_device": "cuda",
+            "device": "cuda",
+            "backend": "native",
+            "selection_reason": "explicit_cuda",
+            "fallback": false,
+            "output_device": "cuda"
+          },
+          {
+            "stage": "decomposition",
+            "requested_device": "cuda",
+            "device": "cuda",
+            "backend": "native",
+            "selection_reason": "explicit_cuda",
+            "fallback": false,
+            "output_device": "cpu"
+          },
+          {
+            "stage": "scores_resident",
+            "requested_device": "cuda",
+            "device": "cuda",
+            "backend": "native",
+            "selection_reason": "device_resident_output",
+            "fallback": false,
+            "output_device": "cuda"
+          }
+        ]
+      }
+    },
+    {
+      "name": "pca/42/resident_scores",
+      "passed": true
+    },
+    {
+      "name": "pca/2026/reconstruction",
+      "passed": true,
+      "elements": 240,
+      "same_shape": true,
+      "all_finite": true,
+      "rtol": 1e-08,
+      "atol": 0,
+      "max_absolute_error": 3.7747582837255322e-15,
+      "max_error_to_allowance_ratio": 3.1363477173916751e-05,
+      "violations": 0,
+      "seed": 2026,
+      "input_shape": [40, 6],
+      "components": 3
+    },
+    {
+      "name": "pca/2026/subspace_projector",
+      "passed": true,
+      "elements": 36,
+      "same_shape": true,
+      "all_finite": true,
+      "rtol": 1e-08,
+      "atol": 0,
+      "max_absolute_error": 6.3837823915946501e-16,
+      "max_error_to_allowance_ratio": 1.2239770620200841e-06,
+      "violations": 0,
+      "provenance": {
+        "schema": "cudaverse-stage/1",
+        "stages": [
+          {
+            "stage": "input_materialization",
+            "requested_device": "inherited",
+            "device": "cuda",
+            "backend": "native",
+            "selection_reason": "device_resident_input",
+            "fallback": false,
+            "output_device": "cuda"
+          },
+          {
+            "stage": "preprocessing",
+            "requested_device": "cuda",
+            "device": "cuda",
+            "backend": "native",
+            "selection_reason": "explicit_cuda",
+            "fallback": false,
+            "output_device": "cuda"
+          },
+          {
+            "stage": "decomposition",
+            "requested_device": "cuda",
+            "device": "cuda",
+            "backend": "native",
+            "selection_reason": "explicit_cuda",
+            "fallback": false,
+            "output_device": "cpu"
+          },
+          {
+            "stage": "scores_resident",
+            "requested_device": "cuda",
+            "device": "cuda",
+            "backend": "native",
+            "selection_reason": "device_resident_output",
+            "fallback": false,
+            "output_device": "cuda"
+          }
+        ]
+      }
+    },
+    {
+      "name": "pca/2026/resident_scores",
+      "passed": true
+    },
+    {
+      "name": "stable_ties/batch_1/indices",
+      "passed": true,
+      "expected_indices": [
+        [2, 3, 4, 5],
+        [1, 3, 4, 5],
+        [1, 2, 5, 6],
+        [1, 2, 5, 6],
+        [1, 2, 3, 4],
+        [1, 2, 3, 4]
+      ],
+      "actual_indices": [
+        [2, 3, 4, 5],
+        [1, 3, 4, 5],
+        [1, 2, 5, 6],
+        [1, 2, 5, 6],
+        [1, 2, 3, 4],
+        [1, 2, 3, 4]
+      ],
+      "ordering": "distance then original row number; self excluded",
+      "provenance": {
+        "schema": "cudaverse-stage/1",
+        "stages": [
+          {
+            "stage": "distance",
+            "requested_device": "cuda",
+            "device": "cuda",
+            "backend": "native",
+            "selection_reason": "explicit_cuda",
+            "fallback": false,
+            "output_device": "cuda"
+          },
+          {
+            "stage": "neighbor_selection",
+            "requested_device": "cuda",
+            "device": "cuda",
+            "backend": "native",
+            "selection_reason": "explicit_cuda",
+            "fallback": false,
+            "output_device": "cpu"
+          }
+        ]
+      }
+    },
+    {
+      "name": "stable_ties/batch_1/distances",
+      "passed": true,
+      "elements": 24,
+      "same_shape": true,
+      "all_finite": true,
+      "rtol": 1e-10,
+      "atol": 0,
+      "max_absolute_error": 0,
+      "max_error_to_allowance_ratio": 0,
+      "violations": 0
+    },
+    {
+      "name": "stable_ties/batch_4/indices",
+      "passed": true,
+      "expected_indices": [
+        [2, 3, 4, 5],
+        [1, 3, 4, 5],
+        [1, 2, 5, 6],
+        [1, 2, 5, 6],
+        [1, 2, 3, 4],
+        [1, 2, 3, 4]
+      ],
+      "actual_indices": [
+        [2, 3, 4, 5],
+        [1, 3, 4, 5],
+        [1, 2, 5, 6],
+        [1, 2, 5, 6],
+        [1, 2, 3, 4],
+        [1, 2, 3, 4]
+      ],
+      "ordering": "distance then original row number; self excluded",
+      "provenance": {
+        "schema": "cudaverse-stage/1",
+        "stages": [
+          {
+            "stage": "distance",
+            "requested_device": "cuda",
+            "device": "cuda",
+            "backend": "native",
+            "selection_reason": "explicit_cuda",
+            "fallback": false,
+            "output_device": "cuda"
+          },
+          {
+            "stage": "neighbor_selection",
+            "requested_device": "cuda",
+            "device": "cuda",
+            "backend": "native",
+            "selection_reason": "explicit_cuda",
+            "fallback": false,
+            "output_device": "cpu"
+          }
+        ]
+      }
+    },
+    {
+      "name": "stable_ties/batch_4/distances",
+      "passed": true,
+      "elements": 24,
+      "same_shape": true,
+      "all_finite": true,
+      "rtol": 1e-10,
+      "atol": 0,
+      "max_absolute_error": 0,
+      "max_error_to_allowance_ratio": 0,
+      "violations": 0
+    },
+    {
+      "name": "stable_ties/batch_20/indices",
+      "passed": true,
+      "expected_indices": [
+        [2, 3, 4, 5],
+        [1, 3, 4, 5],
+        [1, 2, 5, 6],
+        [1, 2, 5, 6],
+        [1, 2, 3, 4],
+        [1, 2, 3, 4]
+      ],
+      "actual_indices": [
+        [2, 3, 4, 5],
+        [1, 3, 4, 5],
+        [1, 2, 5, 6],
+        [1, 2, 5, 6],
+        [1, 2, 3, 4],
+        [1, 2, 3, 4]
+      ],
+      "ordering": "distance then original row number; self excluded",
+      "provenance": {
+        "schema": "cudaverse-stage/1",
+        "stages": [
+          {
+            "stage": "distance",
+            "requested_device": "cuda",
+            "device": "cuda",
+            "backend": "native",
+            "selection_reason": "explicit_cuda",
+            "fallback": false,
+            "output_device": "cuda"
+          },
+          {
+            "stage": "neighbor_selection",
+            "requested_device": "cuda",
+            "device": "cuda",
+            "backend": "native",
+            "selection_reason": "explicit_cuda",
+            "fallback": false,
+            "output_device": "cpu"
+          }
+        ]
+      }
+    },
+    {
+      "name": "stable_ties/batch_20/distances",
+      "passed": true,
+      "elements": 24,
+      "same_shape": true,
+      "all_finite": true,
+      "rtol": 1e-10,
+      "atol": 0,
+      "max_absolute_error": 0,
+      "max_error_to_allowance_ratio": 0,
+      "violations": 0
+    }
+  ],
+  "passed": true,
+  "software": {
+    "R": "R version 4.5.3 (2026-03-11)",
+    "library_paths": "/home/exouser/cudaverse-validation/env/lib/R/library",
+    "torch_installed": false,
+    "cuda_library_paths": {
+      "CUDAVERSE_CUBLAS_PATH": "",
+      "CUDAVERSE_CUSOLVER_PATH": "/home/exouser/cudaverse-validation/env/lib/libcusolver.so.11",
+      "LD_LIBRARY_PATH": ""
+    },
+    "cudaverse": "0.4.1",
+    "installed_description": {
+      "path": "/home/exouser/cudaverse-validation/env/lib/R/library/cudaverse/DESCRIPTION",
+      "md5": "6eb1483d00ba89fdd8f1fbbe18a2b0bf",
+      "sha256": "13add513aacd56f5dc79b7cd27881b07a53d61831999e65b7aa5743c8c84c8a2",
+      "sha256_unavailable_reason": null
+    },
+    "installed_dll": {
+      "path": "/home/exouser/cudaverse-validation/env/lib/R/library/cudaverse/libs/cudaverse.so",
+      "md5": "4dc366a3dc4c7c823374c54f4e9a8646",
+      "sha256": "63d71ed6a07b909732fa49d2940512cd8dd4d3cd27101985b5126d19d7b06c06",
+      "sha256_unavailable_reason": null
+    },
+    "loaded_libtorch_dlls": []
+  },
+  "diagnostics": {
+    "torch_installed": false,
+    "torch_version": null,
+    "cuda_available": true,
+    "cuda_device_count": 1,
+    "reason": "cuda_available",
+    "detection_error": null,
+    "available_backends": ["base", "native"],
+    "auto_eligible_backends": "native",
+    "auto_selection_reason": "native_auto_eligible",
+    "selected_backend": "native",
+    "backend_diagnostics": {
+      "torch": {
+        "installed": false,
+        "available": false,
+        "device_count": 0,
+        "version": null,
+        "reason": "torch_not_installed",
+        "detection_error": null,
+        "capabilities": ["transfer", "cast", "arithmetic", "matmul", "reduce", "reshape", "broadcast", "transpose", "svd", "pca", "distance", "distance-batched", "pca-predict", "knn", "sparse"],
+        "operations": ["algorithm_distance", "algorithm_distance_batched", "algorithm_knn_block", "algorithm_knn_prepare", "algorithm_pca", "algorithm_pca_predict", "algorithm_svd", "binary", "broadcast", "cast", "from_host", "matmul", "memory_info", "reduce", "release", "reshape", "sparse_from_coo", "sparse_matmul_dense", "synchronize", "to_host", "transpose"],
+        "contract_schema": null,
+        "missing_auto_capabilities": [],
+        "capability_compatible": true,
+        "self_test_passed": null,
+        "auto_eligible": false,
+        "auto_selection_reason": "torch_not_installed"
+      },
+      "native": {
+        "installed": true,
+        "available": true,
+        "device_count": 1,
+        "version": "13020",
+        "reason": "cuda_available",
+        "detection_error": null,
+        "driver_version": 13020,
+        "cublas_loaded": true,
+        "cusolver_loaded": true,
+        "cusolver_error": null,
+        "kernels_loaded": true,
+        "runtime_complete": true,
+        "self_test": {
+          "passed": true,
+          "reason": "self_test_passed",
+          "error": null,
+          "checks": ["float64-transfer-matmul-reduce", "float32-transfer-matmul-reduce", "arithmetic-reshape-broadcast-transpose", "device-indexing", "resident-matrix-validation-svd-pca", "resident-batched-distance", "resident-kmeans", "sparse-transpose", "sparse-transfer-normalize"],
+          "duration_ms": 115.99999999999999
+        },
+        "auto_eligible": true,
+        "capabilities": ["driver-detection", "allocation", "transfer", "cast", "matmul", "reduce", "arithmetic", "reshape", "broadcast", "transpose", "subset", "replacement", "matrix-validation", "svd", "svd-resident", "pca", "pca-resident", "pca-predict", "distance", "distance-batched", "kmeans", "kmeans-batched", "knn", "stable-topk", "sparse", "sparse-coo", "sparse-csr", "sparse-transpose", "sparse-normalize", "sparse-matmul", "sparse-reduce", "sparse-pca", "sparse-knn", "synchronize", "shared-ownership", "memory-observability", "dtype-float32", "dtype-float64", "runtime-self-test"],
+        "operations": ["algorithm_distance", "algorithm_distance_batched", "algorithm_kmeans", "algorithm_kmeans_batched", "algorithm_knn_block", "algorithm_knn_prepare", "algorithm_knn_select", "algorithm_matrix_validate", "algorithm_pca", "algorithm_pca_predict", "algorithm_pca_storage", "algorithm_sparse_knn_prepare", "algorithm_sparse_pca", "algorithm_svd", "algorithm_svd_storage", "binary", "broadcast", "cast", "from_host", "matmul", "memory_info", "reduce", "release", "replace", "reshape", "sparse_from_coo", "sparse_matmul_dense", "sparse_normalize", "sparse_reduce", "sparse_release", "sparse_share", "sparse_to_dense", "sparse_to_host", "sparse_transpose", "subset", "synchronize", "test_inject_cuda_error", "to_host", "transpose"],
+        "contract_schema": "cudaverse-backend/1",
+        "missing_auto_capabilities": [],
+        "capability_compatible": true,
+        "self_test_passed": true,
+        "auto_selection_reason": "native_auto_eligible"
+      }
+    },
+    "status": "cuda_ready",
+    "summary": "CUDA is ready through the native backend (1 device).",
+    "next_steps": [],
+    "backend_status": [
+      {
+        "backend": "base",
+        "device": "cpu",
+        "installed": true,
+        "available": true,
+        "auto_eligible": false,
+        "selected": false,
+        "reason": "cpu_available",
+        "error": null,
+        "_row": "base"
+      },
+      {
+        "backend": "torch",
+        "device": "cuda",
+        "installed": false,
+        "available": false,
+        "auto_eligible": false,
+        "selected": false,
+        "reason": "torch_not_installed",
+        "error": null,
+        "_row": "torch"
+      },
+      {
+        "backend": "native",
+        "device": "cuda",
+        "installed": true,
+        "available": true,
+        "auto_eligible": true,
+        "selected": true,
+        "reason": "native_auto_eligible",
+        "error": null,
+        "_row": "native"
+      }
+    ]
+  },
+  "lifecycle": {
+    "seed": 20260907,
+    "input_shape": [32, 6],
+    "dtype": "float64",
+    "components": 3,
+    "k": 5,
+    "batch_size": 11,
+    "warmups": 5,
+    "iterations_required": 1000,
+    "iterations_completed": 1000,
+    "synchronized_and_gc": true,
+    "allocator_before": {
+      "current": 0,
+      "peak": 0
+    },
+    "allocator_after": {
+      "current": 0,
+      "peak": 6610940
+    },
+    "allocator_delta_bytes": 0,
+    "exact_allocator_cleanup": true,
+    "memory_limit_bytes": 1048576,
+    "checkpoints": [
+      {
+        "iteration": 100,
+        "allocator": {
+          "current": 0,
+          "peak": 6594812
+        },
+        "device_global": {
+          "free": 72531050496,
+          "total": 85019590656,
+          "used": 12488540160
+        }
+      },
+      {
+        "iteration": 200,
+        "allocator": {
+          "current": 0,
+          "peak": 6602492
+        },
+        "device_global": {
+          "free": 72531050496,
+          "total": 85019590656,
+          "used": 12488540160
+        }
+      },
+      {
+        "iteration": 300,
+        "allocator": {
+          "current": 0,
+          "peak": 6610940
+        },
+        "device_global": {
+          "free": 72531050496,
+          "total": 85019590656,
+          "used": 12488540160
+        }
+      },
+      {
+        "iteration": 400,
+        "allocator": {
+          "current": 0,
+          "peak": 6610940
+        },
+        "device_global": {
+          "free": 72531050496,
+          "total": 85019590656,
+          "used": 12488540160
+        }
+      },
+      {
+        "iteration": 500,
+        "allocator": {
+          "current": 0,
+          "peak": 6610940
+        },
+        "device_global": {
+          "free": 72531050496,
+          "total": 85019590656,
+          "used": 12488540160
+        }
+      },
+      {
+        "iteration": 600,
+        "allocator": {
+          "current": 0,
+          "peak": 6610940
+        },
+        "device_global": {
+          "free": 72531050496,
+          "total": 85019590656,
+          "used": 12488540160
+        }
+      },
+      {
+        "iteration": 700,
+        "allocator": {
+          "current": 0,
+          "peak": 6610940
+        },
+        "device_global": {
+          "free": 72531050496,
+          "total": 85019590656,
+          "used": 12488540160
+        }
+      },
+      {
+        "iteration": 800,
+        "allocator": {
+          "current": 0,
+          "peak": 6610940
+        },
+        "device_global": {
+          "free": 72531050496,
+          "total": 85019590656,
+          "used": 12488540160
+        }
+      },
+      {
+        "iteration": 900,
+        "allocator": {
+          "current": 0,
+          "peak": 6610940
+        },
+        "device_global": {
+          "free": 72531050496,
+          "total": 85019590656,
+          "used": 12488540160
+        }
+      },
+      {
+        "iteration": 1000,
+        "allocator": {
+          "current": 0,
+          "peak": 6610940
+        },
+        "device_global": {
+          "free": 72531050496,
+          "total": 85019590656,
+          "used": 12488540160
+        }
+      }
+    ],
+    "device_global_before": {
+      "free": 72531050496,
+      "total": 85019590656,
+      "used": 12488540160
+    },
+    "device_global_after": {
+      "free": 72531050496,
+      "total": 85019590656,
+      "used": 12488540160
+    },
+    "device_global_delta_bytes": 0,
+    "device_global_measurement_scope": "whole GPU, may include other projects; informational only, not an isolated process leak measurement",
+    "process_inventory_before": {
+      "status": 0,
+      "output": ["978807, /home/exouser/histopia/.venv/bin/python, 5074", "987482, /home/exouser/histopia/.venv/bin/python, 5938", "997635, /home/exouser/cudaverse-validation/env/lib/R/bin/exec/R, 878"]
+    },
+    "process_inventory_after": {
+      "status": 0,
+      "output": ["978807, /home/exouser/histopia/.venv/bin/python, 5074", "987482, /home/exouser/histopia/.venv/bin/python, 5938", "997635, /home/exouser/cudaverse-validation/env/lib/R/bin/exec/R, 878"]
+    },
+    "provenance_sample": {
+      "pca": [
+        {
+          "stage": "input_materialization",
+          "requested_device": "inherited",
+          "device": "cuda",
+          "backend": "native",
+          "selection_reason": "device_resident_input",
+          "fallback": false,
+          "output_device": "cuda"
+        },
+        {
+          "stage": "preprocessing",
+          "requested_device": "cuda",
+          "device": "cuda",
+          "backend": "native",
+          "selection_reason": "explicit_cuda",
+          "fallback": false,
+          "output_device": "cuda"
+        },
+        {
+          "stage": "decomposition",
+          "requested_device": "cuda",
+          "device": "cuda",
+          "backend": "native",
+          "selection_reason": "explicit_cuda",
+          "fallback": false,
+          "output_device": "cpu"
+        },
+        {
+          "stage": "scores_resident",
+          "requested_device": "cuda",
+          "device": "cuda",
+          "backend": "native",
+          "selection_reason": "device_resident_output",
+          "fallback": false,
+          "output_device": "cuda"
+        }
+      ],
+      "knn": [
+        {
+          "stage": "input_materialization",
+          "requested_device": "inherited",
+          "device": "cuda",
+          "backend": "native",
+          "selection_reason": "device_resident_input",
+          "fallback": false,
+          "output_device": "cuda"
+        },
+        {
+          "stage": "distance",
+          "requested_device": "cuda",
+          "device": "cuda",
+          "backend": "native",
+          "selection_reason": "explicit_cuda",
+          "fallback": false,
+          "output_device": "cuda"
+        },
+        {
+          "stage": "neighbor_selection",
+          "requested_device": "cuda",
+          "device": "cuda",
+          "backend": "native",
+          "selection_reason": "explicit_cuda",
+          "fallback": false,
+          "output_device": "cpu"
+        }
+      ]
+    },
+    "error": null,
+    "passed": true
+  },
+  "session": ["R version 4.5.3 (2026-03-11)", "Platform: x86_64-conda-linux-gnu", "Running under: Ubuntu 24.04.4 LTS", "", "Matrix products: default", "BLAS/LAPACK: /home/exouser/cudaverse-validation/env/lib/libopenblasp-r0.3.34.so;  LAPACK version 3.12.0", "", "locale:", " [1] LC_CTYPE=C.UTF-8       LC_NUMERIC=C           LC_TIME=C.UTF-8       ", " [4] LC_COLLATE=C.UTF-8     LC_MONETARY=C.UTF-8    LC_MESSAGES=C.UTF-8   ", " [7] LC_PAPER=C.UTF-8       LC_NAME=C              LC_ADDRESS=C          ", "[10] LC_TELEPHONE=C         LC_MEASUREMENT=C.UTF-8 LC_IDENTIFICATION=C   ", "", "time zone: Etc/UTC", "tzcode source: system (glibc)", "", "attached base packages:", "[1] stats     graphics  grDevices utils     datasets  methods   base     ", "", "loaded via a namespace (and not attached):", "[1] compiler_4.5.3  tools_4.5.3     jsonlite_2.0.0  cudaverse_0.4.1"],
+  "finished_at_utc": "2026-09-07 20:16:06 UTC"
+}

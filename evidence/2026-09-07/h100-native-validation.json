@@ -1,0 +1,409 @@
+{
+  "schema": "cudaverse-h100-native-validation/1",
+  "time_utc": "2026-09-07 20:11:47 UTC",
+  "commit": "2faaa385fcbc9365371476733236578baafaebae",
+  "scope": "native-backend test file and phase4 smoke",
+  "torch_installed": false,
+  "diagnostics": {
+    "torch_installed": false,
+    "torch_version": null,
+    "cuda_available": true,
+    "cuda_device_count": 1,
+    "reason": "cuda_available",
+    "detection_error": null,
+    "available_backends": ["base", "native"],
+    "auto_eligible_backends": "native",
+    "auto_selection_reason": "native_auto_eligible",
+    "selected_backend": "native",
+    "backend_diagnostics": {
+      "torch": {
+        "installed": false,
+        "available": false,
+        "device_count": 0,
+        "version": null,
+        "reason": "torch_not_installed",
+        "detection_error": null,
+        "capabilities": ["transfer", "cast", "arithmetic", "matmul", "reduce", "reshape", "broadcast", "transpose", "svd", "pca", "distance", "distance-batched", "pca-predict", "knn", "sparse"],
+        "operations": ["algorithm_distance", "algorithm_distance_batched", "algorithm_knn_block", "algorithm_knn_prepare", "algorithm_pca", "algorithm_pca_predict", "algorithm_svd", "binary", "broadcast", "cast", "from_host", "matmul", "memory_info", "reduce", "release", "reshape", "sparse_from_coo", "sparse_matmul_dense", "synchronize", "to_host", "transpose"],
+        "contract_schema": null,
+        "missing_auto_capabilities": [],
+        "capability_compatible": true,
+        "self_test_passed": null,
+        "auto_eligible": false,
+        "auto_selection_reason": "torch_not_installed"
+      },
+      "native": {
+        "installed": true,
+        "available": true,
+        "device_count": 1,
+        "version": "13020",
+        "reason": "cuda_available",
+        "detection_error": null,
+        "driver_version": 13020,
+        "cublas_loaded": true,
+        "cusolver_loaded": true,
+        "cusolver_error": null,
+        "kernels_loaded": true,
+        "runtime_complete": true,
+        "self_test": {
+          "passed": true,
+          "reason": "self_test_passed",
+          "error": null,
+          "checks": ["float64-transfer-matmul-reduce", "float32-transfer-matmul-reduce", "arithmetic-reshape-broadcast-transpose", "device-indexing", "resident-matrix-validation-svd-pca", "resident-batched-distance", "resident-kmeans", "sparse-transpose", "sparse-transfer-normalize"],
+          "duration_ms": 20
+        },
+        "auto_eligible": true,
+        "capabilities": ["driver-detection", "allocation", "transfer", "cast", "matmul", "reduce", "arithmetic", "reshape", "broadcast", "transpose", "subset", "replacement", "matrix-validation", "svd", "svd-resident", "pca", "pca-resident", "pca-predict", "distance", "distance-batched", "kmeans", "kmeans-batched", "knn", "stable-topk", "sparse", "sparse-coo", "sparse-csr", "sparse-transpose", "sparse-normalize", "sparse-matmul", "sparse-reduce", "sparse-pca", "sparse-knn", "synchronize", "shared-ownership", "memory-observability", "dtype-float32", "dtype-float64", "runtime-self-test"],
+        "operations": ["algorithm_distance", "algorithm_distance_batched", "algorithm_kmeans", "algorithm_kmeans_batched", "algorithm_knn_block", "algorithm_knn_prepare", "algorithm_knn_select", "algorithm_matrix_validate", "algorithm_pca", "algorithm_pca_predict", "algorithm_pca_storage", "algorithm_sparse_knn_prepare", "algorithm_sparse_pca", "algorithm_svd", "algorithm_svd_storage", "binary", "broadcast", "cast", "from_host", "matmul", "memory_info", "reduce", "release", "replace", "reshape", "sparse_from_coo", "sparse_matmul_dense", "sparse_normalize", "sparse_reduce", "sparse_release", "sparse_share", "sparse_to_dense", "sparse_to_host", "sparse_transpose", "subset", "synchronize", "test_inject_cuda_error", "to_host", "transpose"],
+        "contract_schema": "cudaverse-backend/1",
+        "missing_auto_capabilities": [],
+        "capability_compatible": true,
+        "self_test_passed": true,
+        "auto_selection_reason": "native_auto_eligible"
+      }
+    },
+    "status": "cuda_ready",
+    "summary": "CUDA is ready through the native backend (1 device).",
+    "next_steps": [],
+    "backend_status": [
+      {
+        "backend": "base",
+        "device": "cpu",
+        "installed": true,
+        "available": true,
+        "auto_eligible": false,
+        "selected": false,
+        "reason": "cpu_available",
+        "_row": "base"
+      },
+      {
+        "backend": "torch",
+        "device": "cuda",
+        "installed": false,
+        "available": false,
+        "auto_eligible": false,
+        "selected": false,
+        "reason": "torch_not_installed",
+        "_row": "torch"
+      },
+      {
+        "backend": "native",
+        "device": "cuda",
+        "installed": true,
+        "available": true,
+        "auto_eligible": true,
+        "selected": true,
+        "reason": "native_auto_eligible",
+        "_row": "native"
+      }
+    ]
+  },
+  "runner_state": {
+    "backend_option_before": null,
+    "backend_option_after_tests": "torch",
+    "restored": true
+  },
+  "hardware": "NVIDIA H100 80GB HBM3, 595.84, 81559 MiB",
+  "session": ["R version 4.5.3 (2026-03-11)", "Platform: x86_64-conda-linux-gnu", "Running under: Ubuntu 24.04.4 LTS", "", "Matrix products: default", "BLAS/LAPACK: /home/exouser/cudaverse-validation/env/lib/libopenblasp-r0.3.34.so;  LAPACK version 3.12.0", "", "locale:", " [1] LC_CTYPE=C.UTF-8       LC_NUMERIC=C           LC_TIME=C.UTF-8       ", " [4] LC_COLLATE=C.UTF-8     LC_MONETARY=C.UTF-8    LC_MESSAGES=C.UTF-8   ", " [7] LC_PAPER=C.UTF-8       LC_NAME=C              LC_ADDRESS=C          ", "[10] LC_TELEPHONE=C         LC_MEASUREMENT=C.UTF-8 LC_IDENTIFICATION=C   ", "", "time zone: Etc/UTC", "tzcode source: system (glibc)", "", "attached base packages:", "[1] stats     graphics  grDevices utils     datasets  methods   base     ", "", "other attached packages:", "[1] cudaverse_0.4.1 testthat_3.3.2 ", "", "loaded via a namespace (and not attached):", " [1] waldo_0.6.2     desc_1.4.3      R6_2.6.1        Matrix_1.7-6   ", " [5] lattice_0.23-1  magrittr_2.0.5  glue_1.8.1      lifecycle_1.0.5", " [9] cli_3.6.6       grid_4.5.3      withr_3.0.3     pkgload_1.5.3  ", "[13] compiler_4.5.3  rprojroot_2.1.1 tools_4.5.3     pkgbuild_1.4.8 ", "[17] brio_1.1.5      rlang_1.3.0     jsonlite_2.0.0 "],
+  "packages": [
+    {
+      "Package": "assertthat",
+      "Version": "0.2.1",
+      "_row": "assertthat"
+    },
+    {
+      "Package": "base",
+      "Version": "4.5.3",
+      "_row": "base"
+    },
+    {
+      "Package": "brio",
+      "Version": "1.1.5",
+      "_row": "brio"
+    },
+    {
+      "Package": "callr",
+      "Version": "3.7.6",
+      "_row": "callr"
+    },
+    {
+      "Package": "cli",
+      "Version": "3.6.6",
+      "_row": "cli"
+    },
+    {
+      "Package": "compiler",
+      "Version": "4.5.3",
+      "_row": "compiler"
+    },
+    {
+      "Package": "cpp11",
+      "Version": "0.5.5",
+      "_row": "cpp11"
+    },
+    {
+      "Package": "crayon",
+      "Version": "1.5.3",
+      "_row": "crayon"
+    },
+    {
+      "Package": "cudacellr",
+      "Version": "0.4.0",
+      "_row": "cudacellr"
+    },
+    {
+      "Package": "cudaverse",
+      "Version": "0.4.1",
+      "_row": "cudaverse"
+    },
+    {
+      "Package": "datasets",
+      "Version": "4.5.3",
+      "_row": "datasets"
+    },
+    {
+      "Package": "desc",
+      "Version": "1.4.3",
+      "_row": "desc"
+    },
+    {
+      "Package": "diffobj",
+      "Version": "0.3.8",
+      "_row": "diffobj"
+    },
+    {
+      "Package": "digest",
+      "Version": "0.6.39",
+      "_row": "digest"
+    },
+    {
+      "Package": "ellipsis",
+      "Version": "0.3.3",
+      "_row": "ellipsis"
+    },
+    {
+      "Package": "evaluate",
+      "Version": "1.0.5",
+      "_row": "evaluate"
+    },
+    {
+      "Package": "fansi",
+      "Version": "1.0.7",
+      "_row": "fansi"
+    },
+    {
+      "Package": "fs",
+      "Version": "2.1.0",
+      "_row": "fs"
+    },
+    {
+      "Package": "glue",
+      "Version": "1.8.1",
+      "_row": "glue"
+    },
+    {
+      "Package": "graphics",
+      "Version": "4.5.3",
+      "_row": "graphics"
+    },
+    {
+      "Package": "grDevices",
+      "Version": "4.5.3",
+      "_row": "grDevices"
+    },
+    {
+      "Package": "grid",
+      "Version": "4.5.3",
+      "_row": "grid"
+    },
+    {
+      "Package": "igraph",
+      "Version": "2.3.3",
+      "_row": "igraph"
+    },
+    {
+      "Package": "irlba",
+      "Version": "2.3.7",
+      "_row": "irlba"
+    },
+    {
+      "Package": "jsonlite",
+      "Version": "2.0.0",
+      "_row": "jsonlite"
+    },
+    {
+      "Package": "lattice",
+      "Version": "0.23-1",
+      "_row": "lattice"
+    },
+    {
+      "Package": "lifecycle",
+      "Version": "1.0.5",
+      "_row": "lifecycle"
+    },
+    {
+      "Package": "magrittr",
+      "Version": "2.0.5",
+      "_row": "magrittr"
+    },
+    {
+      "Package": "Matrix",
+      "Version": "1.7-6",
+      "_row": "Matrix"
+    },
+    {
+      "Package": "methods",
+      "Version": "4.5.3",
+      "_row": "methods"
+    },
+    {
+      "Package": "parallel",
+      "Version": "4.5.3",
+      "_row": "parallel"
+    },
+    {
+      "Package": "pillar",
+      "Version": "1.11.1",
+      "_row": "pillar"
+    },
+    {
+      "Package": "pkgbuild",
+      "Version": "1.4.8",
+      "_row": "pkgbuild"
+    },
+    {
+      "Package": "pkgconfig",
+      "Version": "2.0.3",
+      "_row": "pkgconfig"
+    },
+    {
+      "Package": "pkgload",
+      "Version": "1.5.3",
+      "_row": "pkgload"
+    },
+    {
+      "Package": "praise",
+      "Version": "1.0.0",
+      "_row": "praise"
+    },
+    {
+      "Package": "prettyunits",
+      "Version": "1.2.0",
+      "_row": "prettyunits"
+    },
+    {
+      "Package": "processx",
+      "Version": "3.9.0",
+      "_row": "processx"
+    },
+    {
+      "Package": "ps",
+      "Version": "1.9.3",
+      "_row": "ps"
+    },
+    {
+      "Package": "R6",
+      "Version": "2.6.1",
+      "_row": "R6"
+    },
+    {
+      "Package": "Rcpp",
+      "Version": "1.1.2",
+      "_row": "Rcpp"
+    },
+    {
+      "Package": "RcppEigen",
+      "Version": "0.3.4.0.2",
+      "_row": "RcppEigen"
+    },
+    {
+      "Package": "rematch2",
+      "Version": "2.1.2",
+      "_row": "rematch2"
+    },
+    {
+      "Package": "rlang",
+      "Version": "1.3.0",
+      "_row": "rlang"
+    },
+    {
+      "Package": "rprojroot",
+      "Version": "2.1.1",
+      "_row": "rprojroot"
+    },
+    {
+      "Package": "RSpectra",
+      "Version": "0.16-2",
+      "_row": "RSpectra"
+    },
+    {
+      "Package": "splines",
+      "Version": "4.5.3",
+      "_row": "splines"
+    },
+    {
+      "Package": "stats",
+      "Version": "4.5.3",
+      "_row": "stats"
+    },
+    {
+      "Package": "stats4",
+      "Version": "4.5.3",
+      "_row": "stats4"
+    },
+    {
+      "Package": "tcltk",
+      "Version": "4.5.3",
+      "_row": "tcltk"
+    },
+    {
+      "Package": "testthat",
+      "Version": "3.3.2",
+      "_row": "testthat"
+    },
+    {
+      "Package": "tibble",
+      "Version": "3.3.1",
+      "_row": "tibble"
+    },
+    {
+      "Package": "tools",
+      "Version": "4.5.3",
+      "_row": "tools"
+    },
+    {
+      "Package": "utf8",
+      "Version": "1.2.6",
+      "_row": "utf8"
+    },
+    {
+      "Package": "utils",
+      "Version": "4.5.3",
+      "_row": "utils"
+    },
+    {
+      "Package": "vctrs",
+      "Version": "0.7.3",
+      "_row": "vctrs"
+    },
+    {
+      "Package": "waldo",
+      "Version": "0.6.2",
+      "_row": "waldo"
+    },
+    {
+      "Package": "withr",
+      "Version": "3.0.3",
+      "_row": "withr"
+    }
+  ],
+  "tests": {
+    "tests": 46,
+    "expectations": 8592,
+    "failures": 0,
+    "errors": 0,
+    "skips": 0,
+    "warnings": 0
+  },
+  "passed": true
+}

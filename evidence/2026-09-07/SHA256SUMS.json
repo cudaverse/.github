@@ -1,0 +1,60 @@
+{
+  "schema": "cudaverse-evidence-checksums/1",
+  "files": [
+    {
+      "file": "h100-contract-supplement.json",
+      "bytes": 45668,
+      "sha256": "24117ca937bf58005861baa7c840f11566d998c6ec6ab131494f613bef9e312c"
+    },
+    {
+      "file": "h100-contract-supplement.R",
+      "bytes": 16220,
+      "sha256": "20aff7d1fd9b12374d7647775f9b658efbb6857127417a4f24900717ae5f2039"
+    },
+    {
+      "file": "h100-install-size.json",
+      "bytes": 392,
+      "sha256": "d2a33e3621b6d788b555453f3f06f57031d20ea1e6f430b16aa0c064a54d274c"
+    },
+    {
+      "file": "h100-linux-64.lock",
+      "bytes": 21106,
+      "sha256": "5846e70221d4bc0aab0fe6dbd4ea3fe7dca1300611bd5830107d873d47817d95"
+    },
+    {
+      "file": "h100-native-session.json",
+      "bytes": 1458,
+      "sha256": "cb7fe50f7ab15c3873717d50c95149002fedd4bc47b8cc71906b08330fd62870"
+    },
+    {
+      "file": "h100-native-validation.json",
+      "bytes": 11739,
+      "sha256": "852a773aa065f458b96190d87e4dfd62b45a5a520460494b1362d94fc8aa354c"
+    },
+    {
+      "file": "h100-native.R",
+      "bytes": 3137,
+      "sha256": "d1840fd428ab05e41c0f349e6cb6f74e14245228b2965bf241a812cdf9e9692d"
+    },
+    {
+      "file": "h100-single-cell-parity.json",
+      "bytes": 20946,
+      "sha256": "192532513b11fb60c97717697466aed5f465f47e4af2cfc35c3b02309b25977c"
+    },
+    {
+      "file": "h100-single-cell.R",
+      "bytes": 2560,
+      "sha256": "6556f48ce26d87e64cf8788a5b7b73b8fb36e4b60093848a1177fd6514694342"
+    },
+    {
+      "file": "README.md",
+      "bytes": 2982,
+      "sha256": "d0fbe482a83abfab53a6d8a74c44df0cdaca4b52f2fa0fe8f1e4a6b06c363508"
+    },
+    {
+      "file": "verify-evidence.R",
+      "bytes": 2792,
+      "sha256": "94c5e3f0f02743d8aa75fe2e8817cb1c102ce78dc4259a53f9e7c01664fde4a9"
+    }
+  ]
+}
