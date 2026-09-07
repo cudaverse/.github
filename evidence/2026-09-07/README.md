@@ -5,6 +5,13 @@ These reports test core commit `2faaa385fcbc9365371476733236578baafaebae`
 (cudacellr 0.4.0) in an isolated Linux R 4.5.3 environment without torch.
 They are **not** CRAN acceptance or evidence of a general performance advantage.
 
+Subsequent testing found a case outside this checkpoint: native PCA in 0.4.1
+can give identical observations slightly different scores, changing the order
+of tied neighbours. A device-resident score-projection correction and exact
+regression test are under development in
+[PR #55](https://github.com/cudaverse/cudaverse/pull/55). The original reports
+remain unchanged and should not be read as proof that every edge case passes.
+
 | Report | Verified scope |
 | --- | --- |
 | h100-native-validation.json | 46 native tests; 8,592 expectations; no failures, errors, skips, or warnings; native selection after restoring test-modified options |

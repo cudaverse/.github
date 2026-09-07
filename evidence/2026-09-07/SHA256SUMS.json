@@ -48,8 +48,8 @@
     },
     {
       "file": "README.md",
-      "bytes": 3197,
-      "sha256": "dc55853ba885116758fa72e0e8980ddf765911717fd0f0bfa4fa6f78862e6ed3"
+      "bytes": 3627,
+      "sha256": "d00d2e427f9aa2de5bcaf4da9837a98b892bf13497f5a9cd9af1a80e8fef154c"
     },
     {
       "file": "verify-evidence.R",
