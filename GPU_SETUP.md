@@ -22,8 +22,7 @@ for NVIDIA installation links and library-path troubleshooting.
 ## Install and verify
 
 ```r
-# install.packages("pak")
-pak::pak("cudaverse/cudaverse")
+install.packages("cudaverse")
 library(cudaverse)
 
 health <- cuda_diagnostics()

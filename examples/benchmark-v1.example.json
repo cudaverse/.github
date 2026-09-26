@@ -29,7 +29,7 @@
       "cuda_driver": "example",
       "cuda_runtime": "example",
       "package_versions": {
-        "cudaverse": "0.1.0",
+        "cudaverse": "0.4.1",
         "torch": "example"
       }
     }

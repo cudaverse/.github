@@ -4,7 +4,7 @@ Prepare an NVIDIA GPU on Windows or Linux using the [CUDA setup guide](GPU_SETUP
 then install the general package once:
 
 ```r
-pak::pak("cudaverse/cudaverse")
+install.packages("cudaverse")
 library(cudaverse)
 cuda_select_device("cuda")
 ```
@@ -40,6 +40,7 @@ cuda_provenance(product)
 Single-cell users install the extension:
 
 ```r
+# install.packages("pak")
 pak::pak("cudaverse/cudacellr")
 library(cudacellr)
 
