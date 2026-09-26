@@ -1,11 +1,17 @@
 # Compatibility contract
 
-The supported source stack contains two packages.
+The supported main-branch source stack contains two packages.
 
-| Package | Development version | Strong cudaverse dependency |
+| Package | Main-branch version | Strong cudaverse dependency |
 |---|---:|---|
-| `cudaverse` | 0.1.0 | None |
-| `cudacellr` | 0.4.0 | `cudaverse (>= 0.1.0)` |
+| `cudaverse` | 0.4.1 | None |
+| `cudacellr` | 0.4.0 | `cudaverse (>= 0.4.1)` |
+
+The core version is [published on CRAN](https://cran.r-project.org/package=cudaverse).
+The extension no longer declares a development `Remotes` dependency and can
+use that published core. The core 0.4.1.9000 development candidate in
+[PR #55](https://github.com/cudaverse/cudaverse/pull/55) remains separate from
+this main-branch stack.
 
 `cudaverse` owns the canonical `cuda_provenance()` generic and all
 general-purpose dense, sparse, algorithm, graph, and embedding APIs.

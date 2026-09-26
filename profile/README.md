@@ -17,8 +17,7 @@ cuSOLVER 11 using the [CUDA setup guide](https://github.com/cudaverse/.github/bl
 Current CUDA execution is unavailable on macOS.
 
 ```r
-# install.packages("pak")
-pak::pak("cudaverse/cudaverse")
+install.packages("cudaverse")
 library(cudaverse)
 
 cuda_select_device("cuda")
@@ -34,5 +33,7 @@ worked examples and `cuda_provenance()` to inspect which stages used CUDA.
 Graph assembly, community detection, and some embedding adapters use host
 computation; speedups depend on the operation and workload.
 
-Single-cell users can add `pak::pak("cudaverse/cudacellr")` and begin with
+The core package is [available from CRAN](https://cran.r-project.org/package=cudaverse).
+Single-cell users can install `pak` if needed, add
+`pak::pak("cudaverse/cudacellr")`, and begin with
 the [single-cell workflow guide](https://cudaverse.github.io/cudacellr/).
