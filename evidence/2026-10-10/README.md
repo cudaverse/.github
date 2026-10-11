@@ -82,7 +82,10 @@ The candidate's four-platform [R check matrix](https://github.com/cudaverse/cuda
 and [documentation build](https://github.com/cudaverse/cudaverse/actions/runs/38099228319)
 passed. The PR did not deploy Pages; optional hardware CI skipped. The separate
 [full manual/readiness run](https://github.com/cudaverse/cudaverse/actions/runs/38099232218)
-is pending at this checkpoint.
+also passed at exact `2c2b569`: zero errors, zero warnings and one NOTE for the
+development version number 0.4.1.9000. Tests, rebuilt vignettes and PDF/HTML
+manuals passed. The retained source candidate matches the transferred artifact,
+with SHA-256 `b0f2905378a4ada39dc35a1366d203f3f66838d19abd5b03c3c22f3adc87879f`.
 
 ## Preserved failed diagnostic
 
