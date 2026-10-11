@@ -8,10 +8,11 @@ main or released, and the companion upload is awaiting email confirmation.
 | Source | Exact commit | Scope |
 | --- | --- | --- |
 | Initial core | `0c74a44a972329dea8e4926727fb70f3f947a1f7` | 0.4.1.9000 correctness and diagnostic baseline |
-| Current core | `2c2b569a2b503478d1141ddc6fd7f2276ff866af` | Adds explicit shared-GPU benchmark execution and reporting |
+| Original full candidate | `2c2b569a2b503478d1141ddc6fd7f2276ff866af` | Shared-GPU contract; full core run failed distance parity |
+| Corrected candidate | `5754739cfc09d730322bf7a9ea4d5d6ae02b8245` | Native Euclidean cancellation fix; new full validation running |
 | Companion | `02a5b1e130aaf5e8d3db4d6e65bba6eed74bfa40` | cudacellr 0.4.0 |
 
-Both core revisions and the companion were installed from clean exact sources
+The core revisions and the companion were installed from clean exact sources
 into isolated Linux R libraries on an A100 SXM4 40 GB with R 4.3.3 and no torch.
 Source archives, installation manifests and reports identify source revisions
 and installed-file fingerprints. Raw evidence remains retained outside package
@@ -103,9 +104,35 @@ interval. This remains a failed diagnostic; it is not relabelled as an all-pass
 suite. Package R, C++ and test files are unchanged from the passing `0c74a44`
 run. The observations do not rule out untracked or library allocations.
 
+## Full core failure and corrected candidate
+
+The original full core sequence at `2c2b569` exited with status 1 after timing
+all twelve cases. Final sparse-50000x128 numerical parity failed for six native
+kNN distances: maximum absolute error 1.6313176432589571e-10 and maximum
+pointwise tolerance ratio 1.62675440799739, with unchanged rtol 1e-8 and atol
+1e-10. Exact neighbor indices, normalization and PCA checks passed; native
+tracked cleanup delta was zero. The full single-cell stage did not start.
+The failed raw report and log remain retained; completed timings do not turn
+this into a passing benchmark.
+
+Diagnosis reproduced cancellation using identical CPU PCA scores and an
+independent analytic close-vector fixture. [PR #57](https://github.com/cudaverse/cudaverse/pull/57)
+uses the CPU path's dimension-aware guard and recomputes risky pairs from
+scaled coordinate differences. The analytic regression has three failures on
+the original kernel and five passing assertions on the corrected exact-source
+installation. A patched-PTX diagnostic of the original full-size fixture also
+passes unchanged tolerances and exact indices; it does not replace the full run.
+
+At `5754739`, [native integrity](https://github.com/cudaverse/cudaverse/actions/runs/38124095924)
+and [CPU integration](https://github.com/cudaverse/cudaverse/actions/runs/38124096207)
+passed. CI reproduced the committed PTX byte for byte with CUDA 12.8.1.
+New full A100, Windows installed-suite and
+[readiness](https://github.com/cudaverse/cudaverse/actions/runs/38124167593)
+checks are running against the corrected candidate.
+
 ## Remaining work
 
-Full precision is complete; the full core and single-cell sequence is in progress.
+The corrected candidate's full precision, core and single-cell sequence is in progress.
 Review the completed numerical, timing, memory and provenance reports together
 with exact-candidate readiness artifacts before integrating PR #55. Preserve
 any failure and identify unavailable measurements explicitly. Shared timing

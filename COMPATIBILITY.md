@@ -22,7 +22,11 @@ validation pairs that exact core with unchanged `cudacellr` main commit
 `02a5b1e130aaf5e8d3db4d6e65bba6eed74bfa40`; it does not change the published
 core or the main-branch compatibility table. The
 [current evidence summary](evidence/2026-10-10/README.md) records the completed
-checks, shared-device limitation and pending full results.
+checks, shared-device limitation and pending full results. The original full
+core run failed its distance tolerance on six values. Stacked
+[PR #57](https://github.com/cudaverse/cudaverse/pull/57) fixes native Euclidean
+cancellation at `5754739cfc09d730322bf7a9ea4d5d6ae02b8245`; a new exact-source
+full validation sequence is running against the same companion revision.
 
 `cudaverse` owns the canonical `cuda_provenance()` generic and all
 general-purpose dense, sparse, algorithm, graph, and embedding APIs.

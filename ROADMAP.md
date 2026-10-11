@@ -76,8 +76,12 @@ is resolved; it does not establish application-level accuracy or speedups.
 The maintainer has authorized the full workload sequence on the shared A100.
 It retains the planned sizes, five warmups, ten samples, numerical checks,
 source/install fingerprints, owned-allocation checks and GPU inventories.
-Full precision, the independent installed package suite and final candidate
-readiness passed; full core and single-cell results are pending. Shared timings
+At `2c2b569`, full precision, the independent installed package suite and
+candidate readiness passed, but the full core run failed on six native kNN
+distances in the 50,000-row sparse fixture. Stacked
+[PR #57](https://github.com/cudaverse/cudaverse/pull/57) corrects cancellation
+at `5754739`. Its analytic regression and full-size fixture diagnostic pass
+unchanged tolerances; new exact-source full validation is running. Shared timings
 are descriptive observations and cannot establish
 uncontended performance. See the [current evidence summary](evidence/2026-10-10/README.md)
 for completed diagnostics and the preserved whole-device memory assertion
