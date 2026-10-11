@@ -28,7 +28,8 @@
 - [x] CPU integration contract for identifiers and provenance.
 - [x] Trusted NVIDIA runner contract for package tests and CPU/CUDA parity.
 - [x] `cudaverse-benchmark/1` benchmark evidence schema and validator.
-- [ ] Execute the complete hardware contract on a safely isolated NVIDIA runner.
+- [ ] Complete the planned hardware workloads with recorded GPU sharing and
+      validated results.
 - [ ] Publish representative dense, sparse, graph, embedding, and single-cell
       evidence without generalizing beyond measured hardware.
 
@@ -50,25 +51,36 @@ Submit only one package at a time and wait for acceptance plus completed checks:
    identify that distinction without moving the published tag.
 2. `cudacellr` 0.4.0: the accepted-core dependency update in
    [PR #3](https://github.com/cudaverse/cudacellr/pull/3) is merged, and all four
-   main-branch R checks passed. Complete release preparation and wait for its
-   portfolio review slot. It does not bypass other prepared portfolio packages.
+   main-branch R checks passed. The October 7 upload is awaiting email
+   confirmation; no CRAN acceptance is established. Further submission actions
+   require the maintainer's authorization and the portfolio review slot.
 
 `cudacellr` now requires `cudaverse >= 0.4.1` and has no development-only
 `Remotes` entry. Successful CI is not CRAN acceptance of the extension.
 
-## Next evidence milestone
+## Current evidence milestone (2026-10-10)
 
 The [2026-09-07 correctness checkpoint](evidence/2026-09-07/README.md) retains
 native parity, error recovery, interruption and 1,000-cycle memory evidence for
 its recorded revisions. Later testing identified a duplicate-observation PCA
 edge case, whose correction is in [PR #55](https://github.com/cudaverse/cudaverse/pull/55).
-That development candidate remains held while the strict float32 matrix-product
-accuracy gate and retained benchmarks are unresolved.
+That draft PR contains development version 0.4.1.9000 at `2c2b569`; published
+CRAN 0.4.1 and the supported main branches remain unchanged.
 
-Complete those gates on the chosen candidate, retain exact revisions and
-machine-readable results, and publish benchmarks that separate startup,
-transfers and device computation. Report numerical accuracy alongside timing;
-a skipped GPU job or shared-device diagnostic does not establish performance.
+The maintainer approved the precision policy on September 26: standard FP32
+by default, explicit per-call TF32, and FP64 when greater accuracy is needed.
+The development benchmark uses a stated componentwise FP32 model and retains
+the original strict comparison and failed-entry counts. The policy decision
+is resolved; it does not establish application-level accuracy or speedups.
+
+The maintainer has authorized the full workload sequence on the shared A100.
+It retains the planned sizes, five warmups, ten samples, numerical checks,
+source/install fingerprints, owned-allocation checks and GPU inventories.
+Full precision, core and single-cell results and final candidate readiness
+are pending. Shared timings are descriptive observations and cannot establish
+uncontended performance. See the [current evidence summary](evidence/2026-10-10/README.md)
+for completed diagnostics and the preserved whole-device memory assertion
+failure. Review those full results before integrating PR #55.
 
 Graph construction, Louvain/Leiden, UMAP, and t-SNE currently use CPU adapters;
 diffusion maps combine CUDA and CPU stages. Future GPU implementations and
