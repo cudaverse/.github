@@ -76,8 +76,9 @@ is resolved; it does not establish application-level accuracy or speedups.
 The maintainer has authorized the full workload sequence on the shared A100.
 It retains the planned sizes, five warmups, ten samples, numerical checks,
 source/install fingerprints, owned-allocation checks and GPU inventories.
-Full precision, core and single-cell results and final candidate readiness
-are pending. Shared timings are descriptive observations and cannot establish
+Full precision and the independent installed package suite passed; full core,
+single-cell results and final candidate readiness are pending. Shared timings
+are descriptive observations and cannot establish
 uncontended performance. See the [current evidence summary](evidence/2026-10-10/README.md)
 for completed diagnostics and the preserved whole-device memory assertion
 failure. Review those full results before integrating PR #55.

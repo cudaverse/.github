@@ -55,6 +55,27 @@ benchmarking passed, including fresh child-process identity, five warmups and
 ten samples. Its report labels shared execution and excludes uncontended
 performance eligibility.
 
+The full shared A100 precision experiment subsequently passed at `2c2b569`:
+six fixtures (two exact controls and 64/256/1024/4096-square products), three
+precision modes and both resident and host-boundary scopes. Each scope retained
+five warmups and ten measured samples, totaling 360 measurements. All numerical
+model, shape/dtype, provenance, precision-isolation and repeated-value checks
+passed. All owned-allocation cleanup deltas were zero. Source and installation
+identities were unchanged, and all 1,166 GPU observations recorded sharing.
+
+At 4096, maximum absolute errors were approximately 0.000958 for standard FP32
+and 0.1071 for permitted TF32. The original strict comparison still failed
+638,414 and 16,413,669 elements respectively; those counts remain in the raw
+report alongside the accepted model results. Shared timings remain descriptive
+and do not establish uncontended performance.
+
+An independent Windows R 4.6.1 / RTX 2000 Ada installation of the same source
+passed the full installed package suite: 235 tests and 9,970 expectations across
+20 files, with zero failures, errors, warnings or skips. Native tests were
+enabled, source/installation fingerprints stayed unchanged, and native tracked
+allocation returned to zero. This full-suite result is separate from the
+preserved A100 diagnostic failure below.
+
 The candidate's four-platform [R check matrix](https://github.com/cudaverse/cudaverse/actions/runs/38099228302),
 [native integrity](https://github.com/cudaverse/cudaverse/actions/runs/38099228307),
 [CPU integration](https://github.com/cudaverse/cudaverse/actions/runs/38099228517)
@@ -81,8 +102,8 @@ run. The observations do not rule out untracked or library allocations.
 
 ## Remaining work
 
-The separate full precision, core and single-cell sequence is in progress.
-Review its completed numerical, timing, memory and provenance reports together
+Full precision is complete; the full core and single-cell sequence is in progress.
+Review the completed numerical, timing, memory and provenance reports together
 with exact-candidate readiness artifacts before integrating PR #55. Preserve
 any failure and identify unavailable measurements explicitly. Shared timing
 samples remain descriptive; they do not support uncontended performance claims.
