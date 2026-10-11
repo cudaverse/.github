@@ -126,13 +126,34 @@ passes unchanged tolerances and exact indices; it does not replace the full run.
 At `5754739`, [native integrity](https://github.com/cudaverse/cudaverse/actions/runs/38124095924)
 and [CPU integration](https://github.com/cudaverse/cudaverse/actions/runs/38124096207)
 passed. CI reproduced the committed PTX byte for byte with CUDA 12.8.1.
-New full A100, Windows installed-suite and
-[readiness](https://github.com/cudaverse/cudaverse/actions/runs/38124167593)
-checks are running against the corrected candidate.
+The exact corrected source also passed the full Windows R 4.6.1 / RTX 2000 Ada
+installed suite: 236 tests, 9,975 assertions, zero failures, errors, warnings
+or skips. Source and installation fingerprints remained unchanged, native
+tracked allocations returned to zero, and peak tracked allocation was
+6,665,596 bytes. The report SHA-256 is
+`a45802aeead4fcc09120f7c73d2732cc341c27e99231a026ed260df684ab5e54`.
+
+Its full shared-A100 precision experiment passed all six cases, three modes
+and two scopes, retaining five warmups and 360 measured samples. Numerical,
+metadata, repeated-value, source/install and owned-memory checks passed; final
+tracked allocation was zero and peak was 805,306,368 bytes. Shared execution
+remains ineligible for uncontended performance claims. Report SHA-256:
+`82b663a059cb8adcc1c4fe189d8a794a1a8a4dd09c81245610e29e3990376de9`.
+
+The corrected source's [R matrix](https://github.com/cudaverse/cudaverse/actions/runs/38124095903)
+and [documentation build](https://github.com/cudaverse/cudaverse/actions/runs/38124095889)
+passed. All four R platforms reported Status: OK, 1,242 passing assertions,
+58 skips and no failures; the two Linux logs retain one optional
+SummarizedExperiment duplicate-import warning each. These CI jobs provide no
+GPU coverage. [Full readiness](https://github.com/cudaverse/cudaverse/actions/runs/38124167593)
+passed with zero errors, zero warnings and one NOTE for development version
+0.4.1.9000. Tests, rebuilt vignettes and PDF/HTML manual checks passed. The
+transferred source artifact matches the builder's SHA-256:
+`9d85a539d0ee754ff64fdc1a0380df6134d2a8db88f82d4b5d1b8f125ffffab1`.
 
 ## Remaining work
 
-The corrected candidate's full precision, core and single-cell sequence is in progress.
+The corrected candidate's full core and single-cell sequence is in progress.
 Review the completed numerical, timing, memory and provenance reports together
 with exact-candidate readiness artifacts before integrating PR #55. Preserve
 any failure and identify unavailable measurements explicitly. Shared timing
