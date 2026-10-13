@@ -25,8 +25,12 @@ core or the main-branch compatibility table. The
 checks, shared-device limitation and pending full results. The original full
 core run failed its distance tolerance on six values. Stacked
 [PR #57](https://github.com/cudaverse/cudaverse/pull/57) fixes native Euclidean
-cancellation at `5754739cfc09d730322bf7a9ea4d5d6ae02b8245`; a new exact-source
-full validation sequence is running against the same companion revision.
+cancellation at `5754739cfc09d730322bf7a9ea4d5d6ae02b8245`. Its full core and
+precision gates passed; full single-cell validation is running against the
+same companion revision. [PR #58](https://github.com/cudaverse/cudaverse/pull/58)
+corrects rounded diagnostic counts in the benchmark summary, with no package
+runtime changes. The corrected summary passes verification against the retained
+core report; the original summary failure remains recorded.
 
 `cudaverse` owns the canonical `cuda_provenance()` generic and all
 general-purpose dense, sparse, algorithm, graph, and embedding APIs.

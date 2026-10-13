@@ -80,8 +80,10 @@ At `2c2b569`, full precision, the independent installed package suite and
 candidate readiness passed, but the full core run failed on six native kNN
 distances in the 50,000-row sparse fixture. Stacked
 [PR #57](https://github.com/cudaverse/cudaverse/pull/57) corrects cancellation
-at `5754739`. Its analytic regression and full-size fixture diagnostic pass
-unchanged tolerances; new exact-source full validation is running. Shared timings
+at `5754739`. Its full core and precision gates passed with unchanged tolerances;
+full single-cell validation is running. [PR #58](https://github.com/cudaverse/cudaverse/pull/58)
+repairs summary count formatting after the passing core run. Original failure
+evidence remains preserved. Shared timings
 are descriptive observations and cannot establish
 uncontended performance. See the [current evidence summary](evidence/2026-10-10/README.md)
 for completed diagnostics and the preserved whole-device memory assertion

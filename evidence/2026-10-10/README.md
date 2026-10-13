@@ -9,7 +9,8 @@ main or released, and the companion upload is awaiting email confirmation.
 | --- | --- | --- |
 | Initial core | `0c74a44a972329dea8e4926727fb70f3f947a1f7` | 0.4.1.9000 correctness and diagnostic baseline |
 | Original full candidate | `2c2b569a2b503478d1141ddc6fd7f2276ff866af` | Shared-GPU contract; full core run failed distance parity |
-| Corrected candidate | `5754739cfc09d730322bf7a9ea4d5d6ae02b8245` | Native Euclidean cancellation fix; new full validation running |
+| Corrected candidate | `5754739cfc09d730322bf7a9ea4d5d6ae02b8245` | Full core and precision passed; full single-cell running |
+| Summary correction | `8616084ec1d37e35463cfc8596837fa3b920922d` | Exact integer diagnostic counts; package runtime unchanged |
 | Companion | `02a5b1e130aaf5e8d3db4d6e65bba6eed74bfa40` | cudacellr 0.4.0 |
 
 The core revisions and the companion were installed from clean exact sources
@@ -151,9 +152,32 @@ passed with zero errors, zero warnings and one NOTE for development version
 transferred source artifact matches the builder's SHA-256:
 `9d85a539d0ee754ff64fdc1a0380df6134d2a8db88f82d4b5d1b8f125ffffab1`.
 
+The full core workload at exact `5754739` passed all machine-readable gates:
+twelve cases on both base and native backends, full sizes, five warmups and ten
+measured samples per timing scope. All native tracked cleanup deltas were zero.
+The 50,000-row sparse fixture retained exact neighbor indices and had zero
+failed distance elements, with maximum tolerance ratio 0.09556544316062524
+under the unchanged rtol 1e-8 and atol 1e-10. Raw report SHA-256:
+`2813292f8ebc885d0c0ae8b5fed25e1609f717621779f5616e45338e7f02029e`.
+
+The sequence subsequently exited 1 because its summary rounded three strict
+FP32 diagnostic failure counts. The original raw report, rejected summary and
+verifier log are preserved. [PR #58](https://github.com/cudaverse/cudaverse/pull/58)
+at `8616084` prints exact integer counts; its regression tests and the unchanged
+summary verifier pass against the retained full report. It changes only the
+summary renderer and its tests. Hardware measurements retain source identity
+`5754739`; the verification record separately identifies renderer `8616084`.
+
+The original sequence had not started full single-cell benchmarking. A separate
+continuation now runs the full CPU/native contract on the same exact source
+installations. An initial continuation with omitted mode/backend settings was
+terminated and retained as an aborted startup, not benchmark evidence. The
+corrected process environment explicitly selects full benchmark mode and both
+backends. No external GPU client was stopped.
+
 ## Remaining work
 
-The corrected candidate's full core and single-cell sequence is in progress.
+The corrected candidate's full single-cell benchmark is in progress.
 Review the completed numerical, timing, memory and provenance reports together
 with exact-candidate readiness artifacts before integrating PR #55. Preserve
 any failure and identify unavailable measurements explicitly. Shared timing
