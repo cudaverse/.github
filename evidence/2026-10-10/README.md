@@ -1,20 +1,24 @@
 # Development validation checkpoint
 
-This October 10 checkpoint records the draft
-[PR #55](https://github.com/cudaverse/cudaverse/pull/55) assessment. Core
-0.4.1 remains published on CRAN. The candidate has not been integrated into
-main or released, and the companion upload is awaiting email confirmation.
+This October 10 checkpoint, updated through October 13, records the
+[PR #55](https://github.com/cudaverse/cudaverse/pull/55) assessment, its stacked
+corrections and documentation integration. Core main now contains development
+version 0.4.1.9000. Core 0.4.1 remains published on CRAN; no new package release
+is established, and the companion upload is awaiting email confirmation.
 
 | Source | Exact commit | Scope |
 | --- | --- | --- |
 | Initial core | `0c74a44a972329dea8e4926727fb70f3f947a1f7` | 0.4.1.9000 correctness and diagnostic baseline |
 | Original full candidate | `2c2b569a2b503478d1141ddc6fd7f2276ff866af` | Shared-GPU contract; full core run failed distance parity |
-| Corrected candidate | `5754739cfc09d730322bf7a9ea4d5d6ae02b8245` | Full core and precision passed; full single-cell running |
+| Corrected candidate | `5754739cfc09d730322bf7a9ea4d5d6ae02b8245` | Full core, precision and single-cell passed under the disclosed policies |
 | Summary correction | `8616084ec1d37e35463cfc8596837fa3b920922d` | Exact integer diagnostic counts; package runtime unchanged |
+| Combined documentation PR | `a6d3ee9ae703636230ebe4ea46af26587609c430` | Fresh PR checks; tree matches final core main |
+| Integrated core main | `f93361d40d3b6f035b1494cfb968de679b165cd6` | 0.4.1.9000; final main CI and deployed-page verification passed |
 | Companion | `02a5b1e130aaf5e8d3db4d6e65bba6eed74bfa40` | cudacellr 0.4.0 |
 
-The core revisions and the companion were installed from clean exact sources
-into isolated Linux R libraries on an A100 SXM4 40 GB with R 4.3.3 and no torch.
+The hardware-measured core revisions (`0c74a44`, `2c2b569` and `5754739`) and
+the companion were installed from clean exact sources into isolated Linux R
+libraries on an A100 SXM4 40 GB with R 4.3.3 and no torch.
 Source archives, installation manifests and reports identify source revisions
 and installed-file fingerprints. Raw evidence remains retained outside package
 source trees. This summary does not replace the raw reports or their gates.
@@ -215,9 +219,61 @@ rtol 0 and atol 1e-8, matching the existing core projector check. Its original
 relative-only diagnostic remains visible. The cached 50,000-cell PCA results
 pass both disclosed criteria while retaining the two subspace and 1,526
 reconstruction strict failures. Windows/Linux helper tests pass, including
-isolated-error rejection. A fresh full CPU/native benchmark is running under
-both explicit policies with all sizes, five warmups and ten measured samples.
-These diagnostics do not replace the full workflow, identity and memory gates.
+isolated-error rejection. These diagnostics do not replace the full workflow,
+identity and memory gates.
+
+## Completed full single-cell rerun (2026-10-13)
+
+The fresh full CPU/native run completed at 2026-10-13 04:05:29 UTC with driver
+exit status 0. All three cases (1,000 cells by 50 features, 10,000 by 100 and
+50,000 by 128) passed, retaining five warmups and ten measured samples for each
+backend: 60 measured samples in total. This pass uses both disclosed PCA
+policy revisions above; it does not change the status of the original failed
+or deliberately stopped attempts.
+
+All cases retain exact selected features, normalized values, cell identifiers
+and neighbor indices. Neighbor distances pass the unchanged rtol 1e-8, atol 0
+criterion. Parent workflows pass the revised PCA reconstruction and projector
+checks. Fresh-process parity covers neighbor indices/distances, actual backend
+provenance and source/install identity; the parent workflow carries the PCA,
+normalization and feature parity checks. Requested computational backends were
+used without fallback. All native owned-allocation cleanup deltas were zero.
+CPU peak RSS and continuous whole-device peak VRAM remain unavailable; the
+recorded native allocator peaks cover cudaverse-owned allocations only.
+
+The final report retains the original relative-only PCA diagnostics:
+
+| Native case | Reconstruction failed entries | Projector failed entries |
+| --- | ---: | ---: |
+| 1,000 cells by 50 features | 0 / 40,000 | 0 / 1,600 |
+| 10,000 cells by 100 features | 32 / 800,000 | 0 / 6,400 |
+| 50,000 cells by 128 features | 1,526 / 5,100,000 | 2 / 10,404 |
+
+The original strict criteria have rtol 1e-8 and atol 0. At 50,000 cells, maximum
+absolute differences are 3.7778224992734977e-11 for reconstruction and
+6.0682014968449494e-12 for the projector. All CPU strict diagnostics pass.
+The accepted pointwise criteria remain reconstruction rtol 1e-8, atol 1e-10 and
+projector rtol 0, atol 1e-8; neither is a universal SVD accuracy guarantee.
+
+Before/after verification confirms unchanged core `5754739` and companion
+`02a5b1e` sources and installed payloads, including the fresh worker processes.
+Terminal process inspection confirmed that the driver and parent R process had
+exited. All 12 downloaded evidence files match fresh remote SHA-256 values;
+all nine pinned driver/harness script hashes remained unchanged through the
+run. The retained offline and external verification records are
+`single-cell-pca-v2-terminal-verification.json` and
+`single-cell-pca-v2-terminal-external-verification.json`. The offline verifier
+checks the report, journal and driver contract; it does not recompute numerical
+results from raw workflow arrays. The complete report is
+`single-cell-full-pca-v2-5754739cfc09d730322bf7a9ea4d5d6ae02b8245/single-cell-full.json`,
+with SHA-256
+`b4a4c72002b248e7dd177ba9c4815907e6bb47f2c7d4993ff16fb4d339ac3635`.
+
+The report records shared execution and no eligibility for uncontended
+performance claims. Completion of these candidate gates does not establish
+integration, deployment, a release or CRAN acceptance.
+
+## Summary correction CI
 
 At summary-only commit `8616084`, [R checks](https://github.com/cudaverse/cudaverse/actions/runs/38332237681),
 [native integrity](https://github.com/cudaverse/cudaverse/actions/runs/38332237606),
@@ -227,15 +283,75 @@ passed. All four R checks report Status: OK, 1,242 passing assertions and 58
 skips; each Linux log retains the optional duplicate-import warning described
 above. Summary positive/rejection tests pass, and PTX reproducibility is verified.
 
+## Source integration (2026-10-13)
+
+The reviewed changes were integrated in sequence:
+
+| Pull request | Merge commit | Result |
+| --- | --- | --- |
+| [#58](https://github.com/cudaverse/cudaverse/pull/58) | `224ae6e0a69fb6a21be9706ba47284aa768e13a3` | Summary correction into the distance-fix branch |
+| [#57](https://github.com/cudaverse/cudaverse/pull/57) | `7b8ee3a465009b9e08d0b16b892fd84be90b35b0` | Distance fix and summary correction into the development branch |
+| [#55](https://github.com/cudaverse/cudaverse/pull/55) | `333fb193f3fb613b0905c6b16d00b6018b9ba138` | Development changes into main |
+| [#56](https://github.com/cudaverse/cudaverse/pull/56) | `f93361d40d3b6f035b1494cfb968de679b165cd6` | Windows setup and TF32 availability documentation into main |
+
+The final merge completed at 2026-10-13 04:40:09 UTC. Final main has tree
+`c8cda09a13ed55f352f8af7cbb9be860bc06a990`, matching the reviewed combined tree
+and the PR #56 head `a6d3ee9`. The integrated R and native code are unchanged
+from hardware-measured `5754739`. The complete tree difference from that source
+is the summary renderer and its regression test, README, GPU setup vignette and
+performance vignette. Hardware reports retain `5754739`; corrected core-summary
+verification retains renderer `8616084`. Neither is relabelled as a new hardware
+run at final main.
+
+Fresh PR #56 [R checks](https://github.com/cudaverse/cudaverse/actions/runs/38346698333),
+[native integrity](https://github.com/cudaverse/cudaverse/actions/runs/38346698360),
+[CPU integration](https://github.com/cudaverse/cudaverse/actions/runs/38346698608)
+and [documentation build](https://github.com/cudaverse/cudaverse/actions/runs/38346698402)
+passed at `a6d3ee9`. All four R platforms recorded 1,242 passing assertions,
+58 skips and zero failures. Windows/macOS had no warnings; each Linux log retains
+the optional SummarizedExperiment duplicate-import warning described above.
+The conditional CUDA parity job and PR Pages deployment were skipped. Native
+integrity checks cover ABI and PTX reproducibility; the separate hardware
+evidence above supplies GPU execution coverage. These PR results do not establish
+the final main CI or Pages deployment outcome.
+
+### Final main checks and deployment
+
+All four final main [R checks](https://github.com/cudaverse/cudaverse/actions/runs/38347557292)
+passed at `f93361d`: Windows release, macOS release, Linux release and Linux
+R-devel. Each reports Status: OK, 1,242 passing assertions, 58 skips, zero
+failures and zero test warnings. The R-devel job completed its cold source
+dependency build before checking the package. The optional warnings in earlier
+PR logs remain preserved; they were absent from this final main run.
+
+The final main [CPU integration check](https://github.com/cudaverse/cudaverse/actions/runs/38347557461)
+passed with core `f93361d` and companion `02a5b1e`. The
+[site workflow](https://github.com/cudaverse/cudaverse/actions/runs/38347557262)
+successfully built and deployed that source. Its publication commit is
+`425345ed4e21104c4ce3ef1fca525af10aeeeb53`, with the maintainer's accepted
+identity as both author and committer. GitHub Pages completed publication at
+2026-10-13 04:45:25 UTC. The served homepage, matrix-multiplication reference,
+performance article and GPU setup article returned HTTP 200 and exactly matched
+their published Git blobs. All 32 content checks passed, including the
+development/CRAN version distinction, TF32 precision qualifications and Windows
+dependent-DLL search paths.
+
+An older main `333fb19` [site build](https://github.com/cudaverse/cudaverse/actions/runs/38346588682)
+failed at a 60-second CDN download timeout for `clipboard.min.js`; its logs are
+retained and it did not deploy. The final-source build succeeded on its first
+attempt. The earlier `224ae6e` site build's CDN timeout and successful retry
+at unchanged source also remain recorded; neither transient failure is hidden.
+
 ## Remaining work
 
-The corrected candidate's full single-cell benchmark is in progress.
-Review the completed numerical, timing, memory and provenance reports together
-with exact-candidate readiness artifacts before integrating PR #55. Preserve
-any failure and identify unavailable measurements explicitly. Shared timing
-samples remain descriptive; they do not support uncontended performance claims.
+The corrected candidate's full core, precision and single-cell gates are
+complete under the policies recorded above. These numerical, timing, memory and
+provenance reports remain tied to their exact measured sources. Preserve all
+failed and stopped attempts and identify unavailable measurements explicitly.
+Shared timing samples remain descriptive; they do not support uncontended
+performance claims.
 
-After integration, verify main CI and the deployed reference and tutorial
-pages. Companion publication requires its own authorized confirmation and
+Final main CI and verification of deployed reference and tutorial pages passed.
+The development milestone is complete. Companion publication requires its own authorized confirmation and
 verified outcome. The [September checkpoint](../2026-09-07/README.md) and its
 raw historical reports remain unchanged.
