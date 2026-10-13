@@ -197,11 +197,27 @@ The separate benchmark harness now records policy
 atol 1e-10, matching the existing core FP64 reconstruction criterion. This is
 an explicit acceptance-policy revision, not an unchanged-tolerance pass or a
 universal SVD error bound. Each result retains the original relative-only
-diagnostic and its failure count. Neighbor and subspace gates are unchanged.
+diagnostic and its failure count. Neighbor gates are unchanged.
 Windows/Linux helper tests cover near-zero comparisons and rejection of isolated
 errors; the cached fixture passes the revised criterion while retaining all
-32 original failures. A fresh full benchmark is running with all sizes, five
-warmups and ten measured samples. The original failed report remains failed.
+32 original failures. The original failed report remains failed.
+
+A separate PCA-only check of the identical 50,000-cell input found two entries
+failing the original relative-only subspace check (maximum absolute difference
+6.06820149684495e-12). Reconstruction passed the revised criterion and retained
+1,526 original strict failures. The reconstruction-only rerun was deliberately
+stopped during its own fresh CPU worker after this finding; its partial results
+are preserved and do not establish full validation. Both smaller cases had
+passed that attempt with zero tracked cleanup deltas.
+
+The harness now also records `core-fp64-projector-parity/1`: pointwise projector
+rtol 0 and atol 1e-8, matching the existing core projector check. Its original
+relative-only diagnostic remains visible. The cached 50,000-cell PCA results
+pass both disclosed criteria while retaining the two subspace and 1,526
+reconstruction strict failures. Windows/Linux helper tests pass, including
+isolated-error rejection. A fresh full CPU/native benchmark is running under
+both explicit policies with all sizes, five warmups and ten measured samples.
+These diagnostics do not replace the full workflow, identity and memory gates.
 
 At summary-only commit `8616084`, [R checks](https://github.com/cudaverse/cudaverse/actions/runs/38332237681),
 [native integrity](https://github.com/cudaverse/cudaverse/actions/runs/38332237606),

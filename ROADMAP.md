@@ -84,7 +84,9 @@ at `5754739`. Its full core and precision gates passed with unchanged tolerances
 full single-cell validation is being rerun after its relative-only PCA
 reconstruction check failed near zero. The revised reconstruction criterion
 matches the existing core FP64 criterion and retains the original failure
-counts. [PR #58](https://github.com/cudaverse/cudaverse/pull/58)
+counts. After a larger-input diagnostic found two near-zero subspace failures,
+the fresh full run also uses the existing core projector criterion and retains
+its original diagnostic. [PR #58](https://github.com/cudaverse/cudaverse/pull/58)
 repairs summary count formatting after the passing core run. Original failure
 evidence remains preserved. Shared timings
 are descriptive observations and cannot establish
