@@ -81,7 +81,10 @@ candidate readiness passed, but the full core run failed on six native kNN
 distances in the 50,000-row sparse fixture. Stacked
 [PR #57](https://github.com/cudaverse/cudaverse/pull/57) corrects cancellation
 at `5754739`. Its full core and precision gates passed with unchanged tolerances;
-full single-cell validation is running. [PR #58](https://github.com/cudaverse/cudaverse/pull/58)
+full single-cell validation is being rerun after its relative-only PCA
+reconstruction check failed near zero. The revised reconstruction criterion
+matches the existing core FP64 criterion and retains the original failure
+counts. [PR #58](https://github.com/cudaverse/cudaverse/pull/58)
 repairs summary count formatting after the passing core run. Original failure
 evidence remains preserved. Shared timings
 are descriptive observations and cannot establish

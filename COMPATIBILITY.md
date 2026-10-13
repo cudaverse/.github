@@ -26,8 +26,10 @@ checks, shared-device limitation and pending full results. The original full
 core run failed its distance tolerance on six values. Stacked
 [PR #57](https://github.com/cudaverse/cudaverse/pull/57) fixes native Euclidean
 cancellation at `5754739cfc09d730322bf7a9ea4d5d6ae02b8245`. Its full core and
-precision gates passed; full single-cell validation is running against the
-same companion revision. [PR #58](https://github.com/cudaverse/cudaverse/pull/58)
+precision gates passed. Full single-cell validation failed its relative-only
+PCA reconstruction comparison near zero; a fresh run uses the core FP64
+reconstruction criterion and retains that original diagnostic. It runs against
+the same companion revision. [PR #58](https://github.com/cudaverse/cudaverse/pull/58)
 corrects rounded diagnostic counts in the benchmark summary, with no package
 runtime changes. The corrected summary passes verification against the retained
 core report; the original summary failure remains recorded.

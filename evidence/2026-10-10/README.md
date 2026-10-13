@@ -169,11 +169,47 @@ summary renderer and its tests. Hardware measurements retain source identity
 `5754739`; the verification record separately identifies renderer `8616084`.
 
 The original sequence had not started full single-cell benchmarking. A separate
-continuation now runs the full CPU/native contract on the same exact source
+continuation ran the full CPU/native contract on the same exact source
 installations. An initial continuation with omitted mode/backend settings was
 terminated and retained as an aborted startup, not benchmark evidence. The
-corrected process environment explicitly selects full benchmark mode and both
+corrected process environment explicitly selected full benchmark mode and both
 backends. No external GPU client was stopped.
+
+That continuation exited 1 at the 10,000-cell native PCA reconstruction gate:
+32 of 800,000 entries failed rtol 1e-8 with zero absolute tolerance, with maximum
+absolute difference 4.722888746755416e-12. Neighbor indices, distances, PCA
+subspace, backend and fresh-process parity passed. The 50,000-cell case did not
+start; the failing backend's allocation measurement and final installation
+verification were not reached. Failed report SHA-256:
+`69dfd663381d64b6bb07808e03997126c3322749df8bddea59254b3e32529af6`.
+
+A separate diagnostic reproduces the same 32 failures and verifies unchanged
+source installations. Reconstructing from CPU QR followed by SVD also fails
+seven entries against the original CPU result. Native-versus-CPU relative
+Frobenius difference is 6.9342e-13; CPU-QR-versus-CPU is 1.4526e-13. This supports
+near-zero comparison sensitivity rather than a demonstrated runtime defect.
+[LAPACK's SVD analysis](https://netlib.org/lapack/lug/node97.html) describes
+normwise backward stability and singular-vector sensitivity; it does not
+guarantee relative accuracy in every near-zero reconstructed entry.
+
+The separate benchmark harness now records policy
+`core-fp64-reconstruction-parity/1`: pointwise reconstruction rtol 1e-8 and
+atol 1e-10, matching the existing core FP64 reconstruction criterion. This is
+an explicit acceptance-policy revision, not an unchanged-tolerance pass or a
+universal SVD error bound. Each result retains the original relative-only
+diagnostic and its failure count. Neighbor and subspace gates are unchanged.
+Windows/Linux helper tests cover near-zero comparisons and rejection of isolated
+errors; the cached fixture passes the revised criterion while retaining all
+32 original failures. A fresh full benchmark is running with all sizes, five
+warmups and ten measured samples. The original failed report remains failed.
+
+At summary-only commit `8616084`, [R checks](https://github.com/cudaverse/cudaverse/actions/runs/38332237681),
+[native integrity](https://github.com/cudaverse/cudaverse/actions/runs/38332237606),
+[integration](https://github.com/cudaverse/cudaverse/actions/runs/38332238207)
+and [documentation build](https://github.com/cudaverse/cudaverse/actions/runs/38332237707)
+passed. All four R checks report Status: OK, 1,242 passing assertions and 58
+skips; each Linux log retains the optional duplicate-import warning described
+above. Summary positive/rejection tests pass, and PTX reproducibility is verified.
 
 ## Remaining work
 
